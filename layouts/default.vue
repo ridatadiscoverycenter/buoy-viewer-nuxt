@@ -3,7 +3,23 @@
     <nuxt />
   </div>
 </template>
-
+<script>
+export default {
+  mounted() {
+    // add event listener for prefers-color-scheme
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const onMediaChange = (e) => this.onMediaChange(e);
+    mql.addEventListener('change', function(e) {
+      onMediaChange(e);
+    });
+  },
+  methods: {
+    onMediaChange(e) {
+      this.$store.dispatch('mode/setMode', e.matches ? 'dark' : 'light');
+    }
+  }
+};
+</script>
 <style>
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',

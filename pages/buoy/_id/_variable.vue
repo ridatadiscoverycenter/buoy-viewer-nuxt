@@ -1,6 +1,21 @@
 <template>
   <div>
-    <BarChart :dataset="counts" x="year" y="count" />
+    <BarChart
+      id="bar-chart"
+      :dataset="counts"
+      x="year"
+      y="count"
+      width="900"
+      height="600"
+    />
+    <LineChart
+      id="line-chart"
+      :dataset="averages"
+      x="year"
+      y="average"
+      width="900"
+      height="600"
+    />
   </div>
 </template>
 
@@ -8,10 +23,12 @@
 import { mapState } from 'vuex';
 import _ from 'lodash';
 import BarChart from '@/components/charts/BarChart';
+import LineChart from '@/components/charts/LineChart.vue';
 
 export default {
   components: {
-    BarChart
+    BarChart,
+    LineChart
   },
   async fetch({ store, error, params }) {
     try {
@@ -25,6 +42,7 @@ export default {
   },
   computed: {
     ...mapState('erddap', ['buoyData']),
+    ...mapState('mode', ['mode']),
     grouped() {
       const data = this.buoyData;
       const grouped = _.groupBy(data, 'time');
