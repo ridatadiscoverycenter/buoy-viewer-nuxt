@@ -48,6 +48,9 @@ export default {
             .filter((v) => this.xScale(v) !== undefined)
         )
         .tickSizeOuter(0);
+    },
+    yAxis() {
+      return d3.axisLeft(this.yScale).ticks(null, 's');
     }
   },
   watch: {
@@ -61,7 +64,6 @@ export default {
   methods: {
     updatePlot() {
       const svg = d3.select(`#${this.$attrs.id}`).select('g');
-
       svg
         .selectAll('rect')
         .data(this.dataset)
@@ -76,6 +78,10 @@ export default {
       d3.select('.x-ticks')
         .transition()
         .call(this.xAxis);
+
+      d3.select('.y-ticks')
+        .transition()
+        .call(this.yAxis);
     },
     plot() {
       const svg = d3
@@ -97,23 +103,11 @@ export default {
         .attr('class', 'x-ticks')
         .call(this.xAxis);
 
-      const yAxis = (g) =>
-        g
-          .attr('transform', `translate(${this.margin.left},0)`)
-          .attr('class', 'y-ticks')
-          .call(d3.axisLeft(this.yScale).ticks(null, 's'))
-          .call((g) => g.select('.domain').remove())
-          .call((g) =>
-            g
-              .append('text')
-              .attr('x', -this.margin.left)
-              .attr('y', 10)
-              .attr('fill', 'currentColor')
-              .attr('text-anchor', 'start')
-              .text(this.dataset[this.y])
-          );
-
-      svg.append('g').call(yAxis);
+      svg
+        .append('g')
+        .attr('transform', `translate(${this.margin.left},0)`)
+        .attr('class', 'y-ticks')
+        .call(this.yAxis);
       return svg;
     }
   }
