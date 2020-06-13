@@ -1,6 +1,8 @@
 <template>
   <div>
     <BarChart id="bar-chart" :dataset="dataset" width="900" height="600" />
+    <LineChart id="line-chart" :dataset="dataset" width="900" height="600" />
+
     <select v-model="dataset">
       <option v-for="obj in options" :key="obj.name" :value="obj.data">{{
         obj.name
@@ -11,9 +13,11 @@
 
 <script>
 import BarChart from '@/components/charts/BarChart.vue';
+import LineChart from '@/components/charts/LineChart.vue';
 export default {
   components: {
-    BarChart
+    BarChart,
+    LineChart
   },
   data() {
     return {
@@ -43,7 +47,9 @@ export default {
             { x: 2, y: 9.7 },
             { x: 3, y: 7.3 },
             { x: 4, y: 6.9 },
-            { x: 5, y: 1.9 }
+            { x: 5, y: 1.9 },
+            { x: 6, y: 0.9 },
+            { x: 7, y: 19.9 }
           ]
         }
       ]
