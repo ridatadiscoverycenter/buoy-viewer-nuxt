@@ -94,7 +94,8 @@ export default {
         .attr('fill', 'none')
         .attr('stroke', 'currentColor')
         .attr('stroke-miterlimit', 1)
-        .attr('stroke-width', 1)
+        .attr('stroke-width', 2)
+        .attr('stroke-linejoin', 'round')
         .attr('d', this.line(this.dataset));
 
       g.append('g')
@@ -119,7 +120,6 @@ export default {
   font-size: 0.3rem;
 }
 .line {
-  stroke-dasharray: 2px;
   color: $info;
 }
 </style>
