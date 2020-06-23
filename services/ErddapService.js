@@ -10,9 +10,11 @@ const erddapClient = axios.create({
 });
 
 export default {
-  getBuoyData({ id, variable }) {
+  getBuoyData({ id, variable, year }) {
+    const yearStart = year ? year.toString() : '2003';
+    const yearEnd = year ? year.toString() : '2012';
     return erddapClient.get(
-      `/combined_e784_bee5_492e.geoJson?${variable},time,latitude,longitude&station_name="${id}"`
+      `/combined_e784_bee5_492e.geoJson?${variable},time,latitude,longitude&station_name="${id}"&time>=${yearStart}-01-01T12:00:00Z&time<=${yearEnd}-12-31T12:00:00Z`
     );
   }
 };

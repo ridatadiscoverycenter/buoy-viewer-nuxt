@@ -21,7 +21,8 @@
     "d3": "^5.16.0",
     "nuxt": "^2.0.0",
     "vega-embed": "^6.9.0",
-    "vue-chartjs": "^3.5.0"
+    "vue-chartjs": "^3.5.0",
+    "vue-multiselect": "^2.1.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
