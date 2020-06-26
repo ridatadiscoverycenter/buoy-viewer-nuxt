@@ -19,8 +19,11 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "chart.js": "^2.9.3",
     "d3": "^5.16.0",
-    "nuxt": "^2.0.0",
+    "git": "^0.1.5",
+    "nuxt": "^2.13.1",
+    "vega": "^5.13.0",
     "vega-embed": "^6.9.0",
+    "vega-lite": "^4.13.1",
     "vue-chartjs": "^3.5.0",
     "vue-multiselect": "^2.1.6"
   },
@@ -45,8 +48,7 @@
     "sass-loader": "^8.0.2",
     "stylelint": "^10.1.0",
     "vue-cli-plugin-cz": "^1.2.3",
-    "vue-jest": "^4.0.0-0",
-    "vue-vega": "^1.0.0-alpha.13"
+    "vue-jest": "^4.0.0-0"
   },
   "config": {
     "commitizen": {

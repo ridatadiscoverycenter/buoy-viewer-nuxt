@@ -7,7 +7,7 @@ import * as d3 from 'd3';
 export default {
   props: {
     dataset: {
-      type: [Array, Object],
+      type: Array,
       required: true
     },
     x: {
