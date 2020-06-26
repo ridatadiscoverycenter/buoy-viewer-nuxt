@@ -35,7 +35,11 @@ export const actions = {
     return Promise.all(ErddapService.getMultiBuoyGeoJsonData(payload)).then(
       (response) => {
         const data = response.map((datum) => {
-          return datum.data.features.map((feature) => feature.properties);
+          return datum.data.features.map((feature) => {
+            const date = new Date(feature.properties.time);
+            feature.properties.time = date;
+            return feature.properties;
+          });
         });
         commit('SET_BUOY_DATA', data);
       }

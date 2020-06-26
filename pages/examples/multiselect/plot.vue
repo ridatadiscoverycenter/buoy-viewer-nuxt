@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="plot-container">
+    <!-- {{ dataset }} -->
     <div id="viz"></div>
   </div>
 </template>
@@ -14,8 +15,7 @@ export default {
       const ids = query.buoyIds.split(',');
       const payload = {
         variable: query.variable,
-        ids,
-        year: 2011
+        ids
       };
       await store.dispatch('buoy/fetchDataGeoJson', payload);
     } catch (e) {
@@ -31,7 +31,8 @@ export default {
     }),
     dataset() {
       return this.buoyData
-        .map((arr) => arr.slice(1000, 1010))
+        .map((arr) => arr.slice(0, 2000))
+        .filter((arr) => arr[this.$route.query.variable] !== null)
         .reduce((a, b) => a.concat(b));
     },
     spec() {
@@ -52,7 +53,7 @@ export default {
         scales: [
           {
             name: 'xscale',
-            type: 'point',
+            type: 'time',
             domain: { data: 'buoy', field: 'time' },
             range: 'width',
             padding: 0.05,
@@ -73,9 +74,8 @@ export default {
             domain: { data: 'buoy', field: 'station_name' }
           }
         ],
-
         axes: [
-          { orient: 'bottom', scale: 'xscale' },
+          { orient: 'bottom', scale: 'xscale', labelAngle: 15 },
           { orient: 'left', scale: 'yscale' }
         ],
         marks: [
@@ -115,12 +115,19 @@ export default {
     }
   },
   mounted() {
-    vega('#viz', this.spec, { actions: false, theme: 'vox' });
+    vega('#viz', this.spec, { actions: true, theme: 'vox' });
   },
   updated() {
-    vega('#viz', this.spec, { actions: false, theme: 'vox' });
+    vega('#viz', this.spec, { actions: true, theme: 'vox' });
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import 'bulma';
+.plot-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+}
+</style>
