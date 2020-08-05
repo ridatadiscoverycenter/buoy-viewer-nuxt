@@ -97,7 +97,7 @@ export default {
                     x: { scale: 'xscale', field: 'time' },
                     y: { scale: 'yscale', field: this.$route.query.variable },
                     stroke: { scale: 'color', field: 'station_name' },
-                    strokeWidth: { value: 4 }
+                    strokeWidth: { value: 0.5 }
                   },
                   update: {
                     interpolate: 'linear',

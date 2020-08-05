@@ -85,6 +85,18 @@ export default {
     downloadUrl() {
       return `${this.variables.baseUrl}${this.fileFormat}?${this.variable},time,latitude,longitude&station_name="${this.buoy}"`;
     }
+  },
+  created() {
+    if (process.browser) {
+      const worker = this.$worker.createWorker();
+      worker.addEventListener('message', this.workerResponseHandler);
+      worker.postMessage('post message');
+    }
+  },
+  methods: {
+    workerResponseHandler(event) {
+      console.log('[WORKER REPONSE]', event.data);
+    }
   }
 };
 </script>
