@@ -32,6 +32,13 @@
                     >Go</nuxt-link
                   >
                 </div>
+                <nuxt-link
+                  class="button is-warning control-item"
+                  :to="{
+                    name: 'summary'
+                  }"
+                  >What data do we have for each buoy?</nuxt-link
+                >
               </main>
             </div>
             <div class="hero-right">
@@ -95,7 +102,8 @@ export default {
   },
   methods: {
     workerResponseHandler(event) {
-      console.log('[WORKER REPONSE]', event.data);
+      // console.log('[WORKER REPONSE]', event.data);
+      this.$store.dispatch('worker/setSummary', event.data);
     }
   }
 };

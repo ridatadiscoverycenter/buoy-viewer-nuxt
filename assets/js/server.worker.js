@@ -37,9 +37,9 @@ const variables = [
 ];
 
 self.addEventListener('message', (event) => {
-  const ids = state().buoys.slice(1, 3);
+  const ids = state().buoys;
   const variable = state().variables.join(',');
-  fetchDataGeoJson({ variable, ids, year: 2012 }).then((response) => {
+  fetchDataGeoJson({ variable, ids }).then((response) => {
     const d = response.map((data) =>
       data.map((datum) => {
         const date = new Date(datum.time);
@@ -56,26 +56,25 @@ self.addEventListener('message', (event) => {
       })
       .reduce((a, b) => Object.assign(a, b));
     const reduced = Object.keys(grouped).map((k) => {
-      return {
-        [k]: Object.keys(grouped[k]).map((date) => {
-          return {
-            [date]: grouped[k][date]
-              .map((obj) => {
-                const newObj = {};
-                variables.forEach((v) => {
-                  newObj[v] = obj[v] ? 1 : 0;
-                });
-                return newObj;
-              })
-              .reduce((a, b) => {
-                const newObj = {};
-                variables.forEach((v) => (newObj[v] = a[v] + b[v]));
-                return newObj;
-              })
-          };
-        })
-      };
+      return Object.keys(grouped[k]).map((date) => {
+        const result = grouped[k][date]
+          .map((obj) => {
+            const newObj = {};
+            variables.forEach((v) => {
+              newObj[v] = obj[v] ? 1 : 0;
+            });
+            return newObj;
+          })
+          .reduce((a, b) => {
+            const newObj = {};
+            variables.forEach((v) => (newObj[v] = a[v] + b[v]));
+            newObj.date = date; // new Date(date.replace('_', '/'));
+            newObj.station = k;
+            return newObj;
+          });
+        return result;
+      });
     });
-    self.postMessage(reduced);
+    self.postMessage(reduced.reduce((a, b) => a.concat(b)));
   });
 });
