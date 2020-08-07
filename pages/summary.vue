@@ -32,70 +32,86 @@ export default {
     ...mapState(['variables']),
     spec() {
       return {
-        $schema: 'https://vega.github.io/schema/vega-lite/v4.json',
+        $schema: 'https://vega.github.io/schema/vega/v5.json',
         width: 1000,
         height: 200,
         data: {
+          name: 'buoy',
           values: this.summary
         },
-        selection: {
-          highlight: { type: 'single' }
-        },
-        mark: { type: 'rect', strokeWidth: 2, tooltip: true },
-        encoding: {
-          y: {
-            field: 'station',
-            type: 'nominal'
+        scales: [
+          {
+            name: 'x',
+            type: 'band',
+            domain: { data: 'buoy', field: 'date' },
+            range: 'width'
           },
-          x: {
-            field: 'date',
-            type: 'nominal'
+          {
+            name: 'y',
+            type: 'band',
+            domain: { data: 'buoy', field: 'station' },
+            range: 'height'
           },
-          fill: {
-            field: this.variable,
-            type: 'quantitative'
-          },
-          stroke: {
-            condition: {
-              test: {
-                and: [
-                  { selection: 'highlight' },
-                  'length(data("highlight_store"))'
-                ]
-              },
-              value: 'black'
-            },
-            value: null
-          },
-          opacity: {
-            condition: { selection: 'highlight', value: 1 },
-            value: 0.5
-          },
-          order: { condition: { selection: 'highlight', value: 1 }, value: 0 }
-        },
-        config: {
-          scale: {
-            bandPaddingInner: 0,
-            bandPaddingOuter: 0
-          },
-          view: { step: 40 },
-          range: {
-            ramp: {
-              scheme: 'YellowGreenBlue'
-            }
-          },
-          axis: {
-            domain: false
+          {
+            name: 'color',
+            type: 'linear',
+            range: { scheme: 'Viridis' },
+            domain: { data: 'buoy', field: this.variable },
+            reverse: true,
+            zero: false,
+            nice: true
           }
-        }
+        ],
+        axes: [
+          {
+            orient: 'bottom',
+            scale: 'x',
+            domain: false,
+            title: 'Month/Year',
+            labelOverlap: 'parity'
+          },
+          {
+            orient: 'left',
+            scale: 'y',
+            domain: false,
+            title: 'Buoy ID'
+          }
+        ],
+        legends: [
+          {
+            fill: 'color',
+            type: 'gradient',
+            gradientLength: { signal: 'height - 20' }
+          }
+        ],
+        marks: [
+          {
+            type: 'rect',
+            from: { data: 'buoy' },
+            encode: {
+              enter: {
+                x: { scale: 'x', field: 'date' },
+                y: { scale: 'y', field: 'station' },
+                width: { scale: 'x', band: 1 },
+                height: { scale: 'y', band: 1 },
+                tooltip: {
+                  signal: `datum.date + datum.station`
+                }
+              },
+              update: {
+                fill: { scale: 'color', field: this.variable }
+              }
+            }
+          }
+        ]
       };
     }
   },
   mounted() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
   },
   updated() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
   }
 };
 </script>
