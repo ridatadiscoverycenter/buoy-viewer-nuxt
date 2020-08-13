@@ -1,4 +1,19 @@
 export const state = () => ({
+  application: {
+    title: 'Rhode Island Data Discovery Center',
+    subtitle:
+      'Explore our collection of present and historical data from the Narragansett Bay.',
+    baseURL: 'https://ridatadiscoverycenter.github.io/',
+    menu: {
+      home: 'Home',
+      resources: 'Resources',
+      about: 'About'
+    },
+    titles: {
+      highlights: 'Highlights',
+      collaborators: 'Collaborators'
+    }
+  },
   buoyNames: {
     bid2: 'N. Prudence',
     bid3: 'Conimicut Pt',

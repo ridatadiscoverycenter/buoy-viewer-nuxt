@@ -1,108 +1,53 @@
 <template>
-  <div>
-    <section class="hero">
-      <div class="hero-body">
-        <div class="container">
-          <div class="hero-columns">
-            <div>
-              <h1 class="title">RI Buoy Data</h1>
-              <h1 class="subtitle">Using ERDDAP as backend server</h1>
-              <main>
-                <div class="controls">
-                  <BaseSelect
-                    id="buoy-id"
-                    v-model="buoy"
-                    class="control-item"
-                    label="Buoy ID"
-                    :options="variables.buoys"
-                  />
-                  <BaseSelect
-                    id="variable"
-                    v-model="variable"
-                    class="control-item"
-                    label="Variable"
-                    :options="variables.variables"
-                  />
-                  <nuxt-link
-                    class="button is-link control-item"
-                    :to="{
-                      name: 'buoy-id-variable',
-                      params: { id: buoy, variable: variable }
-                    }"
-                    >Go</nuxt-link
-                  >
-                </div>
-                <nuxt-link
-                  class="button is-warning control-item"
-                  :to="{
-                    name: 'summary'
-                  }"
-                  >What data do we have for each buoy?</nuxt-link
-                >
-              </main>
-            </div>
-            <div class="hero-right">
-              <div>
-                <p class="label">Request URL</p>
-                <p>
-                  <code class="code">{{ requestUrl }}</code>
-                </p>
-                <p class="label label-table">ERDDAP Table</p>
-                <BaseSelect
-                  id="file-format"
-                  v-model="fileFormat"
-                  class="control-item"
-                  label="File format"
-                  :options="variables.fileFormats"
-                />
-                <p>
-                  <code class="code-link"
-                    ><a :href="downloadUrl">{{ downloadUrl }}</a></code
-                  >
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+  <main class="hero grid-container">
+    <div class="item1">
+      <div class="center">
+        <h1 class="title">NarrBay Buoy Data Viewer</h1>
+        <h2 class="subtitle">
+          Explore historical data collected from multiple buoys in the
+          Narragansett Bay
+        </h2>
+        <nuxt-link
+          :class="{ disabled: !loaded }"
+          class="button is-warning"
+          :to="{
+            name: 'summary'
+          }"
+        >
+          <span>Explore data availabilty for each buoy</span>
+          <font-awesome-icon v-if="!loaded" icon="play-circle" size="2x" spin />
+        </nuxt-link>
       </div>
-    </section>
-  </div>
+    </div>
+    <Map class="item2" />
+  </main>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import BaseSelect from '@/components/BaseSelect';
-
+import Map from '@/components/Map.vue';
 export default {
   components: {
-    BaseSelect
-  },
-  data() {
-    return {
-      buoy: 'bid2',
-      variable: 'WaterTempSurface',
-      fileFormat: '-'
-    };
+    Map
   },
   computed: {
-    ...mapState(['variables']),
-    requestUrl() {
-      return `${this.variables.baseUrl}geoJson?${this.variable},time,latitude,longitude&station_name="${this.buoy}"`;
-    },
-    downloadUrl() {
-      return `${this.variables.baseUrl}${this.fileFormat}?${this.variable},time,latitude,longitude&station_name="${this.buoy}"`;
-    }
+    ...mapState('worker', ['loaded', 'summary'])
   },
   created() {
     if (process.browser) {
-      const worker = this.$worker.createWorker();
-      worker.addEventListener('message', this.workerResponseHandler);
-      worker.postMessage('post message');
+      if (this.summary.length === 0) {
+        const worker = this.$worker.createWorker();
+        this.$store.dispatch('worker/loaded', false);
+        worker.addEventListener('message', this.workerResponseHandler);
+        worker.postMessage('post message');
+      } else {
+        this.$store.dispatch('worker/loaded', true);
+      }
     }
   },
   methods: {
     workerResponseHandler(event) {
-      // console.log('[WORKER REPONSE]', event.data);
+      this.$store.dispatch('worker/loaded', true);
       this.$store.dispatch('worker/setSummary', event.data);
     }
   }
@@ -110,47 +55,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-code {
-  font-weight: bold;
-  font-size: 1rem;
-}
-.code {
-  color: rgb(186, 125, 11);
-}
-.code-link {
-  color: rgb(95, 73, 140);
-}
-.label-table {
-  margin-top: 2rem;
-}
-.hero {
-  padding-top: 10rem;
-}
-.hero-columns {
-  display: flex;
-  flex-direction: row;
-  .container {
-    width: 50vw !important;
+.disabled {
+  background-color: #efefef !important;
+  cursor: not-allowed;
+  svg {
+    margin-left: 1rem;
   }
 }
-.hero-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin-left: 4rem;
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 4fr 5fr 1fr;
+  grid-template-rows: 2rem auto;
+  grid-template-areas:
+    '. . . . '
+    '. area1 area2 .';
 }
 
-.controls {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+.item1 {
+  display: grid;
+  grid-area: area1;
+  align-content: start;
+  justify-items: start;
+  grid-template-columns: 1fr 9fr 1fr;
+  grid-template-rows: 8rem auto 5rem;
+  grid-template-areas:
+    '. top .'
+    '. center .'
+    '. bottom .';
 }
-
-.control-item {
-  margin-right: 1rem;
+.center {
+  grid-area: center;
 }
-.control-item.button {
-  margin-bottom: -1rem;
+.item2 {
+  grid-area: area2;
 }
 </style>

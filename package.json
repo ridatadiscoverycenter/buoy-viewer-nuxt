@@ -25,6 +25,7 @@
     "git": "^0.1.5",
     "nuxt": "^2.13.1",
     "nuxt-fontawesome": "^0.4.0",
+    "nuxt-svg-loader": "^1.2.0",
     "vega": "^5.13.0",
     "vega-embed": "^6.9.0",
     "vega-lite": "^4.13.1",

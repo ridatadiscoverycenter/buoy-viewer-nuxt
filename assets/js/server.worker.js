@@ -68,7 +68,7 @@ self.addEventListener('message', (event) => {
           .reduce((a, b) => {
             const newObj = {};
             variables.forEach((v) => (newObj[v] = a[v] + b[v]));
-            newObj.date = date; // new Date(date.replace('_', '/'));
+            newObj.date = new Date(date.replace('_', '/'));
             newObj.station = k;
             return newObj;
           });

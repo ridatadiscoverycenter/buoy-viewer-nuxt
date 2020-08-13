@@ -16,7 +16,7 @@
 <script>
 import { mapState } from 'vuex';
 import vega from 'vega-embed';
-import BaseSelect from '@/components/BaseSelect';
+import BaseSelect from '@/components/base/BaseSelect';
 
 export default {
   components: {
@@ -42,7 +42,7 @@ export default {
         scales: [
           {
             name: 'x',
-            type: 'band',
+            type: 'time',
             domain: { data: 'buoy', field: 'date' },
             range: 'width'
           },
@@ -92,10 +92,10 @@ export default {
               enter: {
                 x: { scale: 'x', field: 'date' },
                 y: { scale: 'y', field: 'station' },
-                width: { scale: 'x', band: 1 },
+                width: { value: 9 },
                 height: { scale: 'y', band: 1 },
                 tooltip: {
-                  signal: `datum.date + datum.station`
+                  signal: `{'Date': timeFormat(datum.date, '%B %Y'), 'Station': datum.station, 'Count': datum.${this.variable}}`
                 }
               },
               update: {

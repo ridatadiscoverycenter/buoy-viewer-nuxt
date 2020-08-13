@@ -48,14 +48,22 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     // Font Awesome
-    'nuxt-fontawesome'
+    'nuxt-fontawesome',
+    // SVG Loader
+    'nuxt-svg-loader'
   ],
   fontawesome: {
     imports: [
       // import whole set
       {
         set: '@fortawesome/free-solid-svg-icons',
-        icons: ['faAngleLeft', 'faMapMarkerAlt', 'faCalendarAlt']
+        icons: [
+          'faAngleLeft',
+          'faMapMarkerAlt',
+          'faCalendarAlt',
+          'faSpinner',
+          'faPlayCircle'
+        ]
       }
     ]
   },

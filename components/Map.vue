@@ -254,8 +254,8 @@ export default {
     spec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
-        width: 900,
-        height: 900,
+        width: 600,
+        height: 700,
         autosize: 'none',
 
         data: [
@@ -281,8 +281,8 @@ export default {
           {
             name: 'projection',
             type: 'mercator',
-            scale: 50000,
-            center: [-71.4774, 41.8801]
+            scale: 30000,
+            center: [-71.1774, 41.6801]
           }
         ],
         marks: [
@@ -291,9 +291,12 @@ export default {
             from: { data: 'buoys' },
             encode: {
               enter: {
-                size: { value: 40 },
+                size: { value: 100 },
                 stroke: { value: 'steelblue' },
-                fill: { value: 'steelblue' }
+                fill: { value: 'steelblue' },
+                tooltip: {
+                  signal: 'datum'
+                }
               },
               update: {
                 x: { field: 'x' },
