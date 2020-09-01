@@ -1,14 +1,44 @@
 <template>
-  <div class="container">
+  <div class="plot-container">
     <BaseSelect
       id="variable"
       v-model="variable"
       class="control-item"
       label="Variable"
-      :options="variables.variables"
+      :options="variables"
     />
-    <div class="plot-container">
+    <div class="plot">
       <div id="viz"></div>
+    </div>
+    <div>
+      <form id="buoy-select-form">
+        <label for="buoy-select" class="label">Select Buoys</label>
+        <multiselect
+          id="buoy-select"
+          v-model="selectedBuoys"
+          class="multiselect"
+          :options="buoys"
+          :multiple="true"
+        ></multiselect>
+
+        <label for="variable-select" class="label">Select Variable</label>
+        <multiselect
+          id="variable-select"
+          v-model="selectedVariable"
+          class="multiselect"
+          :options="variables"
+        ></multiselect>
+        <label for="date-select" class="label">Select Date Range</label>
+        <date-picker id="date-select" v-model="dateRange" range></date-picker>
+        <nuxt-link
+          class="button is-link"
+          :to="{
+            name: 'examples-multiselect-plot',
+            query: { buoyIds: selectedBuoysString, slug }
+          }"
+          >Submit</nuxt-link
+        >
+      </form>
     </div>
   </div>
 </template>
@@ -16,20 +46,42 @@
 <script>
 import { mapState } from 'vuex';
 import vega from 'vega-embed';
+import _ from 'lodash';
+import Multiselect from 'vue-multiselect';
+import DatePicker from 'vue2-datepicker';
 import BaseSelect from '@/components/base/BaseSelect';
 
 export default {
   components: {
-    BaseSelect
+    BaseSelect,
+    Multiselect,
+    DatePicker
   },
   data() {
     return {
-      variable: 'WaterTempSurface'
+      variable: 'WaterTempSurface',
+      selectedBuoys: [],
+      selectedVariable: '',
+      dateRange: null
     };
   },
   computed: {
     ...mapState('worker', ['summary']),
-    ...mapState(['variables']),
+    ...mapState('variables', ['buoys', 'variables']),
+    dataArr() {
+      return this.summary.reduce((a, b) => _.concat(a, b));
+    },
+    selectedBuoysString() {
+      return this.selectedBuoys.join(',');
+    },
+    slug() {
+      try {
+        const isoDate = this.dateRange.map((date) => date.toISOString());
+        return [this.selectedVariable].concat(isoDate).join(',');
+      } catch {
+        return null;
+      }
+    },
     spec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
@@ -37,7 +89,7 @@ export default {
         height: 200,
         data: {
           name: 'buoy',
-          values: this.summary
+          values: this.dataArr
         },
         scales: [
           {
@@ -118,14 +170,14 @@ export default {
 
 <style lang="scss" scoped>
 @import 'bulma';
-.container {
+.plot-container {
+  margin-top: 3rem;
+  display: grid;
+  justify-content: center;
+}
+.plot {
   margin-top: 3rem;
 }
-.plot-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  overflow-x: scroll;
-  padding: 5rem;
-}
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src="vue2-datepicker/index.css"></style>

@@ -25,21 +25,26 @@
 
 <script>
 import { mapState } from 'vuex';
+import _ from 'lodash';
 import Map from '@/components/Map.vue';
 export default {
   components: {
     Map
   },
   computed: {
-    ...mapState('worker', ['loaded', 'summary'])
+    ...mapState('worker', ['loaded', 'summary']),
+    ...mapState('variables', ['buoys'])
   },
   created() {
+    const buoyChunks = _.chunk(this.buoys, this.buoys.length);
     if (process.browser) {
       if (this.summary.length === 0) {
-        const worker = this.$worker.createWorker();
-        this.$store.dispatch('worker/loaded', false);
-        worker.addEventListener('message', this.workerResponseHandler);
-        worker.postMessage('post message');
+        buoyChunks.forEach((chunk) => {
+          const worker = this.$worker.createWorker();
+          this.$store.dispatch('worker/loaded', false);
+          worker.addEventListener('message', this.workerResponseHandler);
+          worker.postMessage({ buoys: chunk });
+        });
       } else {
         this.$store.dispatch('worker/loaded', true);
       }

@@ -14,7 +14,9 @@ export default {
     try {
       const ids = query.buoyIds.split(',');
       const payload = {
-        variable: query.variable,
+        variable: query.slug.split(',')[0],
+        start: query.slug.split(',')[1],
+        end: query.slug.split(',')[2],
         ids
       };
       await store.dispatch('buoy/fetchDataGeoJson', payload);
@@ -29,10 +31,13 @@ export default {
     ...mapState({
       buoyData: (state) => state.buoy.buoyData
     }),
+    variable() {
+      return this.$route.query.slug.split(',')[0];
+    },
     dataset() {
       return this.buoyData
         .map((arr) => arr.slice(0, 2000))
-        .filter((arr) => arr[this.$route.query.variable] !== null)
+        .filter((arr) => arr[this.variable] !== null)
         .reduce((a, b) => a.concat(b));
     },
     spec() {
@@ -62,7 +67,7 @@ export default {
           {
             name: 'yscale',
             type: 'linear',
-            domain: { data: 'buoy', field: this.$route.query.variable },
+            domain: { data: 'buoy', field: this.variable },
             nice: true,
             zero: true,
             range: 'height'
@@ -95,7 +100,7 @@ export default {
                 encode: {
                   enter: {
                     x: { scale: 'xscale', field: 'time' },
-                    y: { scale: 'yscale', field: this.$route.query.variable },
+                    y: { scale: 'yscale', field: this.variable },
                     stroke: { scale: 'color', field: 'station_name' },
                     strokeWidth: { value: 0.5 }
                   },

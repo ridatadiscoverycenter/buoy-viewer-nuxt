@@ -5,7 +5,7 @@ export const state = () => ({
 
 export const mutations = {
   SET_SUMMARY(state, payload) {
-    state.summary = payload;
+    state.summary.push(payload);
   },
   LOADED(state, payload) {
     state.loaded = payload;
