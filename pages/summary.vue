@@ -1,12 +1,20 @@
 <template>
   <div class="plot-container">
-    <BaseSelect
-      id="variable"
-      v-model="variable"
-      class="control-item"
-      label="Variable"
-      :options="variables"
-    />
+    <div class="d-flex">
+      <BaseSelect
+        id="variable"
+        v-model="variable"
+        class="control-item"
+        label="Variable"
+        :options="variables"
+      />
+      <font-awesome-icon
+        v-if="summary.length < 13"
+        icon="spinner"
+        size="2x"
+        spin
+      />
+    </div>
     <div class="plot">
       <div id="viz"></div>
     </div>
@@ -38,6 +46,28 @@
           }"
           >Submit</nuxt-link
         >
+        <BaseSelect
+          id="file-format"
+          v-model="fileFormat"
+          class="control-item"
+          label="File format"
+          :options="fileFormats"
+        />
+        <BaseSelect
+          id="buoy-id"
+          v-model="downloadBuoy"
+          class="control-item"
+          label="Buoy ID"
+          :options="buoys"
+        />
+        <multiselect
+          id="variable-select"
+          v-model="downloadVariables"
+          class="multiselect"
+          :options="variables"
+          :multiple="true"
+        ></multiselect>
+        <a :href="downloadUrl">Download Data</a>
       </form>
     </div>
   </div>
@@ -62,12 +92,15 @@ export default {
       variable: 'WaterTempSurface',
       selectedBuoys: [],
       selectedVariable: '',
-      dateRange: null
+      dateRange: null,
+      fileFormat: 'json',
+      downloadBuoy: '',
+      downloadVariables: []
     };
   },
   computed: {
     ...mapState('worker', ['summary']),
-    ...mapState('variables', ['buoys', 'variables']),
+    ...mapState('variables', ['buoys', 'variables', 'fileFormats', 'baseUrl']),
     dataArr() {
       return this.summary.reduce((a, b) => _.concat(a, b));
     },
@@ -81,6 +114,9 @@ export default {
       } catch {
         return null;
       }
+    },
+    downloadUrl() {
+      return `${this.baseUrl}${this.fileFormat}?${this.downloadVariables},time,latitude,longitude&station_name="${this.downloadBuoy}"`;
     },
     spec() {
       return {
@@ -159,17 +195,35 @@ export default {
       };
     }
   },
+  watch: {
+    // whenever question changes, this function will run
+    summary(newData, oldData) {
+      this.update();
+    }
+  },
   mounted() {
     vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
   },
   updated() {
     vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
+  },
+  methods: {
+    update() {
+      vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import 'bulma';
+.d-flex {
+  display: flex;
+}
+.fa-spinner {
+  margin-top: 2.4rem;
+  margin-left: 2rem;
+}
 .plot-container {
   margin-top: 3rem;
   display: grid;

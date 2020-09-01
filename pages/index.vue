@@ -8,14 +8,19 @@
           Narragansett Bay
         </h2>
         <nuxt-link
-          :class="{ disabled: !loaded }"
+          :class="{ disabled: summary.length == 0 }"
           class="button is-warning"
           :to="{
             name: 'summary'
           }"
         >
           <span>Explore data availabilty for each buoy</span>
-          <font-awesome-icon v-if="!loaded" icon="play-circle" size="2x" spin />
+          <font-awesome-icon
+            v-if="summary.length == 0"
+            icon="play-circle"
+            size="2x"
+            spin
+          />
         </nuxt-link>
       </div>
     </div>
@@ -33,10 +38,18 @@ export default {
   },
   computed: {
     ...mapState('worker', ['loaded', 'summary']),
-    ...mapState('variables', ['buoys'])
+    ...mapState('variables', ['buoys']),
+    dataArr: {
+      get() {
+        return 0;
+      },
+      set() {
+        return this.summary.reduce((a, b) => _.concat(a, b)).length();
+      }
+    }
   },
   created() {
-    const buoyChunks = _.chunk(this.buoys, this.buoys.length);
+    const buoyChunks = _.chunk(this.buoys, 1);
     if (process.browser) {
       if (this.summary.length === 0) {
         buoyChunks.forEach((chunk) => {
