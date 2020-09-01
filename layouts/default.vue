@@ -1,10 +1,15 @@
 <template>
   <div>
+    <BaseNavbar />
     <nuxt />
   </div>
 </template>
 <script>
+import BaseNavbar from '@/components/base/BaseNavbar';
 export default {
+  components: {
+    BaseNavbar
+  },
   mounted() {
     // add event listener for prefers-color-scheme
     const mql = window.matchMedia('(prefers-color-scheme: dark)');

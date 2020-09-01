@@ -27,7 +27,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~/plugins/vega', mode: 'client' }],
+  plugins: [{ src: '~/plugins/web-worker.js', ssr: false }],
   /*
    ** Nuxt.js dev-modules
    */
@@ -46,8 +46,27 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
+    // Font Awesome
+    'nuxt-fontawesome',
+    // SVG Loader
+    'nuxt-svg-loader'
   ],
+  fontawesome: {
+    imports: [
+      // import whole set
+      {
+        set: '@fortawesome/free-solid-svg-icons',
+        icons: [
+          'faAngleLeft',
+          'faMapMarkerAlt',
+          'faCalendarAlt',
+          'faSpinner',
+          'faPlayCircle'
+        ]
+      }
+    ]
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -67,6 +86,14 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {
+      if (ctx.isClient) {
+        config.module.rules.push({
+          test: /\.worker\.js$/,
+          loader: 'worker-loader',
+          exclude: /(node_modules)/
+        });
+      }
+    }
   }
 };

@@ -14,14 +14,23 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.30",
+    "@fortawesome/free-solid-svg-icons": "^5.14.0",
+    "@fortawesome/vue-fontawesome": "^0.1.10",
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/bulma": "^1.2.1",
     "@nuxtjs/dotenv": "^1.4.0",
     "chart.js": "^2.9.3",
     "d3": "^5.16.0",
-    "nuxt": "^2.0.0",
+    "git": "^0.1.5",
+    "nuxt": "^2.13.1",
+    "nuxt-fontawesome": "^0.4.0",
+    "nuxt-svg-loader": "^1.2.0",
+    "vega": "^5.13.0",
     "vega-embed": "^6.9.0",
-    "vue-chartjs": "^3.5.0"
+    "vega-lite": "^4.13.1",
+    "vue-chartjs": "^3.5.0",
+    "vue-multiselect": "^2.1.6"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
@@ -45,7 +54,7 @@
     "stylelint": "^10.1.0",
     "vue-cli-plugin-cz": "^1.2.3",
     "vue-jest": "^4.0.0-0",
-    "vue-vega": "^1.0.0-alpha.13"
+    "worker-loader": "^2.0.0"
   },
   "config": {
     "commitizen": {
