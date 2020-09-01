@@ -287,6 +287,17 @@ export default {
         ],
         marks: [
           {
+            type: 'shape',
+            from: { data: 'outlines' },
+            encode: {
+              enter: {
+                strokeWidth: { value: 1 },
+                stroke: { value: '#bbb' }
+              }
+            },
+            transform: [{ type: 'geoshape', projection: 'projection' }]
+          },
+          {
             type: 'symbol',
             from: { data: 'buoys' },
             encode: {
@@ -303,17 +314,6 @@ export default {
                 y: { field: 'y' }
               }
             }
-          },
-          {
-            type: 'shape',
-            from: { data: 'outlines' },
-            encode: {
-              enter: {
-                strokeWidth: { value: 1 },
-                stroke: { value: '#bbb' }
-              }
-            },
-            transform: [{ type: 'geoshape', projection: 'projection' }]
           }
         ]
       };

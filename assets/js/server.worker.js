@@ -43,7 +43,7 @@ self.addEventListener('message', (event) => {
     const d = response.map((data) =>
       data.map((datum) => {
         const date = new Date(datum.time);
-        datum.time = `${date.getFullYear()}_${date.getMonth()}`;
+        datum.time = `${date.getFullYear()}_${date.getMonth() + 1}`;
         return datum;
       })
     );
@@ -68,7 +68,7 @@ self.addEventListener('message', (event) => {
           .reduce((a, b) => {
             const newObj = {};
             variables.forEach((v) => (newObj[v] = a[v] + b[v]));
-            newObj.date = new Date(date.replace('_', '/'));
+            newObj.date = new Date(date.replace('_', '/') + '/01');
             newObj.station = k;
             return newObj;
           });
