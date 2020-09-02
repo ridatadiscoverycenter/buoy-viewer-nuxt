@@ -1,75 +1,120 @@
 <template>
   <div class="plot-container">
     <div class="d-flex">
-      <BaseSelect
-        id="variable"
-        v-model="variable"
-        class="control-item"
-        label="Variable"
-        :options="variables"
-      />
-      <font-awesome-icon
-        v-if="summary.length < 13"
-        icon="spinner"
-        size="2x"
-        spin
-      />
+      <div class="control-item control-item-first">
+        <label for="variable" class="label">Variable</label>
+        <multiselect
+          id="variable"
+          v-model="variable"
+          class="multiselect"
+          :options="variables"
+        ></multiselect>
+        <font-awesome-icon
+          v-if="summary.length < 13"
+          icon="spinner"
+          size="2x"
+          spin
+        />
+      </div>
     </div>
     <div class="plot">
       <div id="viz"></div>
     </div>
-    <div>
-      <form id="buoy-select-form">
-        <label for="buoy-select" class="label">Select Buoys</label>
-        <multiselect
-          id="buoy-select"
-          v-model="selectedBuoys"
-          class="multiselect"
-          :options="buoys"
-          :multiple="true"
-        ></multiselect>
+    <main>
+      <details>
+        <summary class="title">
+          Visualize
+        </summary>
+        <form id="buoy-select-form" class="control-group">
+          <p class="control-group-header">Visualize</p>
+          <div class="control-item control-item-first">
+            <label for="buoy-select" class="label">Select Buoys</label>
+            <multiselect
+              id="buoy-select"
+              v-model="selectedBuoys"
+              class="multiselect"
+              :options="buoys"
+              :multiple="true"
+            ></multiselect>
+          </div>
 
-        <label for="variable-select" class="label">Select Variable</label>
-        <multiselect
-          id="variable-select"
-          v-model="selectedVariable"
-          class="multiselect"
-          :options="variables"
-        ></multiselect>
-        <label for="date-select" class="label">Select Date Range</label>
-        <date-picker id="date-select" v-model="dateRange" range></date-picker>
-        <nuxt-link
-          class="button is-link"
-          :to="{
-            name: 'examples-multiselect-plot',
-            query: { buoyIds: selectedBuoysString, slug }
-          }"
-          >Submit</nuxt-link
-        >
-        <BaseSelect
-          id="file-format"
-          v-model="fileFormat"
-          class="control-item"
-          label="File format"
-          :options="fileFormats"
-        />
-        <BaseSelect
-          id="buoy-id"
-          v-model="downloadBuoy"
-          class="control-item"
-          label="Buoy ID"
-          :options="buoys"
-        />
-        <multiselect
-          id="variable-select"
-          v-model="downloadVariables"
-          class="multiselect"
-          :options="variables"
-          :multiple="true"
-        ></multiselect>
-        <a :href="downloadUrl">Download Data</a>
-      </form>
-    </div>
+          <div class="control-item">
+            <label for="variable-select-visualize" class="label"
+              >Select Variable</label
+            >
+            <multiselect
+              id="variable-select-visualize"
+              v-model="selectedVariable"
+              class="multiselect"
+              :options="variables"
+            ></multiselect>
+          </div>
+
+          <div class="control-item">
+            <label for="date-select" class="label">Select Date Range</label>
+            <date-picker
+              id="date-select"
+              v-model="dateRange"
+              range
+            ></date-picker>
+          </div>
+          <nuxt-link
+            class="button is-link control-item control-item-button"
+            :to="{
+              name: 'examples-multiselect-plot',
+              query: { buoyIds: selectedBuoysString, slug }
+            }"
+            >Visualize</nuxt-link
+          >
+        </form>
+      </details>
+      <details>
+        <summary class="title">
+          Download
+        </summary>
+        <section id="download" class="control-group">
+          <p class="control-group-header">Download</p>
+          <div class="control-item">
+            <label for="file-format" class="label">File format</label>
+            <multiselect
+              id="file-format"
+              v-model="fileFormat"
+              class="multiselect"
+              :options="fileFormats"
+            ></multiselect>
+          </div>
+
+          <div class="control-item">
+            <label for="buoy-id" class="label">Buoy ID</label>
+            <multiselect
+              id="buoy-id"
+              v-model="downloadBuoy"
+              class="multiselect"
+              :options="buoys"
+            ></multiselect>
+          </div>
+
+          <div class="control-item">
+            <label for="variable-select-download" class="label"
+              >Select Variable</label
+            >
+            <multiselect
+              id="variable-select-download"
+              v-model="downloadVariables"
+              class="multiselect"
+              :options="variables"
+              :multiple="true"
+            ></multiselect>
+          </div>
+          <a
+            role="button"
+            class="button control-item is-link control-item-button"
+            :href="downloadUrl"
+            >Download Data</a
+          >
+        </section>
+      </details>
+    </main>
   </div>
 </template>
 
@@ -79,11 +124,9 @@ import vega from 'vega-embed';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
-import BaseSelect from '@/components/base/BaseSelect';
 
 export default {
   components: {
-    BaseSelect,
     Multiselect,
     DatePicker
   },
@@ -196,7 +239,6 @@ export default {
     }
   },
   watch: {
-    // whenever question changes, this function will run
     summary(newData, oldData) {
       this.update();
     }
@@ -217,8 +259,28 @@ export default {
 
 <style lang="scss" scoped>
 @import 'bulma';
-.d-flex {
-  display: flex;
+
+.control-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    'header header header'
+    'first second third'
+    'footer . .';
+}
+.control-group-header {
+  grid-area: header;
+}
+.control-item-first {
+  grid-area: first;
+}
+.control-item-button {
+  grid-area: footer;
+  @extend .my-6;
+}
+.control-item {
+  @extend .py-2;
 }
 .fa-spinner {
   margin-top: 2.4rem;
@@ -231,6 +293,9 @@ export default {
 }
 .plot {
   margin-top: 3rem;
+}
+.multiselect {
+  width: 50%;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
