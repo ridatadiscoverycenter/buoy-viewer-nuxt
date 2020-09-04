@@ -1,32 +1,65 @@
 <template>
-  <div class="plot-container">
-    <div class="d-flex">
-      <div class="control-item control-item-first">
-        <label for="variable" class="label">Variable</label>
-        <multiselect
-          id="variable"
-          v-model="variable"
-          class="multiselect"
-          :options="variables"
-        ></multiselect>
-        <font-awesome-icon
-          v-if="summary.length < 13"
-          icon="spinner"
-          size="2x"
-          spin
-        />
+  <div>
+    <section class="hero is-small is-info is-bold">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title"></h1>
+          <h2 class="subtitle"></h2>
+        </div>
       </div>
-    </div>
-    <div class="plot">
-      <div id="viz"></div>
-    </div>
-    <main>
-      <details>
-        <summary class="title">
-          Visualize
-        </summary>
-        <form id="buoy-select-form" class="control-group">
-          <p class="control-group-header">Visualize</p>
+    </section>
+    <main class="container-center">
+      <div class="container-main-first">
+        <header class="control-group-header">
+          <h1 class="title">Buoy Data Exploration</h1>
+          <p class="is-size-4 mb-6">
+            This dataset spans from 2003 to 2012. The heatmap below summarizes
+            the number of observations collected for each month for different
+            variables. Use this heatmap to help you decide what data you want to
+            visualize or download. When you have an idea, go ahead and select
+            the buoys, variables and dates to explore. Or download the data in
+            the most appropriate format for your analyzes! To begin, select a
+            variable to see what data is available.
+          </p>
+        </header>
+        <div class="d-flex">
+          <div class="control-item control-item-first">
+            <label for="variable" class="label">Variable</label>
+            <multiselect
+              id="variable"
+              v-model="variable"
+              class="multiselect"
+              :options="variables"
+            ></multiselect>
+          </div>
+          <font-awesome-icon
+            v-if="summary.length < 13"
+            icon="compass"
+            size="2x"
+            spin
+          />
+        </div>
+      </div>
+      <div class="container-main-second">
+        <div id="viz"></div>
+      </div>
+      <form
+        id="buoy-select-form"
+        class="control-group container-main-third section-grid"
+      >
+        <header class="control-group-header">
+          <h2 class="title ">
+            <font-awesome-icon icon="chart-area" />
+            Visualize
+          </h2>
+          <p class="is-size-4 mb-6">
+            Here you can generate a line plot comparing one variable for
+            multiple buoys over time. Just select the variable, the buoys, and
+            the time range. Use the heatmap above to check what data are
+            available.
+          </p>
+        </header>
+        <section class="box control-box">
           <div class="control-item control-item-first">
             <label for="buoy-select" class="label">Select Buoys</label>
             <multiselect
@@ -59,21 +92,31 @@
             ></date-picker>
           </div>
           <nuxt-link
-            class="button is-link control-item control-item-button"
+            class="button is-link control-item-button"
             :to="{
               name: 'examples-multiselect-plot',
               query: { buoyIds: selectedBuoysString, slug }
             }"
             >Visualize</nuxt-link
           >
-        </form>
-      </details>
-      <details>
-        <summary class="title">
-          Download
-        </summary>
-        <section id="download" class="control-group">
-          <p class="control-group-header">Download</p>
+        </section>
+      </form>
+      <section
+        id="download"
+        class="control-group container-main-fourth section-grid"
+      >
+        <header class="control-group-header">
+          <h2 class="title">
+            <font-awesome-icon icon="download" />
+            Download
+          </h2>
+          <p class="is-size-4 mb-6">
+            If you prefer, we provide the raw data for you to download in
+            various file formats. Just select the options below. You'll need to
+            download one file for each buoy.
+          </p>
+        </header>
+        <section class="box control-box">
           <div class="control-item">
             <label for="file-format" class="label">File format</label>
             <multiselect
@@ -106,14 +149,18 @@
               :multiple="true"
             ></multiselect>
           </div>
+          <!-- <div class="control-item">
+          <label for="date-select" class="label">Select Date Range</label>
+          <date-picker id="date-select" v-model="dateRange" range></date-picker>
+        </div> -->
           <a
             role="button"
-            class="button control-item is-link control-item-button"
+            class="button is-link control-item-button"
             :href="downloadUrl"
             >Download Data</a
           >
         </section>
-      </details>
+      </section>
     </main>
   </div>
 </template>
@@ -239,7 +286,10 @@ export default {
     }
   },
   watch: {
-    summary(newData, oldData) {
+    summary(newVal) {
+      if (newVal.length === 13 && process.browser) {
+        this.addToLocalStorage();
+      }
       this.update();
     }
   },
@@ -252,6 +302,9 @@ export default {
   methods: {
     update() {
       vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
+    },
+    addToLocalStorage() {
+      localStorage.setItem('riddcBuoy', JSON.stringify(this.summary));
     }
   }
 };
@@ -260,6 +313,13 @@ export default {
 <style lang="scss" scoped>
 @import 'bulma';
 
+.banner {
+  height: 25vh;
+}
+
+.d-flex {
+  display: flex;
+}
 .control-group {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -272,6 +332,9 @@ export default {
 .control-group-header {
   grid-area: header;
 }
+.control-box {
+  grid-area: center;
+}
 .control-item-first {
   grid-area: first;
 }
@@ -281,21 +344,50 @@ export default {
 }
 .control-item {
   @extend .py-2;
+  @extend .pr-6;
 }
-.fa-spinner {
+.fa-compass {
   margin-top: 2.4rem;
   margin-left: 2rem;
 }
-.plot-container {
-  margin-top: 3rem;
+.container-center {
   display: grid;
-  justify-content: center;
+  grid-template-columns: 4fr 10fr 4fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    '. main-first .'
+    '. main-second .'
+    '. main-third .'
+    '. main-fourth .';
 }
+
+.container-main-first {
+  @extend .my-6;
+  grid-area: main-first;
+}
+.container-main-second {
+  @extend .my-6;
+  grid-area: main-second;
+}
+.container-main-third {
+  @extend .my-6;
+  grid-area: main-third;
+}
+.container-main-fourth {
+  @extend .my-6;
+  grid-area: main-fourth;
+}
+.section-grid {
+  display: grid;
+  grid-template-columns: 4fr 10fr 4fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    'header header header'
+    '. center .';
+}
+
 .plot {
   margin-top: 3rem;
-}
-.multiselect {
-  width: 50%;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

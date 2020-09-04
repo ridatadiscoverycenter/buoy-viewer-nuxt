@@ -56,6 +56,7 @@ self.addEventListener('message', (event) => {
         return result;
       });
     });
-    self.postMessage(reduced.reduce((a, b) => a.concat(b)));
+    const final = reduced.reduce((a, b) => a.concat(b));
+    self.postMessage(final);
   });
 });

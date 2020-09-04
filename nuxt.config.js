@@ -35,7 +35,8 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
-    '@nuxtjs/stylelint-module'
+    '@nuxtjs/stylelint-module',
+    '@nuxtjs/moment'
   ],
   /*
    ** Nuxt.js modules
@@ -62,7 +63,11 @@ export default {
           'faMapMarkerAlt',
           'faCalendarAlt',
           'faSpinner',
-          'faPlayCircle'
+          'faPlayCircle',
+          'faCompass',
+          'faChartArea',
+          'faDownload',
+          'faArrowLeft'
         ]
       }
     ]

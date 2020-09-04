@@ -1,8 +1,39 @@
 <template>
-  <div class="plot-container">
+  <section class="plot-grid">
+    <nuxt-link
+      class="plot-nav is-size-4"
+      :to="{
+        name: 'summary'
+      }"
+      ><font-awesome-icon icon="arrow-left" /><span class="ml-4"
+        >Back to Summary</span
+      ></nuxt-link
+    >
+    <header class="plot-header">
+      <h1 class="title is-size-2 py-6">
+        <font-awesome-icon icon="chart-area" />Visualizing Buoy Data
+      </h1>
+      <p class="is-size-4 pb-6">
+        Showing <span class="tag is-size-4 is-info">{{ variable }}</span> for
+        buoys
+        <span
+          v-for="buoy in buoyIds"
+          :key="buoy"
+          class="tag is-size-4 is-success mr-2"
+          >{{ buoy }}
+        </span>
+        from
+        <span class="tag is-size-4 is-secondary mr-2"
+          >{{ $moment(startDate).format('DD-MMM-YYYY') }} </span
+        >to
+        <span class="tag is-size-4 is-secondary mr-2">{{
+          $moment(endDate).format('DD-MMM-YYYY')
+        }}</span>
+      </p>
+    </header>
     <!-- {{ dataset }} -->
-    <div id="viz"></div>
-  </div>
+    <div id="viz" class="plot-canvas"></div>
+  </section>
 </template>
 
 <script>
@@ -34,11 +65,21 @@ export default {
     variable() {
       return this.$route.query.slug.split(',')[0];
     },
+    startDate() {
+      const start = new Date(this.$route.query.slug.split(',')[1]);
+      return start;
+    },
+    endDate() {
+      return this.$route.query.slug.split(',')[2];
+    },
     dataset() {
       return this.buoyData
         .map((arr) => arr.slice(0, 2000))
         .filter((arr) => arr[this.variable] !== null)
         .reduce((a, b) => a.concat(b));
+    },
+    buoyIds() {
+      return this.$route.query.buoyIds.split(',');
     },
     spec() {
       return {
@@ -102,7 +143,7 @@ export default {
                     x: { scale: 'xscale', field: 'time' },
                     y: { scale: 'yscale', field: this.variable },
                     stroke: { scale: 'color', field: 'station_name' },
-                    strokeWidth: { value: 0.5 }
+                    strokeWidth: { value: 2 }
                   },
                   update: {
                     interpolate: 'linear',
@@ -130,9 +171,22 @@ export default {
 
 <style lang="scss" scoped>
 @import 'bulma';
-.plot-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 10rem;
+.plot-grid {
+  display: grid;
+  grid-template-columns: 4fr 10fr 4fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    ' . nav .'
+    '. header .'
+    '. plot .';
+}
+.plot-header {
+  grid-area: header;
+}
+.plot-canvas {
+  grid-area: plot;
+}
+.plot-nav {
+  grid-area: nav;
 }
 </style>
