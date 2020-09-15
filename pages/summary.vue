@@ -10,6 +10,15 @@
     </section>
     <main class="container-center">
       <div class="container-main-first">
+        <nuxt-link
+          class="plot-nav is-size-5 py-5"
+          :to="{
+            name: 'index'
+          }"
+          ><font-awesome-icon icon="arrow-left" /><span class="ml-4"
+            >Back to Home</span
+          ></nuxt-link
+        >
         <header class="control-group-header">
           <h1 class="title">Buoy Data Exploration</h1>
           <p class="is-size-4 mb-6">
@@ -291,6 +300,22 @@ export default {
         this.addToLocalStorage();
       }
       this.update();
+    }
+  },
+  beforeMount() {
+    if (process.browser && this.summary.length < 13) {
+      try {
+        const summary = JSON.parse(localStorage.getItem('riddcBuoy'));
+        summary
+          .reduce((a, b) => a.concat(b))
+          .forEach((datum) => {
+            datum.date = new Date(datum.date);
+            this.$store.dispatch('worker/setSummary', datum);
+          });
+        this.$store.dispatch('worker/loaded', true);
+      } catch {
+        this.$store.dispatch('worker/loaded', false);
+      }
     }
   },
   mounted() {

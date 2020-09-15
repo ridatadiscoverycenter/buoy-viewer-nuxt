@@ -47,8 +47,8 @@ export default {
       }
     }
   },
-  beforeCreate() {
-    if (process.browser) {
+  beforeMount() {
+    if (process.browser && this.summary.length < 13) {
       try {
         const summary = JSON.parse(localStorage.getItem('riddcBuoy'));
         summary
@@ -63,7 +63,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     const buoyChunks = _.chunk(this.buoys, 1);
     if (process.browser) {
       if (this.summary.length === 0) {

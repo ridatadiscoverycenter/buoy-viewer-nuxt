@@ -1,5 +1,8 @@
 <template>
   <section class="plot-grid">
+    <aside class="plot-aside">
+      <header>=</header>
+    </aside>
     <nuxt-link
       class="plot-nav is-size-4"
       :to="{
@@ -74,7 +77,6 @@ export default {
     },
     dataset() {
       return this.buoyData
-        .map((arr) => arr.slice(0, 2000))
         .filter((arr) => arr[this.variable] !== null)
         .reduce((a, b) => a.concat(b));
     },
@@ -172,21 +174,31 @@ export default {
 <style lang="scss" scoped>
 @import 'bulma';
 .plot-grid {
+  @extend .mt-6;
   display: grid;
-  grid-template-columns: 4fr 10fr 4fr;
+  grid-template-columns: 5fr 10fr;
   grid-template-rows: auto;
   grid-template-areas:
-    ' . nav .'
-    '. header .'
-    '. plot .';
+    ' aside nav'
+    ' aside header'
+    ' aside plot';
 }
 .plot-header {
+  @extend .px-6;
   grid-area: header;
 }
 .plot-canvas {
+  @extend .px-6;
+  @extend .mr-6;
   grid-area: plot;
 }
 .plot-nav {
+  @extend .px-6;
   grid-area: nav;
+}
+.plot-aside {
+  @extend .has-background-light;
+  @extend .px-6;
+  grid-area: aside;
 }
 </style>
