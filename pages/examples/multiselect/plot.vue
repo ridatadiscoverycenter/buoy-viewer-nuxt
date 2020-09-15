@@ -1,8 +1,42 @@
 <template>
-  <div class="plot-container">
+  <section class="plot-grid">
+    <aside class="plot-aside">
+      <header>=</header>
+    </aside>
+    <nuxt-link
+      class="plot-nav is-size-4"
+      :to="{
+        name: 'summary'
+      }"
+      ><font-awesome-icon icon="arrow-left" /><span class="ml-4"
+        >Back to Summary</span
+      ></nuxt-link
+    >
+    <header class="plot-header">
+      <h1 class="title is-size-2 py-6">
+        <font-awesome-icon icon="chart-area" />Visualizing Buoy Data
+      </h1>
+      <p class="is-size-4 pb-6">
+        Showing <span class="tag is-size-4 is-info">{{ variable }}</span> for
+        buoys
+        <span
+          v-for="buoy in buoyIds"
+          :key="buoy"
+          class="tag is-size-4 is-success mr-2"
+          >{{ buoy }}
+        </span>
+        from
+        <span class="tag is-size-4 is-secondary mr-2"
+          >{{ $moment(startDate).format('DD-MMM-YYYY') }} </span
+        >to
+        <span class="tag is-size-4 is-secondary mr-2">{{
+          $moment(endDate).format('DD-MMM-YYYY')
+        }}</span>
+      </p>
+    </header>
     <!-- {{ dataset }} -->
-    <div id="viz"></div>
-  </div>
+    <div id="viz" class="plot-canvas"></div>
+  </section>
 </template>
 
 <script>
@@ -14,7 +48,9 @@ export default {
     try {
       const ids = query.buoyIds.split(',');
       const payload = {
-        variable: query.variable,
+        variable: query.slug.split(',')[0],
+        start: query.slug.split(',')[1],
+        end: query.slug.split(',')[2],
         ids
       };
       await store.dispatch('buoy/fetchDataGeoJson', payload);
@@ -29,11 +65,23 @@ export default {
     ...mapState({
       buoyData: (state) => state.buoy.buoyData
     }),
+    variable() {
+      return this.$route.query.slug.split(',')[0];
+    },
+    startDate() {
+      const start = new Date(this.$route.query.slug.split(',')[1]);
+      return start;
+    },
+    endDate() {
+      return this.$route.query.slug.split(',')[2];
+    },
     dataset() {
       return this.buoyData
-        .map((arr) => arr.slice(0, 2000))
-        .filter((arr) => arr[this.$route.query.variable] !== null)
+        .filter((arr) => arr[this.variable] !== null)
         .reduce((a, b) => a.concat(b));
+    },
+    buoyIds() {
+      return this.$route.query.buoyIds.split(',');
     },
     spec() {
       return {
@@ -62,7 +110,7 @@ export default {
           {
             name: 'yscale',
             type: 'linear',
-            domain: { data: 'buoy', field: this.$route.query.variable },
+            domain: { data: 'buoy', field: this.variable },
             nice: true,
             zero: true,
             range: 'height'
@@ -95,9 +143,9 @@ export default {
                 encode: {
                   enter: {
                     x: { scale: 'xscale', field: 'time' },
-                    y: { scale: 'yscale', field: this.$route.query.variable },
+                    y: { scale: 'yscale', field: this.variable },
                     stroke: { scale: 'color', field: 'station_name' },
-                    strokeWidth: { value: 0.5 }
+                    strokeWidth: { value: 2 }
                   },
                   update: {
                     interpolate: 'linear',
@@ -125,9 +173,32 @@ export default {
 
 <style lang="scss" scoped>
 @import 'bulma';
-.plot-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 10rem;
+.plot-grid {
+  @extend .mt-6;
+  display: grid;
+  grid-template-columns: 5fr 10fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    ' aside nav'
+    ' aside header'
+    ' aside plot';
+}
+.plot-header {
+  @extend .px-6;
+  grid-area: header;
+}
+.plot-canvas {
+  @extend .px-6;
+  @extend .mr-6;
+  grid-area: plot;
+}
+.plot-nav {
+  @extend .px-6;
+  grid-area: nav;
+}
+.plot-aside {
+  @extend .has-background-light;
+  @extend .px-6;
+  grid-area: aside;
 }
 </style>

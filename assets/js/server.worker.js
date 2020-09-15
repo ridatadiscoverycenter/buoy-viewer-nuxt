@@ -17,27 +17,8 @@ const fetchDataGeoJson = (payload) => {
   );
 };
 
-const variables = [
-  'ChlorophyllSurface',
-  'DepthBottom',
-  'FSpercentSurface',
-  'O2PercentSurface',
-  'O2Surface',
-  'SalinityBottom',
-  'SalinitySurface',
-  'SpCondBottom',
-  'SpCondSurface',
-  'TurbidityBottom',
-  'WaterTempBottom',
-  'WaterTempSurface',
-  'depth',
-  'pHBottom',
-  'pHSurface',
-  'depth'
-];
-
 self.addEventListener('message', (event) => {
-  const ids = state().buoys;
+  const ids = event.data.buoys;
   const variable = state().variables.join(',');
   fetchDataGeoJson({ variable, ids }).then((response) => {
     const d = response.map((data) =>
@@ -60,14 +41,14 @@ self.addEventListener('message', (event) => {
         const result = grouped[k][date]
           .map((obj) => {
             const newObj = {};
-            variables.forEach((v) => {
+            state().variables.forEach((v) => {
               newObj[v] = obj[v] ? 1 : 0;
             });
             return newObj;
           })
           .reduce((a, b) => {
             const newObj = {};
-            variables.forEach((v) => (newObj[v] = a[v] + b[v]));
+            state().variables.forEach((v) => (newObj[v] = a[v] + b[v]));
             newObj.date = new Date(date.replace('_', '/') + '/01');
             newObj.station = k;
             return newObj;
@@ -75,6 +56,7 @@ self.addEventListener('message', (event) => {
         return result;
       });
     });
-    self.postMessage(reduced.reduce((a, b) => a.concat(b)));
+    const final = reduced.reduce((a, b) => a.concat(b));
+    self.postMessage(final);
   });
 });

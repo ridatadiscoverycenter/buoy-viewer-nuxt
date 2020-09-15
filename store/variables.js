@@ -63,7 +63,6 @@ export const state = () => ({
     'SalinitySurface'
   ],
   fileFormats: [
-    '-',
     'htmlTable',
     'csv',
     'json',
