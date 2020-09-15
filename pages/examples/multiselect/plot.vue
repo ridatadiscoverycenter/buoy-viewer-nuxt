@@ -1,7 +1,42 @@
 <template>
   <section class="plot-grid">
     <aside class="plot-aside">
-      <header>=</header>
+      <header class="plot-variables">
+        <ul class="py-4">
+          <li>
+            <span class="has-text-weight-bold">Variable:</span
+            ><span class="tag is-link">{{ variable }}</span>
+          </li>
+          <li>
+            <span class="has-text-weight-bold">Buoys:</span>
+            <span
+              v-for="buoy in buoyIds"
+              :key="buoy"
+              class="tag is-success mr-2"
+              >{{ buoy }}
+            </span>
+          </li>
+          <li>
+            <span class="has-text-weight-bold">Date Range:</span>
+            <span class="tag is-info mr-2"
+              >{{ $moment(startDate).format('DD-MMM-YYYY') }} </span
+            >to
+            <span class="tag is-info mr-2">{{
+              $moment(endDate).format('DD-MMM-YYYY')
+            }}</span>
+          </li>
+        </ul>
+      </header>
+      <Map
+        id="map"
+        :width="500"
+        :height="600"
+        :scale="25000"
+        :points="filterCoordinates"
+        :center="[-71.07, 41.6]"
+        background="whitesmoke"
+        class="plot-container"
+      />
     </aside>
     <nuxt-link
       class="plot-nav is-size-4"
@@ -14,25 +49,8 @@
     >
     <header class="plot-header">
       <h1 class="title is-size-2 py-6">
-        <font-awesome-icon icon="chart-area" />Visualizing Buoy Data
+        <font-awesome-icon icon="chart-area" />{{ variable }}
       </h1>
-      <p class="is-size-4 pb-6">
-        Showing <span class="tag is-size-4 is-info">{{ variable }}</span> for
-        buoys
-        <span
-          v-for="buoy in buoyIds"
-          :key="buoy"
-          class="tag is-size-4 is-success mr-2"
-          >{{ buoy }}
-        </span>
-        from
-        <span class="tag is-size-4 is-secondary mr-2"
-          >{{ $moment(startDate).format('DD-MMM-YYYY') }} </span
-        >to
-        <span class="tag is-size-4 is-secondary mr-2">{{
-          $moment(endDate).format('DD-MMM-YYYY')
-        }}</span>
-      </p>
     </header>
     <!-- {{ dataset }} -->
     <div id="viz" class="plot-canvas"></div>
@@ -42,8 +60,12 @@
 <script>
 import { mapState } from 'vuex';
 import vega from 'vega-embed';
+import Map from '@/components/Map.vue';
 
 export default {
+  components: {
+    Map
+  },
   async fetch({ store, error, query }) {
     try {
       const ids = query.buoyIds.split(',');
@@ -62,9 +84,7 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      buoyData: (state) => state.buoy.buoyData
-    }),
+    ...mapState('buoy', ['coordinates', 'buoyData']),
     variable() {
       return this.$route.query.slug.split(',')[0];
     },
@@ -83,6 +103,11 @@ export default {
     buoyIds() {
       return this.$route.query.buoyIds.split(',');
     },
+    filterCoordinates() {
+      return this.coordinates.filter((o) => {
+        return this.buoyIds.includes(o.buoyId);
+      });
+    },
     spec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
@@ -91,7 +116,6 @@ export default {
         width: 800,
         height: 500,
         padding: 5,
-
         data: [
           {
             name: 'buoy',
@@ -162,6 +186,13 @@ export default {
       };
     }
   },
+  created() {
+    if (this.coordinates.length === 0) {
+      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
+        ids: this.buoyIds
+      });
+    }
+  },
   mounted() {
     vega('#viz', this.spec, { actions: true, theme: 'vox' });
   },
@@ -200,5 +231,17 @@ export default {
   @extend .has-background-light;
   @extend .px-6;
   grid-area: aside;
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    ' . first-center .'
+    ' second second second ';
+}
+.plot-variables {
+  grid-area: first-center;
+}
+.plot-container {
+  grid-area: second;
 }
 </style>

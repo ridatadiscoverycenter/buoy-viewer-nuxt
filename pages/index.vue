@@ -23,7 +23,7 @@
         </nuxt-link>
       </div>
     </div>
-    <Map class="item2" />
+    <Map class="item2" :points="coordinates" />
   </main>
 </template>
 
@@ -38,6 +38,7 @@ export default {
   computed: {
     ...mapState('worker', ['loaded', 'summary']),
     ...mapState('variables', ['buoys']),
+    ...mapState('buoy', ['coordinates']),
     dataArr: {
       get() {
         return 0;
@@ -46,6 +47,11 @@ export default {
         return this.summary.reduce((a, b) => _.concat(a, b)).length();
       }
     }
+  },
+  created() {
+    this.$store.dispatch('buoy/fetchBuoyCoordinates', {
+      ids: this.buoys
+    });
   },
   beforeMount() {
     if (process.browser && this.summary.length < 13) {
