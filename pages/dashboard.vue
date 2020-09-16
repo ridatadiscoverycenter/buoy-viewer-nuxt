@@ -20,7 +20,7 @@
     </template>
     <template #main-header
       ><span class="title"
-        ><font-awesome-icon icon="chart-area" />Dashboard</span
+        ><font-awesome-icon icon="chart-area" class="mr-2" />Dashboard</span
       >
     </template>
     <template #main-section>
@@ -45,8 +45,11 @@
       </ChartContainer>
 
       <ChartContainer class="half-width">
-        <template #title>Download</template>
-        <template #subtitle>Download the selected data.</template>
+        <template #title>Download Selected Data</template>
+        <template #subtitle
+          >Selected data includes {{ variable }} from
+          {{ startDate.slice(0, 10) }} to {{ endDate.slice(0, 10) }}</template
+        >
         <template #chart>
           <div class="control-item">
             <label for="file-format" class="label">File format</label>
@@ -62,7 +65,7 @@
             v-for="buoy in buoyIds"
             :key="'download' + buoy"
             role="button"
-            class="button is-link control-item-button mx-2 my-2"
+            class="button is-link control-item-button mr-2 my-2"
             :href="downloadUrl(buoy)"
             >Download {{ buoy }} Data</a
           >

@@ -18,11 +18,11 @@ export default {
     },
     width: {
       type: Number,
-      default: 600
+      default: 550
     },
     height: {
       type: Number,
-      default: 800
+      default: 720
     },
     scale: {
       type: Number,
@@ -34,7 +34,7 @@ export default {
     },
     center: {
       type: Array,
-      default: () => [-71.1774, 41.6801]
+      default: () => [-71.1774, 41.8]
     }
   },
   data() {

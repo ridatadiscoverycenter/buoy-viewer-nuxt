@@ -103,7 +103,7 @@
         <template #chart>
           <div class="is-flex-column">
             <nuxt-link
-              class="button is-link"
+              class="button is-link mb-2"
               :to="{
                 name: 'dashboard',
                 query: {
@@ -115,7 +115,7 @@
               >Buoys 1 and 2, Water Temperature 2010-2011</nuxt-link
             >
             <nuxt-link
-              class="button is-link"
+              class="button is-link mb-2"
               :to="{
                 name: 'dashboard',
                 query: {
@@ -124,7 +124,7 @@
                     'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
                 }
               }"
-              >Buoys 115 and 17, depth 2008-2009</nuxt-link
+              >Buoys 15 and 17, depth 2008-2009</nuxt-link
             >
           </div>
         </template>
@@ -352,11 +352,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import 'bulma';
-.fa-compass {
-  margin-top: 2.4rem;
-  margin-left: 2rem;
+.is-flex-column {
+  @extend .is-flex;
+  flex-direction: column;
 }
 .container-center {
   display: grid;
@@ -391,7 +391,7 @@ export default {
   margin-top: 3rem;
 }
 .half-width {
-  width: 48%;
+  width: 30%;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

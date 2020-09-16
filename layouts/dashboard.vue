@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="logo-container">
-      <span>Rhode Island Data Discovery Center</span><BaseLogo />
+      <span class="subtitle mb-0 mr-2">Rhode Island Data Discovery Center</span
+      ><BaseLogo />
     </div>
     <div class="dashboard-grid">
       <aside class="sidebar">

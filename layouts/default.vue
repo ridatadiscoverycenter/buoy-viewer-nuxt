@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="logo-container">
-      <span>Rhode Island Data Discovery Center</span><BaseLogo />
+      <span class="subtitle mb-0 mr-2">Rhode Island Data Discovery Center</span>
+      <BaseLogo />
     </div>
     <nuxt />
   </div>
@@ -27,14 +28,3 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-@import 'bulma';
-.logo-container {
-  @extend .is-flex;
-  @extend .px-2;
-  @extend .py-2;
-  justify-content: flex-end;
-  align-items: center;
-  border-bottom: 1px solid #a4b1bf;
-}
-</style>
