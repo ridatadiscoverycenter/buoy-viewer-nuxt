@@ -1,7 +1,5 @@
 <template>
-  <div class="plot-container">
-    <div :id="id"></div>
-  </div>
+  <div :id="id"></div>
 </template>
 
 <script>
@@ -116,6 +114,9 @@ export default {
   watch: {
     points(newValue, oldValue) {
       this.updatePlot();
+    },
+    scale(newValue, oldValue) {
+      this.updatePlot();
     }
   },
   mounted() {
@@ -135,9 +136,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.plot-container {
-  margin-top: 5rem;
-}
-</style>

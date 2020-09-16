@@ -1,70 +1,63 @@
 <template>
-  <section class="plot-grid">
-    <aside class="plot-aside">
-      <header class="plot-variables">
-        <ul class="py-4">
-          <li>
-            <span class="has-text-weight-bold">Variable:</span
-            ><span class="tag is-link">{{ variable }}</span>
-          </li>
-          <li>
-            <span class="has-text-weight-bold">Buoys:</span>
-            <span
-              v-for="buoy in buoyIds"
-              :key="buoy"
-              class="tag is-success mr-2"
-              >{{ buoy }}
-            </span>
-          </li>
-          <li>
-            <span class="has-text-weight-bold">Date Range:</span>
-            <span class="tag is-info mr-2"
-              >{{ $moment(startDate).format('DD-MMM-YYYY') }} </span
-            >to
-            <span class="tag is-info mr-2">{{
-              $moment(endDate).format('DD-MMM-YYYY')
-            }}</span>
-          </li>
-        </ul>
-      </header>
-      <Map
-        id="map"
-        :width="500"
-        :height="600"
-        :scale="25000"
-        :points="filterCoordinates"
-        :center="[-71.07, 41.6]"
-        background="whitesmoke"
-        class="plot-container"
-      />
-    </aside>
-    <nuxt-link
-      class="plot-nav is-size-4"
-      :to="{
-        name: 'summary'
-      }"
-      ><font-awesome-icon icon="arrow-left" /><span class="ml-4"
-        >Back to Summary</span
-      ></nuxt-link
-    >
-    <header class="plot-header">
-      <h1 class="title is-size-2 py-6">
-        <font-awesome-icon icon="chart-area" />{{ variable }}
-      </h1>
-    </header>
-    <!-- {{ dataset }} -->
-    <div id="viz" class="plot-canvas"></div>
-  </section>
+  <Dashboard>
+    <template #sidebar>sidebar</template>
+    <template #main-nav>
+      <nuxt-link
+        class="plot-nav is-size-4"
+        :to="{
+          name: 'index'
+        }"
+      >
+        <span>Home</span></nuxt-link
+      >
+      <span class="ml-4 is-size-4">/</span>
+      <nuxt-link
+        class="plot-nav is-size-4"
+        :to="{
+          name: 'summary'
+        }"
+        ><span class="ml-4">Summary</span></nuxt-link
+      >
+    </template>
+    <template #main-header
+      ><span class="title"><font-awesome-icon icon="chart-area" />Viz</span>
+    </template>
+    <template #main-section>
+      <ChartContainer>
+        <template #title>Buoy Locations</template>
+        <template #subtitle>Subtitle</template>
+        <template #chart>
+          <Map
+            id="map"
+            :width="340"
+            :height="400"
+            :scale="17000"
+            :points="filterCoordinates"
+            :center="[-70.5, 41.5]"
+        /></template>
+      </ChartContainer>
+
+      <ChartContainer>
+        <template #title>{{ variable }}</template>
+        <template #subtitle>Subtitle</template>
+        <template #chart> <div id="viz" class="plot-canvas"></div></template>
+      </ChartContainer>
+    </template>
+  </Dashboard>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import vega from 'vega-embed';
 import Map from '@/components/Map.vue';
+import Dashboard from '@/components/base/BaseDashboard.vue';
+import ChartContainer from '@/components/base/ChartContainer.vue';
 
 export default {
   components: {
-    Map
+    Map,
+    Dashboard,
+    ChartContainer
   },
   async fetch({ store, error, query }) {
     try {
@@ -82,6 +75,11 @@ export default {
         message: 'Unable to fetch data at this time. Try again later.'
       });
     }
+  },
+  data() {
+    return {
+      sideHidden: false
+    };
   },
   computed: {
     ...mapState('buoy', ['coordinates', 'buoyData']),
@@ -194,54 +192,24 @@ export default {
     }
   },
   mounted() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    this.updatePlot();
   },
   updated() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    this.updatePlot();
+  },
+  methods: {
+    hide() {
+      console.log('hide');
+    },
+    updatePlot() {
+      vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import 'bulma';
-.plot-grid {
-  @extend .mt-6;
-  display: grid;
-  grid-template-columns: 5fr 10fr;
-  grid-template-rows: auto;
-  grid-template-areas:
-    ' aside nav'
-    ' aside header'
-    ' aside plot';
-}
-.plot-header {
-  @extend .px-6;
-  grid-area: header;
-}
-.plot-canvas {
-  @extend .px-6;
-  @extend .mr-6;
-  grid-area: plot;
-}
-.plot-nav {
-  @extend .px-6;
-  grid-area: nav;
-}
-.plot-aside {
-  @extend .has-background-light;
-  @extend .px-6;
-  grid-area: aside;
-  display: grid;
-  grid-template-columns: 1fr 5fr 1fr;
-  grid-template-rows: auto;
-  grid-template-areas:
-    ' . first-center .'
-    ' second second second ';
-}
-.plot-variables {
-  grid-area: first-center;
-}
-.plot-container {
-  grid-area: second;
+.map-container {
+  transform: scale(0.8);
 }
 </style>
