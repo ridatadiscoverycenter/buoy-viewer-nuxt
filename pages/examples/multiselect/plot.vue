@@ -1,6 +1,5 @@
 <template>
   <Dashboard>
-    <template #sidebar>sidebar</template>
     <template #main-nav>
       <nuxt-link
         class="plot-nav is-size-4"
@@ -54,6 +53,7 @@ import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 
 export default {
+  layout: 'dashboard',
   components: {
     Map,
     Dashboard,

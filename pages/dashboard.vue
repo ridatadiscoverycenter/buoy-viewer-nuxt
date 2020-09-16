@@ -1,28 +1,246 @@
 <template>
-  <div>
-    <Dashboard>
-      <template #sidebar>sidebar</template>
-      <template #main-nav>nav</template>
-      <template #main-header>header</template>
-      <template #main-section>
-        <ChartContainer>
-          <template #title>Title</template>
-          <template #subtitle>Subtitle</template>
-          <template #chart><div class="mock"></div></template>
-        </ChartContainer>
-      </template>
-    </Dashboard>
-  </div>
+  <Dashboard>
+    <template #main-nav>
+      <nuxt-link
+        class="plot-nav is-size-4"
+        :to="{
+          name: 'index'
+        }"
+      >
+        <span>Home</span></nuxt-link
+      >
+      <span class="ml-4 is-size-4">/</span>
+      <nuxt-link
+        class="plot-nav is-size-4"
+        :to="{
+          name: 'summary'
+        }"
+        ><span class="ml-4">Summary</span></nuxt-link
+      >
+    </template>
+    <template #main-header
+      ><span class="title"
+        ><font-awesome-icon icon="chart-area" />Dashboard</span
+      >
+    </template>
+    <template #main-section>
+      <ChartContainer>
+        <template #title>Buoy Locations</template>
+        <template #subtitle>Subtitle</template>
+        <template #chart>
+          <Map
+            id="map"
+            :width="340"
+            :height="400"
+            :scale="17000"
+            :points="filterCoordinates"
+            :center="[-70.5, 41.5]"
+        /></template>
+      </ChartContainer>
+
+      <ChartContainer>
+        <template #title>{{ variable }}</template>
+        <template #subtitle>Subtitle</template>
+        <template #chart> <div id="viz" class="plot-canvas"></div></template>
+      </ChartContainer>
+
+      <ChartContainer class="half-width">
+        <template #title>Download</template>
+        <template #subtitle>Download the selected data.</template>
+        <template #chart>
+          <div class="control-item">
+            <label for="file-format" class="label">File format</label>
+            <multiselect
+              id="file-format"
+              v-model="fileFormat"
+              class="multiselect"
+              :options="fileFormats"
+            ></multiselect>
+          </div>
+
+          <a
+            v-for="buoy in buoyIds"
+            :key="'download' + buoy"
+            role="button"
+            class="button is-link control-item-button mx-2 my-2"
+            :href="downloadUrl(buoy)"
+            >Download {{ buoy }} Data</a
+          >
+        </template>
+      </ChartContainer>
+    </template>
+  </Dashboard>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import vega from 'vega-embed';
+import Multiselect from 'vue-multiselect';
+import Map from '@/components/Map.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 
 export default {
+  layout: 'dashboard',
   components: {
+    Multiselect,
+    Map,
     Dashboard,
     ChartContainer
+  },
+  async fetch({ store, error, query }) {
+    try {
+      const ids = query.buoyIds.split(',');
+      const payload = {
+        variable: query.slug.split(',')[0],
+        start: query.slug.split(',')[1],
+        end: query.slug.split(',')[2],
+        ids
+      };
+      await store.dispatch('buoy/fetchDataGeoJson', payload);
+    } catch (e) {
+      error({
+        statusCode: 503,
+        message: 'Unable to fetch data at this time. Try again later.'
+      });
+    }
+  },
+  data() {
+    return {
+      sideHidden: false,
+      fileFormat: 'json'
+    };
+  },
+  computed: {
+    ...mapState('buoy', ['coordinates', 'buoyData']),
+    ...mapState('variables', ['baseUrl', 'fileFormats']),
+    variable() {
+      return this.$route.query.slug.split(',')[0];
+    },
+    startDate() {
+      const start = this.$route.query.slug.split(',')[1];
+      return start;
+    },
+    endDate() {
+      return this.$route.query.slug.split(',')[2];
+    },
+    dataset() {
+      return this.buoyData
+        .filter((arr) => arr[this.variable] !== null)
+        .reduce((a, b) => a.concat(b));
+    },
+    buoyIds() {
+      return this.$route.query.buoyIds.split(',');
+    },
+    filterCoordinates() {
+      return this.coordinates.filter((o) => {
+        return this.buoyIds.includes(o.buoyId);
+      });
+    },
+    spec() {
+      return {
+        $schema: 'https://vega.github.io/schema/vega/v5.json',
+        description:
+          'A basic line chart example, with value labels shown upon mouse hover.',
+        width: 800,
+        height: 500,
+        padding: 5,
+        data: [
+          {
+            name: 'buoy',
+            values: this.dataset
+          }
+        ],
+        scales: [
+          {
+            name: 'xscale',
+            type: 'time',
+            domain: { data: 'buoy', field: 'time' },
+            range: 'width',
+            padding: 0.05,
+            round: true
+          },
+          {
+            name: 'yscale',
+            type: 'linear',
+            domain: { data: 'buoy', field: this.variable },
+            nice: true,
+            zero: true,
+            range: 'height'
+          },
+          {
+            name: 'color',
+            type: 'ordinal',
+            range: 'category',
+            domain: { data: 'buoy', field: 'station_name' }
+          }
+        ],
+        axes: [
+          { orient: 'bottom', scale: 'xscale', labelAngle: 15 },
+          { orient: 'left', scale: 'yscale' }
+        ],
+        marks: [
+          {
+            type: 'group',
+            from: {
+              facet: {
+                name: 'series',
+                data: 'buoy',
+                groupby: 'station_name'
+              }
+            },
+            marks: [
+              {
+                type: 'line',
+                from: { data: 'series' },
+                encode: {
+                  enter: {
+                    x: { scale: 'xscale', field: 'time' },
+                    y: { scale: 'yscale', field: this.variable },
+                    stroke: { scale: 'color', field: 'station_name' },
+                    strokeWidth: { value: 2 }
+                  },
+                  update: {
+                    interpolate: 'linear',
+                    strokeOpacity: { value: 1 }
+                  },
+                  hover: {
+                    strokeOpacity: { value: 0.5 }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      };
+    }
+  },
+  created() {
+    if (this.coordinates.length === 0) {
+      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
+        ids: this.buoyIds
+      });
+    }
+  },
+  mounted() {
+    this.updatePlot();
+  },
+  updated() {
+    this.updatePlot();
+  },
+  methods: {
+    downloadUrl(buoyId) {
+      return `${this.baseUrl}${this.fileFormat}?${this.variable},time,latitude,longitude&time>=${this.startDate}&time<=${this.endDate}&station_name="${buoyId}"`;
+    },
+    updatePlot() {
+      vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.map-container {
+  transform: scale(0.8);
+}
+</style>

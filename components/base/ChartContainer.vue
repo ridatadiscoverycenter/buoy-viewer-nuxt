@@ -30,4 +30,8 @@ export default {};
   @extend .px-4;
   @extend .py-4;
 }
+.chart {
+  padding: inherit;
+  width: 100%;
+}
 </style>
