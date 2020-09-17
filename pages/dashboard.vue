@@ -24,7 +24,7 @@
       >
     </template>
     <template #main-section>
-      <ChartContainer>
+      <ChartContainer width="one-third">
         <template #title>Buoy Locations</template>
         <template #subtitle>Subtitle</template>
         <template #chart>
@@ -38,13 +38,13 @@
         /></template>
       </ChartContainer>
 
-      <ChartContainer>
+      <ChartContainer width="two-thirds">
         <template #title>{{ variable }}</template>
         <template #subtitle>Subtitle</template>
         <template #chart> <div id="viz" class="plot-canvas"></div></template>
       </ChartContainer>
 
-      <ChartContainer class="half-width">
+      <ChartContainer width="half">
         <template #title>Download Selected Data</template>
         <template #subtitle
           >Selected data includes {{ variable }} from

@@ -30,7 +30,7 @@ export default {
     },
     background: {
       type: String,
-      default: 'white'
+      default: 'transparent'
     },
     center: {
       type: Array,
@@ -83,8 +83,9 @@ export default {
             from: { data: 'outlines' },
             encode: {
               enter: {
-                strokeWidth: { value: 1 },
-                stroke: { value: '#bbb' }
+                strokeWidth: { value: 1.4 },
+                stroke: { value: 'slategray' },
+                fill: { value: 'whitesmoke' }
               }
             },
             transform: [{ type: 'geoshape', projection: 'projection' }]

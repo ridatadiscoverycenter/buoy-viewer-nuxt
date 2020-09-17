@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="logo-container">
-      <span class="subtitle mb-0 mr-2">Rhode Island Data Discovery Center</span>
+    <a class="logo-container" href="https://ridatadiscovery.org">
+      <span class="brand-title">Rhode Island Data Discovery Center</span>
       <BaseLogo />
-    </div>
+    </a>
     <nuxt />
   </div>
 </template>

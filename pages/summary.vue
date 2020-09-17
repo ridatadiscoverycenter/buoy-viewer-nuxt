@@ -11,7 +11,7 @@
     </template>
     <template #main-header><h1 class="title">Summary</h1></template>
     <template #main-section>
-      <ChartContainer>
+      <ChartContainer width="two-thirds">
         <template #title>Available Data</template>
         <template #subtitle>
           This dataset spans from 2003 to 2012. The heatmap below summarizes the
@@ -23,7 +23,7 @@
           to see what data is available.</template
         >
         <template #chart>
-          <div class="d-flex">
+          <div class="is-flex-column">
             <div class="control-item control-item-first">
               <label for="variable" class="label">Variable</label>
               <multiselect
@@ -36,16 +36,30 @@
             <font-awesome-icon
               v-if="summary.length < 13"
               icon="compass"
-              size="2x"
               spin
+              class="compass-loading"
             />
+            <div id="viz" class="mt-6 chart-centered"></div>
           </div>
-          <div id="viz"></div>
         </template>
       </ChartContainer>
-
-      <ChartContainer class="half-width">
-        <template #title>Visualize</template>
+      <ChartContainer width="one-third">
+        <template #title>Buoy Locations</template>
+        <template #subtitle
+          >Hover over the circles to find out the buoy locations.</template
+        >
+        <template #chart>
+          <Map
+            id="map"
+            :width="340"
+            :height="400"
+            :scale="17000"
+            :points="coordinates"
+            :center="[-70.5, 41.5]"
+        /></template>
+      </ChartContainer>
+      <ChartContainer width="half">
+        <template #title>Explore</template>
         <template #subtitle
           >Here you can generate a line plot comparing one variable for multiple
           buoys over time. Just select the variable, the buoys, and the time
@@ -95,10 +109,11 @@
         >
       </ChartContainer>
 
-      <ChartContainer>
-        <template #title>Explore a few examples</template>
+      <ChartContainer width="half">
+        <template #title>Not sure what to explore?</template>
         <template #subtitle>
-          Select one of the scenarios below and start exploring!</template
+          Here are a few pre-selected scenarios for you. Just pick one and start
+          exploring.</template
         >
         <template #chart>
           <div class="is-flex-column">
@@ -130,7 +145,7 @@
         </template>
       </ChartContainer>
 
-      <ChartContainer class="half-width">
+      <ChartContainer width="one-third">
         <template #title>Download</template>
         <template #subtitle
           >If you prefer, we provide the raw data for you to download in various
@@ -192,12 +207,14 @@ import vega from 'vega-embed';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
+import Map from '@/components/Map.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 
 export default {
   layout: 'dashboard',
   components: {
+    Map,
     Multiselect,
     DatePicker,
     Dashboard,
@@ -217,6 +234,7 @@ export default {
   computed: {
     ...mapState('worker', ['summary']),
     ...mapState('variables', ['buoys', 'variables', 'fileFormats', 'baseUrl']),
+    ...mapState('buoy', ['coordinates']),
     dataArr() {
       return this.summary.reduce((a, b) => _.concat(a, b));
     },
@@ -237,8 +255,8 @@ export default {
     spec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
-        width: 1000,
-        height: 200,
+        width: 800,
+        height: 300,
         data: {
           name: 'buoy',
           values: this.dataArr
@@ -296,7 +314,7 @@ export default {
               enter: {
                 x: { scale: 'x', field: 'date' },
                 y: { scale: 'y', field: 'station' },
-                width: { value: 9 },
+                width: { value: 12 },
                 height: { scale: 'y', band: 1 },
                 tooltip: {
                   signal: `{'Date': timeFormat(datum.date, '%B %Y'), 'Station': datum.station, 'Count': datum.${this.variable}}`
@@ -317,6 +335,13 @@ export default {
         this.addToLocalStorage();
       }
       this.update();
+    }
+  },
+  created() {
+    if (this.coordinates.length === 0) {
+      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
+        ids: this.buoys
+      });
     }
   },
   beforeMount() {
@@ -390,8 +415,13 @@ export default {
 .plot {
   margin-top: 3rem;
 }
-.half-width {
-  width: 30%;
+
+.compass-loading {
+  @extend .mt-6;
+  justify-self: center;
+  align-self: center;
+  font-size: 20rem !important;
+  color: $link;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

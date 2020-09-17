@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container">
+  <div class="chart-container" :class="['is-' + width]">
     <header class="chart-header">
       <h2 class="title"><slot name="title"></slot></h2>
       <h3 class="subtitle"><slot name="subtitle"></slot></h3>
@@ -11,7 +11,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    width: {
+      type: String,
+      default: 'full'
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -22,6 +29,7 @@ export default {};
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  overflow-x: scroll;
 }
 .chart-header {
   display: flex;
@@ -33,5 +41,17 @@ export default {};
 .chart {
   padding: inherit;
   width: 100%;
+}
+.is-one-third {
+  width: 32%;
+}
+.is-half {
+  width: 49%;
+}
+.is-full {
+  width: 100%;
+}
+.is-two-thirds {
+  width: 66%;
 }
 </style>

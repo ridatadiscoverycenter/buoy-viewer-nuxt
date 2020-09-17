@@ -22,7 +22,7 @@
       ><span class="title"><font-awesome-icon icon="chart-area" />Viz</span>
     </template>
     <template #main-section>
-      <ChartContainer>
+      <ChartContainer width="one-third">
         <template #title>Buoy Locations</template>
         <template #subtitle>Subtitle</template>
         <template #chart>
@@ -36,7 +36,7 @@
         /></template>
       </ChartContainer>
 
-      <ChartContainer>
+      <ChartContainer width="two-thirds">
         <template #title>{{ variable }}</template>
         <template #subtitle>Subtitle</template>
         <template #chart> <div id="viz" class="plot-canvas"></div></template>
@@ -198,9 +198,6 @@ export default {
     this.updatePlot();
   },
   methods: {
-    hide() {
-      console.log('hide');
-    },
     updatePlot() {
       vega('#viz', this.spec, { actions: true, theme: 'vox' });
     }

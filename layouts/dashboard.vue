@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="logo-container">
-      <span class="subtitle mb-0 mr-2">Rhode Island Data Discovery Center</span
+    <a class="logo-container" href="https://ridatadiscovery.org">
+      <span class="brand-title">Rhode Island Data Discovery Center</span
       ><BaseLogo />
-    </div>
+    </a>
     <div class="dashboard-grid">
       <aside class="sidebar">
-        <slot name="sidebar"></slot>
+        <Sidebar />
       </aside>
       <nuxt />
     </div>
@@ -14,9 +14,11 @@
 </template>
 <script>
 import BaseLogo from '@/components/base/BaseLogo';
+import Sidebar from '@/components/Sidebar.vue';
 export default {
   components: {
-    BaseLogo
+    BaseLogo,
+    Sidebar
   },
   mounted() {
     // add event listener for prefers-color-scheme

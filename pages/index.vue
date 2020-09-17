@@ -1,30 +1,40 @@
 <template>
-  <main class="hero grid-container">
-    <div class="item1 pt-4">
-      <div class="center">
-        <h1 class="title pb-4">NarrBay Buoy Data Explorer</h1>
-        <h2 class="subtitle pb-4">
-          Explore historical data collected from multiple buoys in the
-          Narragansett Bay
-        </h2>
-        <nuxt-link
-          :class="{ disabled: summary.length == 0 }"
-          class="button is-warning action-button"
-          :to="{
-            name: 'summary'
-          }"
-        >
-          <span>Start Exploring</span>
-          <font-awesome-icon
-            class="ml-3"
-            icon="compass"
-            :spin="summary.length == 0"
-          />
-        </nuxt-link>
+  <div>
+    <main class="hero grid-container">
+      <div class="item1 pt-4">
+        <div class="center">
+          <h1 class="home-title pb-4">Narragansett Bay Data Explorer</h1>
+          <h2 class="home-subtitle pb-4">
+            Explore historical data collected from multiple buoys in the
+            Narragansett Bay
+          </h2>
+          <nuxt-link
+            :class="{ disabled: summary.length == 0 }"
+            class="button is-warning action-button"
+            :to="{
+              name: 'summary'
+            }"
+          >
+            <span>Start Exploring</span>
+            <font-awesome-icon
+              class="ml-3"
+              icon="compass"
+              :spin="summary.length == 0"
+            />
+          </nuxt-link>
+        </div>
       </div>
-    </div>
-    <Map class="item2" :points="coordinates" />
-  </main>
+      <Map class="item2" :points="coordinates" />
+    </main>
+    <figure>
+      <img
+        class="waves"
+        src="@/assets/illustrations/waves-small.png"
+        alt="Waves Art"
+        style="width:100%"
+      />
+    </figure>
+  </div>
 </template>
 
 <script>
@@ -49,9 +59,11 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('buoy/fetchBuoyCoordinates', {
-      ids: this.buoys
-    });
+    if (this.coordinates.length === 0) {
+      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
+        ids: this.buoys
+      });
+    }
   },
   beforeMount() {
     if (process.browser && this.summary.length < 13) {
@@ -93,13 +105,21 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import 'bulma';
-.title {
-  font-size: $size-1 * 1.5;
+.brand-title {
+  @extend .mb-0;
+  @extend .mr-2;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
-.subtitle {
-  font-size: $size-5 * 1.5;
+.home-title {
+  @extend .title;
+  font-size: $size-1 * 1.4;
+}
+.home-subtitle {
+  @extend .subtitle;
+  font-size: $size-4 * 1.4;
 }
 .action-button {
   font-size: $size-4;
@@ -112,7 +132,7 @@ export default {
   }
 }
 .grid-container {
-  display: grid;
+  display: grid !important;
   grid-template-columns: 1fr 4fr 5fr 1fr;
   grid-template-rows: 2rem auto;
   grid-template-areas:
@@ -139,5 +159,8 @@ export default {
   grid-area: area2;
   display: grid;
   justify-content: center;
+}
+.waves {
+  margin-top: -10rem;
 }
 </style>
