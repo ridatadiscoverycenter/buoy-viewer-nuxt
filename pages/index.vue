@@ -10,14 +10,14 @@
           </h2>
           <nuxt-link
             :class="{ disabled: summary.length == 0 }"
-            class="button is-warning action-button"
+            class="button is-large is-warning"
             :to="{
               name: 'summary'
             }"
           >
-            <span>Start Exploring</span>
+            <span class="action-button">Start Exploring</span>
             <font-awesome-icon
-              class="ml-3"
+              class="ml-3 action-button"
               icon="compass"
               :spin="summary.length == 0"
             />
@@ -122,7 +122,7 @@ export default {
   font-size: $size-4 * 1.4;
 }
 .action-button {
-  font-size: $size-4;
+  font-size: $size-3;
 }
 .disabled {
   background-color: #efefef !important;

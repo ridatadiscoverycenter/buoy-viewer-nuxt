@@ -334,7 +334,10 @@ export default {
       if (newVal.length === 13 && process.browser) {
         this.addToLocalStorage();
       }
-      this.update();
+      this.updatePlot();
+    },
+    variable(newValue, oldValue) {
+      this.updatePlot();
     }
   },
   created() {
@@ -361,13 +364,13 @@ export default {
     }
   },
   mounted() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
+    this.updatePlot();
   },
   updated() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
+    this.updatePlot();
   },
   methods: {
-    update() {
+    updatePlot() {
       vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
     },
     addToLocalStorage() {

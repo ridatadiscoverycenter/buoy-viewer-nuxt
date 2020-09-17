@@ -27,7 +27,6 @@
     <ul class="menu-list">
       <li>
         <nuxt-link
-          :class="{ 'is-active': route === 'summary' }"
           :to="{
             name: 'summary'
           }"
