@@ -3,18 +3,15 @@
 </template>
 
 <script>
-import vega from 'vega-embed';
 import topojson from '@/static/ri.json';
+import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 
 export default {
+  mixins: [vegaBaseMixin],
   props: {
-    points: {
+    dataset: {
       type: Array,
       required: true
-    },
-    id: {
-      type: String,
-      default: 'viz'
     },
     width: {
       type: Number,
@@ -58,7 +55,7 @@ export default {
           },
           {
             name: 'points',
-            values: this.points,
+            values: this.dataset,
             format: { type: 'json', parse: 'auto' },
             transform: [
               {
@@ -113,26 +110,8 @@ export default {
     }
   },
   watch: {
-    points(newValue, oldValue) {
-      this.updatePlot();
-    },
     scale(newValue, oldValue) {
       this.updatePlot();
-    }
-  },
-  mounted() {
-    this.updatePlot();
-  },
-  updated() {
-    this.updatePlot();
-  },
-  methods: {
-    updatePlot() {
-      vega(`#${this.id}`, this.spec, {
-        actions: true,
-        theme: 'vox',
-        renderer: 'svg'
-      });
     }
   }
 };

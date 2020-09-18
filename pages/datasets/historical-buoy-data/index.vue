@@ -63,7 +63,7 @@
             :width="340"
             :height="400"
             :scale="17000"
-            :points="coordinates"
+            :dataset="coordinates"
             :center="[-70.5, 41.5]"
           />
         </template>

@@ -7,10 +7,6 @@ import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 export default {
   mixins: [vegaBaseMixin],
   props: {
-    dataset: {
-      type: Array,
-      required: true
-    },
     variable: {
       type: String,
       required: true

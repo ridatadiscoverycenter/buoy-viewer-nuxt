@@ -24,7 +24,7 @@
           </nuxt-link>
         </div>
       </div>
-      <Map class="item2" :points="coordinates" />
+      <Map id="map" class="item2" :dataset="coordinates" />
     </main>
     <figure>
       <img
