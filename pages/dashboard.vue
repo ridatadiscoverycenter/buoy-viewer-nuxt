@@ -79,7 +79,7 @@
 import { mapState } from 'vuex';
 import vega from 'vega-embed';
 import Multiselect from 'vue-multiselect';
-import Map from '@/components/Map.vue';
+import Map from '@/components/charts/Map.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 

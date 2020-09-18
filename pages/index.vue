@@ -40,7 +40,7 @@
 <script>
 import { mapState } from 'vuex';
 import _ from 'lodash';
-import Map from '@/components/Map.vue';
+import Map from '@/components/charts/Map.vue';
 export default {
   components: {
     Map

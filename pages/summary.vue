@@ -39,7 +39,14 @@
               spin
               class="compass-loading"
             />
-            <div id="viz" class="mt-6 chart-centered"></div>
+            <Heatmap
+              v-if="!(summary.length === 0)"
+              id="heatmap"
+              :dataset="dataArr"
+              x="date"
+              y="station"
+              :variable="variable"
+            />
           </div>
         </template>
       </ChartContainer>
@@ -56,7 +63,8 @@
             :scale="17000"
             :points="coordinates"
             :center="[-70.5, 41.5]"
-        /></template>
+          />
+        </template>
       </ChartContainer>
       <ChartContainer width="half">
         <template #title>Explore</template>
@@ -203,11 +211,11 @@
 
 <script>
 import { mapState } from 'vuex';
-import vega from 'vega-embed';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
-import Map from '@/components/Map.vue';
+import Map from '@/components/charts/Map.vue';
+import Heatmap from '@/components/charts/Heatmap.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 
@@ -215,6 +223,7 @@ export default {
   layout: 'dashboard',
   components: {
     Map,
+    Heatmap,
     Multiselect,
     DatePicker,
     Dashboard,
@@ -251,82 +260,6 @@ export default {
     },
     downloadUrl() {
       return `${this.baseUrl}${this.fileFormat}?${this.downloadVariables},time,latitude,longitude&station_name="${this.downloadBuoy}"`;
-    },
-    spec() {
-      return {
-        $schema: 'https://vega.github.io/schema/vega/v5.json',
-        width: 800,
-        height: 300,
-        data: {
-          name: 'buoy',
-          values: this.dataArr
-        },
-        scales: [
-          {
-            name: 'x',
-            type: 'time',
-            domain: { data: 'buoy', field: 'date' },
-            range: 'width'
-          },
-          {
-            name: 'y',
-            type: 'band',
-            domain: { data: 'buoy', field: 'station' },
-            range: 'height'
-          },
-          {
-            name: 'color',
-            type: 'linear',
-            range: { scheme: 'Viridis' },
-            domain: { data: 'buoy', field: this.variable },
-            reverse: true,
-            zero: false,
-            nice: true
-          }
-        ],
-        axes: [
-          {
-            orient: 'bottom',
-            scale: 'x',
-            domain: false,
-            title: 'Month/Year',
-            labelOverlap: 'parity'
-          },
-          {
-            orient: 'left',
-            scale: 'y',
-            domain: false,
-            title: 'Buoy ID'
-          }
-        ],
-        legends: [
-          {
-            fill: 'color',
-            type: 'gradient',
-            gradientLength: { signal: 'height - 20' }
-          }
-        ],
-        marks: [
-          {
-            type: 'rect',
-            from: { data: 'buoy' },
-            encode: {
-              enter: {
-                x: { scale: 'x', field: 'date' },
-                y: { scale: 'y', field: 'station' },
-                width: { value: 12 },
-                height: { scale: 'y', band: 1 },
-                tooltip: {
-                  signal: `{'Date': timeFormat(datum.date, '%B %Y'), 'Station': datum.station, 'Count': datum.${this.variable}}`
-                }
-              },
-              update: {
-                fill: { scale: 'color', field: this.variable }
-              }
-            }
-          }
-        ]
-      };
     }
   },
   watch: {
@@ -334,10 +267,6 @@ export default {
       if (newVal.length === 13 && process.browser) {
         this.addToLocalStorage();
       }
-      this.updatePlot();
-    },
-    variable(newValue, oldValue) {
-      this.updatePlot();
     }
   },
   created() {
@@ -346,8 +275,6 @@ export default {
         ids: this.buoys
       });
     }
-  },
-  beforeMount() {
     if (process.browser && this.summary.length < 13) {
       try {
         const summary = JSON.parse(localStorage.getItem('riddcBuoy'));
@@ -363,16 +290,8 @@ export default {
       }
     }
   },
-  mounted() {
-    this.updatePlot();
-  },
-  updated() {
-    this.updatePlot();
-  },
+
   methods: {
-    updatePlot() {
-      vega('#viz', this.spec, { actions: true, theme: 'vox', renderer: 'svg' });
-    },
     addToLocalStorage() {
       localStorage.setItem('riddcBuoy', JSON.stringify(this.summary));
     }
