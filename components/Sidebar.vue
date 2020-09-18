@@ -61,20 +61,24 @@
 export default {
   data() {
     return {
-      route: this.$route.name,
       datasets: [
         {
           name: 'Historical Buoy Data',
-          route: 'datasets-historical-buoy-data-dashboard',
+          route: 'datasets-historical-buoy-data',
           available: true
         },
         {
           name: 'Phytoplankton TS',
-          route: 'datasets-phytoplankton-timeseries-dashboard',
+          route: 'datasets-phytoplankton-timeseries',
           available: false
         }
       ]
     };
+  },
+  computed: {
+    route() {
+      return this.$route.name.replace('-dashboard', '');
+    }
   }
 };
 </script>

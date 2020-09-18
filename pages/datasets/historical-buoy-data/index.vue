@@ -9,7 +9,9 @@
         ><span>Home</span></nuxt-link
       >
     </template>
-    <template #main-header><h1 class="title">Summary</h1></template>
+    <template #main-header
+      ><h1 class="title">Historical Buoy Data - Summary</h1></template
+    >
     <template #main-section>
       <ChartContainer width="two-thirds">
         <template #title>Available Data</template>

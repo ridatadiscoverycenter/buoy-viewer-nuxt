@@ -20,7 +20,8 @@
     </template>
     <template #main-header
       ><span class="title"
-        ><font-awesome-icon icon="chart-area" class="mr-2" />Dashboard</span
+        ><font-awesome-icon icon="chart-area" class="mr-2" />Historical Buoy
+        Data - Dashboard</span
       >
     </template>
     <template #main-section>
