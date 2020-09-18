@@ -12,7 +12,7 @@
             :class="{ disabled: summary.length == 0 }"
             class="button is-large is-warning"
             :to="{
-              name: 'summary'
+              name: 'datasets-historical-buoy-data'
             }"
           >
             <span class="action-button">Start Exploring</span>

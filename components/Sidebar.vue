@@ -25,15 +25,25 @@
       Datasets
     </p>
     <ul class="menu-list">
-      <li>
+      <li v-for="item in datasets" :key="item.route">
         <nuxt-link
+          v-if="item.available"
+          :class="{ 'is-active': route === item.route }"
+          :aria-disabled="!item.available"
           :to="{
-            name: 'summary'
+            name: item.route
           }"
-          ><span>Historical Bouy Data</span></nuxt-link
+          ><span>{{ item.name }}</span></nuxt-link
+        >
+        <a
+          v-else
+          disabled
+          :aria-disabled="!item.available"
+          class="not-allowed-cursor"
+          ><span>{{ item.name }}</span
+          ><span class="tag is-light is-warning ml-2">comming soon</span></a
         >
       </li>
-      <li><a>Phytoplankton TimeSeries</a></li>
     </ul>
     <p class="menu-label">Resources</p>
     <ul class="menu-list">
@@ -51,10 +61,26 @@
 export default {
   data() {
     return {
-      route: this.$route.name
+      route: this.$route.name,
+      datasets: [
+        {
+          name: 'Historical Buoy Data',
+          route: 'datasets-historical-buoy-data-dashboard',
+          available: true
+        },
+        {
+          name: 'Phytoplankton TS',
+          route: 'datasets-phytoplankton-timeseries-dashboard',
+          available: false
+        }
+      ]
     };
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.not-allowed-cursor {
+  cursor: not-allowed;
+}
+</style>

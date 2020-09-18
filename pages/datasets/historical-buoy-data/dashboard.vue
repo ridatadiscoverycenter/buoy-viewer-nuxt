@@ -13,7 +13,7 @@
       <nuxt-link
         class="plot-nav is-size-4"
         :to="{
-          name: 'summary'
+          name: 'datasets-historical-buoy-data'
         }"
         ><span class="ml-4">Summary</span></nuxt-link
       >

@@ -109,7 +109,7 @@
           <nuxt-link
             class="button is-link"
             :to="{
-              name: 'dashboard',
+              name: 'datasets-historical-buoy-data-dashboard',
               query: { buoyIds: selectedBuoysString, slug }
             }"
             >Visualize</nuxt-link
@@ -128,7 +128,7 @@
             <nuxt-link
               class="button is-link mb-2"
               :to="{
-                name: 'dashboard',
+                name: 'datasets-historical-buoy-data-dashboard',
                 query: {
                   buoyIds: 'bid2,bid3',
                   slug:
@@ -140,7 +140,7 @@
             <nuxt-link
               class="button is-link mb-2"
               :to="{
-                name: 'dashboard',
+                name: 'datasets-historical-buoy-data-dashboard',
                 query: {
                   buoyIds: 'bid15,bid17',
                   slug:
@@ -193,10 +193,6 @@
               :multiple="true"
             ></multiselect>
           </div>
-          <!-- <div class="control-item">
-          <label for="date-select" class="label">Select Date Range</label>
-          <date-picker id="date-select" v-model="dateRange" range></date-picker>
-        </div> -->
           <a
             role="button"
             class="button is-link control-item-button"
