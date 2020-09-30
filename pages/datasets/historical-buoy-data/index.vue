@@ -60,7 +60,7 @@
         <template #chart>
           <Map
             id="map"
-            :width="340"
+            :width="400"
             :height="400"
             :scale="17000"
             :dataset="coordinates"

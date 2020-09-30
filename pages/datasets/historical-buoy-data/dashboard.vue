@@ -27,7 +27,9 @@
     <template #main-section>
       <ChartContainer width="one-third">
         <template #title>Buoy Locations</template>
-        <template #subtitle>Subtitle</template>
+        <template #subtitle
+          >Hover over the circles to find out the buoy locations.</template
+        >
         <template #chart>
           <Map
             id="map"
@@ -41,7 +43,11 @@
 
       <ChartContainer width="two-thirds">
         <template #title>{{ variable }}</template>
-        <template #subtitle>Subtitle</template>
+        <template #subtitle
+          >This plot shows {{ variable }} over the period between
+          {{ startDate.slice(0, 10) }} and {{ endDate.slice(0, 10) }}. You can
+          hover over the lines to see more specific data.</template
+        >
         <template #chart>
           <MultiLineChart
             id="line-chart"

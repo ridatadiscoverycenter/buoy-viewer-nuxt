@@ -9,6 +9,10 @@ import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 export default {
   mixins: [vegaBaseMixin],
   props: {
+    legend: {
+      type: Boolean,
+      default: true
+    },
     dataset: {
       type: Array,
       required: true
@@ -36,11 +40,21 @@ export default {
   },
   data() {
     return {
-      topo: topojson
+      topo: topojson,
+      legendSpec: {
+        legends: [
+          {
+            title: 'Buoys',
+            orient: 'bottom-right',
+            type: 'symbol',
+            fill: 'color'
+          }
+        ]
+      }
     };
   },
   computed: {
-    spec() {
+    basicSpec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         width: this.width,
@@ -74,13 +88,21 @@ export default {
             center: this.center
           }
         ],
+        scales: [
+          {
+            name: 'color',
+            type: 'ordinal',
+            domain: { data: 'points', field: 'buoyId' },
+            range: { scheme: 'tableau20' }
+          }
+        ],
         marks: [
           {
             type: 'shape',
             from: { data: 'outlines' },
             encode: {
               enter: {
-                strokeWidth: { value: 1.4 },
+                strokeWidth: { value: 1 },
                 stroke: { value: 'slategray' },
                 fill: { value: 'whitesmoke' }
               }
@@ -94,7 +116,7 @@ export default {
               enter: {
                 size: { value: 100 },
                 stroke: { value: 'steelblue' },
-                fill: { value: 'steelblue' },
+                fill: { scale: 'color', field: 'buoyId' },
                 tooltip: {
                   signal: 'datum'
                 }
@@ -107,6 +129,11 @@ export default {
           }
         ]
       };
+    },
+    spec() {
+      return this.legend
+        ? { ...this.basicSpec, ...this.legendSpec }
+        : this.basicSpec;
     }
   },
   watch: {

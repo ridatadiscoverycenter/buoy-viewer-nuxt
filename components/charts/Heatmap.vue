@@ -46,7 +46,7 @@ export default {
           {
             name: 'color',
             type: 'linear',
-            range: { scheme: 'Viridis' },
+            range: { scheme: 'cividis' },
             domain: { data: 'data', field: this.variable },
             reverse: true,
             zero: false,
@@ -70,9 +70,10 @@ export default {
         ],
         legends: [
           {
+            title: 'Number of Observations',
             fill: 'color',
             type: 'gradient',
-            gradientLength: { signal: 'height - 20' }
+            gradientLength: { signal: 'height' }
           }
         ],
         marks: [
