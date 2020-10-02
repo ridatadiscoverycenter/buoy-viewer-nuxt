@@ -22,7 +22,7 @@ export default {
 @import 'bulma';
 .loading-container {
   display: flex;
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   background-color: rgba(82, 69, 99, 0.4);
