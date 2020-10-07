@@ -5,13 +5,14 @@
   "description": "",
   "author": "Fernando Gelin",
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt build --modern=server",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "commit": "git-cz",
     "dev": "nuxt",
     "generate": "nuxt generate",
     "start": "nuxt start",
-    "test": "jest"
+    "test": "jest",
+    "prod": "yarn build && yarn start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
