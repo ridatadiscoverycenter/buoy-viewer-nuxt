@@ -24,7 +24,7 @@ export default {
     spec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
-        width: 800,
+        width: this.maxWidth,
         height: 300,
         data: {
           name: 'data',

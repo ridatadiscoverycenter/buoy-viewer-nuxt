@@ -1,4 +1,4 @@
-import vega from 'vega-embed';
+import embed from 'vega-embed';
 
 const vegaBaseMixin = {
   props: {
@@ -9,6 +9,11 @@ const vegaBaseMixin = {
     dataset: {
       type: Array,
       required: true
+    },
+    maxWidth: {
+      type: Number,
+      required: false,
+      default: 800
     }
   },
   watch: {
@@ -19,19 +24,52 @@ const vegaBaseMixin = {
       this.updatePlot();
     }
   },
+  data() {
+    return {
+      view: null
+    };
+  },
   mounted() {
     this.updatePlot();
+
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.resizePlot);
+    });
   },
   updated() {
     this.updatePlot();
   },
+  beforeDestory() {
+    if (this.view) {
+      this.view.finalize();
+      window.removeEventListener('resize', this.resizePlot);
+    }
+  },
   methods: {
+    getWidth() {
+      const el = document.querySelector('#' + this.id);
+      return Math.min(this.maxWidth, el.clientWidth);
+    },
     updatePlot() {
-      vega('#' + this.id, this.spec, {
+      embed('#' + this.id, this.spec, {
         actions: true,
         theme: 'vox',
-        renderer: 'svg'
+        renderer: 'svg',
+        config: {
+          width: this.getWidth(),
+          autosize: 'fit'
+        },
+        logLevel: 'vega.Info'
+      }).then((res) => {
+        this.view = res.view;
       });
+    },
+    resizePlot() {
+      if (this.view) {
+        this.view.width(this.getWidth());
+        this.view.resize();
+        this.view.runAsync();
+      }
     }
   }
 };
