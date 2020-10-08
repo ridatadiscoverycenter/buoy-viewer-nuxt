@@ -14,6 +14,16 @@ const vegaBaseMixin = {
       type: Number,
       required: false,
       default: 200
+    },
+    includeActions: {
+      type: Boolean,
+      required: false,
+      default: true
+    }
+  },
+  computed: {
+    actionsWidth() {
+      return this.includeActions ? 28 : 0;
     }
   },
   watch: {
@@ -26,8 +36,7 @@ const vegaBaseMixin = {
   },
   data() {
     return {
-      view: null,
-      actionsWidth: 28
+      view: null
     };
   },
   mounted() {
@@ -54,7 +63,7 @@ const vegaBaseMixin = {
     },
     updatePlot() {
       embed('#' + this.id, this.spec, {
-        actions: true,
+        actions: this.includeActions,
         theme: 'vox',
         renderer: 'svg',
         config: {
