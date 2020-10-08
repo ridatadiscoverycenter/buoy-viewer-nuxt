@@ -30,6 +30,7 @@
         :min-width="300"
         :dataset="coordinates"
         :legend="false"
+        :include-actions="false"
       />
     </main>
     <figure>
