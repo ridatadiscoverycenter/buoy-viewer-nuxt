@@ -1,49 +1,64 @@
 <template>
-  <section class="plot-grid">
-    <aside class="plot-aside">
-      <header>=</header>
-    </aside>
-    <nuxt-link
-      class="plot-nav is-size-4"
-      :to="{
-        name: 'summary'
-      }"
-      ><font-awesome-icon icon="arrow-left" /><span class="ml-4"
-        >Back to Summary</span
-      ></nuxt-link
-    >
-    <header class="plot-header">
-      <h1 class="title is-size-2 py-6">
-        <font-awesome-icon icon="chart-area" />Visualizing Buoy Data
-      </h1>
-      <p class="is-size-4 pb-6">
-        Showing <span class="tag is-size-4 is-info">{{ variable }}</span> for
-        buoys
-        <span
-          v-for="buoy in buoyIds"
-          :key="buoy"
-          class="tag is-size-4 is-success mr-2"
-          >{{ buoy }}
-        </span>
-        from
-        <span class="tag is-size-4 is-secondary mr-2"
-          >{{ $moment(startDate).format('DD-MMM-YYYY') }} </span
-        >to
-        <span class="tag is-size-4 is-secondary mr-2">{{
-          $moment(endDate).format('DD-MMM-YYYY')
-        }}</span>
-      </p>
-    </header>
-    <!-- {{ dataset }} -->
-    <div id="viz" class="plot-canvas"></div>
-  </section>
+  <Dashboard>
+    <template #main-nav>
+      <nuxt-link
+        class="plot-nav is-size-4"
+        :to="{
+          name: 'index'
+        }"
+      >
+        <span>Home</span></nuxt-link
+      >
+      <span class="ml-4 is-size-4">/</span>
+      <nuxt-link
+        class="plot-nav is-size-4"
+        :to="{
+          name: 'summary'
+        }"
+        ><span class="ml-4">Summary</span></nuxt-link
+      >
+    </template>
+    <template #main-header
+      ><span class="title"><font-awesome-icon icon="chart-area" />Viz</span>
+    </template>
+    <template #main-section>
+      <ChartContainer width="one-third">
+        <template #title>Buoy Locations</template>
+        <template #subtitle>Subtitle</template>
+        <template #chart>
+          <Map
+            id="map"
+            :width="340"
+            :height="400"
+            :scale="17000"
+            :points="filterCoordinates"
+            :center="[-70.5, 41.5]"
+        /></template>
+      </ChartContainer>
+
+      <ChartContainer width="two-thirds">
+        <template #title>{{ variable }}</template>
+        <template #subtitle>Subtitle</template>
+        <template #chart> <div id="viz" class="plot-canvas"></div></template>
+      </ChartContainer>
+    </template>
+  </Dashboard>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import vega from 'vega-embed';
+import Map from '@/components/charts/Map.vue';
+import Dashboard from '@/components/base/BaseDashboard.vue';
+import ChartContainer from '@/components/base/ChartContainer.vue';
 
 export default {
+  layout: 'dashboard',
+  components: {
+    Map,
+    Dashboard,
+    ChartContainer
+  },
   async fetch({ store, error, query }) {
     try {
       const ids = query.buoyIds.split(',');
@@ -61,10 +76,13 @@ export default {
       });
     }
   },
+  data() {
+    return {
+      sideHidden: false
+    };
+  },
   computed: {
-    ...mapState({
-      buoyData: (state) => state.buoy.buoyData
-    }),
+    ...mapState('buoy', ['coordinates', 'buoyData']),
     variable() {
       return this.$route.query.slug.split(',')[0];
     },
@@ -83,6 +101,11 @@ export default {
     buoyIds() {
       return this.$route.query.buoyIds.split(',');
     },
+    filterCoordinates() {
+      return this.coordinates.filter((o) => {
+        return this.buoyIds.includes(o.buoyId);
+      });
+    },
     spec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
@@ -91,7 +114,6 @@ export default {
         width: 800,
         height: 500,
         padding: 5,
-
         data: [
           {
             name: 'buoy',
@@ -162,43 +184,29 @@ export default {
       };
     }
   },
+  created() {
+    if (this.coordinates.length === 0) {
+      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
+        ids: this.buoyIds
+      });
+    }
+  },
   mounted() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    this.updatePlot();
   },
   updated() {
-    vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    this.updatePlot();
+  },
+  methods: {
+    updatePlot() {
+      vega('#viz', this.spec, { actions: true, theme: 'vox' });
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-@import 'bulma';
-.plot-grid {
-  @extend .mt-6;
-  display: grid;
-  grid-template-columns: 5fr 10fr;
-  grid-template-rows: auto;
-  grid-template-areas:
-    ' aside nav'
-    ' aside header'
-    ' aside plot';
-}
-.plot-header {
-  @extend .px-6;
-  grid-area: header;
-}
-.plot-canvas {
-  @extend .px-6;
-  @extend .mr-6;
-  grid-area: plot;
-}
-.plot-nav {
-  @extend .px-6;
-  grid-area: nav;
-}
-.plot-aside {
-  @extend .has-background-light;
-  @extend .px-6;
-  grid-area: aside;
+.map-container {
+  transform: scale(0.8);
 }
 </style>

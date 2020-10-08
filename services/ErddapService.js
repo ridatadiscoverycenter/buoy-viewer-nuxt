@@ -36,5 +36,32 @@ export default {
       );
     });
     return promisseArray;
+  },
+  getBuoysCoordinates({ ids }) {
+    const date = '2012-05-30T04:00:00.000Z';
+    const altDate4 = '2009-03-30T04:00:00.000Z';
+    const altDate16 = '2005-04-30T04:00:00.000Z';
+
+    const promisseArray = ids.map((id) => {
+      let obj;
+      switch (id) {
+        case 'bid4':
+          obj = erddapClient.get(
+            `/combined_e784_bee5_492e.geoJson?latitude,longitude,station_name&station_name="${id}"&time>=${altDate4}&time<=${altDate4}`
+          );
+          break;
+        case 'bid16':
+          obj = erddapClient.get(
+            `/combined_e784_bee5_492e.geoJson?latitude,longitude,station_name&station_name="${id}"&time>=${altDate16}&time<=${altDate16}`
+          );
+          break;
+        default:
+          obj = erddapClient.get(
+            `/combined_e784_bee5_492e.geoJson?latitude,longitude,station_name&station_name="${id}"&time>=${date}&time<=${date}`
+          );
+      }
+      return obj;
+    });
+    return promisseArray;
   }
 };
