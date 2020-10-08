@@ -13,29 +13,13 @@ export default {
       type: Boolean,
       default: true
     },
-    dataset: {
-      type: Array,
-      required: true
-    },
-    width: {
-      type: Number,
-      default: 550
-    },
     height: {
       type: Number,
       default: 720
     },
-    scale: {
-      type: Number,
-      default: 30000
-    },
     background: {
       type: String,
       default: 'transparent'
-    },
-    center: {
-      type: Array,
-      default: () => [-71.1774, 41.8]
     }
   },
   data() {
@@ -47,7 +31,9 @@ export default {
             title: 'Buoys',
             orient: 'bottom-right',
             type: 'symbol',
-            fill: 'color'
+            symbolType: 'circle',
+            fill: 'color',
+            columns: 2
           }
         ]
       }
@@ -57,15 +43,13 @@ export default {
     basicSpec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
-        width: this.width,
         height: this.height,
-        autosize: 'none',
         background: this.background,
         data: [
           {
             name: 'outlines',
             values: this.topo,
-            format: { type: 'topojson', feature: 'ri' }
+            format: { type: 'topojson', mesh: 'ri' }
           },
           {
             name: 'points',
@@ -84,8 +68,8 @@ export default {
           {
             name: 'projection',
             type: 'mercator',
-            scale: this.scale,
-            center: this.center
+            size: { signal: '[width, height]' },
+            fit: { signal: 'data("outlines")' }
           }
         ],
         scales: [
@@ -134,11 +118,6 @@ export default {
       return this.legend
         ? { ...this.basicSpec, ...this.legendSpec }
         : this.basicSpec;
-    }
-  },
-  watch: {
-    scale(newValue, oldValue) {
-      this.updatePlot();
     }
   }
 };

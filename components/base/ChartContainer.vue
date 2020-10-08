@@ -39,7 +39,7 @@ export default {
   @extend .py-4;
 }
 .chart {
-  padding: inherit;
+  padding: 0;
   width: 100%;
 }
 .is-one-third {

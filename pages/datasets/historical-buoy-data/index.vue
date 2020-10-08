@@ -45,6 +45,7 @@
               v-if="!(summary.length === 0)"
               id="heatmap"
               :dataset="dataArr"
+              :min-width="400"
               x="date"
               y="station"
               :variable="variable"
@@ -58,14 +59,7 @@
           >Hover over the circles to find out the buoy locations.</template
         >
         <template #chart>
-          <Map
-            id="map"
-            :width="400"
-            :height="400"
-            :scale="17000"
-            :dataset="coordinates"
-            :center="[-70.5, 41.5]"
-          />
+          <Map id="map" :height="400" :dataset="coordinates" />
         </template>
       </ChartContainer>
       <ChartContainer width="half">
