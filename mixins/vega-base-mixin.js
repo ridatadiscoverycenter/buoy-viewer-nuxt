@@ -10,10 +10,10 @@ const vegaBaseMixin = {
       type: Array,
       required: true
     },
-    maxWidth: {
+    minWidth: {
       type: Number,
       required: false,
-      default: 800
+      default: 200
     }
   },
   watch: {
@@ -26,7 +26,8 @@ const vegaBaseMixin = {
   },
   data() {
     return {
-      view: null
+      view: null,
+      actionsWidth: 28
     };
   },
   mounted() {
@@ -48,7 +49,8 @@ const vegaBaseMixin = {
   methods: {
     getWidth() {
       const el = document.querySelector('#' + this.id);
-      return Math.min(this.maxWidth, el.clientWidth);
+      const p = el.closest('.chart');
+      return Math.max(this.minWidth, p.clientWidth) - this.actionsWidth;
     },
     updatePlot() {
       embed('#' + this.id, this.spec, {
@@ -59,16 +61,17 @@ const vegaBaseMixin = {
           width: this.getWidth(),
           autosize: 'fit'
         },
-        logLevel: 'vega.Info'
+        logLevel: 3
       }).then((res) => {
         this.view = res.view;
       });
     },
     resizePlot() {
       if (this.view) {
-        this.view.width(this.getWidth());
-        this.view.resize();
-        this.view.runAsync();
+        this.view
+          .width(this.getWidth())
+          .resize()
+          .runAsync();
       }
     }
   }

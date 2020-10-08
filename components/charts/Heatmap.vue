@@ -24,7 +24,6 @@ export default {
     spec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
-        width: this.maxWidth,
         height: 300,
         data: {
           name: 'data',
@@ -70,7 +69,7 @@ export default {
         ],
         legends: [
           {
-            title: 'Number of Observations',
+            title: ['Number of', 'Observations'],
             fill: 'color',
             type: 'gradient',
             gradientLength: { signal: 'height' }

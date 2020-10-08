@@ -26,7 +26,6 @@ export default {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         description:
           'A basic line chart example, with value labels shown upon mouse hover.',
-        width: 800,
         height: 500,
         padding: 5,
 

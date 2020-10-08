@@ -31,14 +31,8 @@
           >Hover over the circles to find out the buoy locations.</template
         >
         <template #chart>
-          <Map
-            id="map"
-            :width="340"
-            :height="400"
-            :scale="17000"
-            :dataset="filterCoordinates"
-            :center="[-70.5, 41.5]"
-        /></template>
+          <Map id="map" :height="400" :dataset="filterCoordinates" />
+        </template>
       </ChartContainer>
 
       <ChartContainer width="two-thirds">
@@ -171,9 +165,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.map-container {
-  transform: scale(0.8);
-}
-</style>
