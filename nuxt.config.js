@@ -1,5 +1,6 @@
 export default {
-  mode: 'universal',
+  ssr: true,
+  components: true,
   /*
    ** Headers of the page
    */
@@ -36,7 +37,39 @@ export default {
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/moment'
+    '@nuxtjs/moment',
+    [
+      '@nuxtjs/fontawesome',
+      {
+        component: 'fa',
+        icons: {
+          solid: [
+            'faAngleLeft',
+            'faMapMarkerAlt',
+            'faCalendarAlt',
+            'faSpinner',
+            'faPlayCircle',
+            'faCompass',
+            'faChartArea',
+            'faDownload',
+            'faArrowLeft',
+            'faBars'
+          ]
+        },
+        proIcons: {
+          regular: [
+            'faHome',
+            'faInfoCircle',
+            'faDatabase',
+            'faToolbox',
+            'faPoll',
+            'faArrowLeft',
+            'faArrowRight',
+            'faCircle'
+          ]
+        }
+      }
+    ]
   ],
   /*
    ** Nuxt.js modules
@@ -48,30 +81,9 @@ export default {
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    // Font Awesome
-    'nuxt-fontawesome',
     // SVG Loader
     'nuxt-svg-loader'
   ],
-  fontawesome: {
-    imports: [
-      // import whole set
-      {
-        set: '@fortawesome/free-solid-svg-icons',
-        icons: [
-          'faAngleLeft',
-          'faMapMarkerAlt',
-          'faCalendarAlt',
-          'faSpinner',
-          'faPlayCircle',
-          'faCompass',
-          'faChartArea',
-          'faDownload',
-          'faArrowLeft'
-        ]
-      }
-    ]
-  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options

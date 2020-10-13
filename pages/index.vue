@@ -16,9 +16,9 @@
             }"
           >
             <span class="action-button">Start Exploring</span>
-            <font-awesome-icon
+            <fa
               class="ml-3 action-button"
-              icon="compass"
+              :icon="['fas', 'compass']"
               :spin="summary.length == 0"
             />
           </nuxt-link>

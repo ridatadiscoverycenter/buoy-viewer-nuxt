@@ -2,7 +2,7 @@
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
-        <font-awesome-icon class="card-icon" :icon="icon" />{{ category }}
+        <fa class="card-icon" :icon="icon" />{{ category }}
       </p>
     </header>
     <div class="card-content">
@@ -16,7 +16,7 @@
         <span>
           <a :href="url"
             >{{ $t('actions.go_to', [main]) }}
-            <font-awesome-icon icon="external-link-alt" />
+            <fa icon="external-link-alt" />
           </a>
         </span>
       </p>
@@ -24,7 +24,7 @@
         <span>
           <a :href="secondUrl"
             >{{ $t('actions.go_to', [second]) }}
-            <font-awesome-icon icon="external-link-alt" />
+            <fa icon="external-link-alt" />
           </a>
         </span>
       </p>
@@ -32,7 +32,7 @@
         <span>
           <a :href="thirdUrl"
             >{{ $t('actions.go_to', 'third') }}
-            <font-awesome-icon icon="external-link-alt" />
+            <fa icon="external-link-alt" />
           </a>
         </span>
       </p>

@@ -4,33 +4,25 @@
       <span class="brand-title">Rhode Island Data Discovery Center</span
       ><BaseLogo />
     </a>
-    <div class="dashboard-grid">
+    <div :class="[collapsed ? 'dashboard-grid-collapsed' : 'dashboard-grid']">
       <aside class="sidebar">
-        <Sidebar />
+        <Sidebar @toggle="toggle" />
       </aside>
       <nuxt />
     </div>
   </div>
 </template>
 <script>
-import BaseLogo from '@/components/base/BaseLogo';
-import Sidebar from '@/components/Sidebar.vue';
 export default {
-  components: {
-    BaseLogo,
-    Sidebar
-  },
-  mounted() {
-    // add event listener for prefers-color-scheme
-    const mql = window.matchMedia('(prefers-color-scheme: dark)');
-    const onMediaChange = (e) => this.onMediaChange(e);
-    mql.addEventListener('change', function(e) {
-      onMediaChange(e);
-    });
+  data() {
+    return {
+      collapsed: false
+    };
   },
   methods: {
-    onMediaChange(e) {
-      this.$store.dispatch('mode/setMode', e.matches ? 'dark' : 'light');
+    toggle(e) {
+      this.collapsed = e;
+      return e;
     }
   }
 };
@@ -76,6 +68,15 @@ export default {
   background-image: linear-gradient(to top left, whitesmoke, white);
   display: grid;
   grid-template-columns: 2fr 10fr;
+  grid-template-areas:
+    'sidebar main-header'
+    'sidebar main-nav'
+    'sidebar main-section';
+}
+.dashboard-grid-collapsed {
+  background-image: linear-gradient(to top left, whitesmoke, white);
+  display: grid;
+  grid-template-columns: 8ch auto;
   grid-template-areas:
     'sidebar main-header'
     'sidebar main-nav'

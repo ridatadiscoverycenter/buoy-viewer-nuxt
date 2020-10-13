@@ -1,66 +1,141 @@
 <template>
   <div>
-    <p class="menu-label">
-      Narraganssett Bay Data Explorer
-    </p>
-    <ul class="menu-list">
-      <li>
-        <nuxt-link
-          :to="{
-            name: 'index'
-          }"
-          ><span>Home</span></nuxt-link
-        >
-      </li>
-      <li>
-        <nuxt-link
-          :to="{
-            name: 'about'
-          }"
-          ><span>About</span></nuxt-link
-        >
-      </li>
-    </ul>
-    <p class="menu-label">
-      Datasets
-    </p>
-    <ul class="menu-list">
-      <li v-for="item in datasets" :key="item.route">
-        <nuxt-link
-          v-if="item.available"
-          :class="{ 'is-active': route === item.route }"
-          :aria-disabled="!item.available"
-          :to="{
-            name: item.route
-          }"
-          ><span>{{ item.name }}</span></nuxt-link
-        >
-        <a
-          v-else
-          disabled
-          :aria-disabled="!item.available"
-          class="not-allowed-cursor"
-          ><span>{{ item.name }}</span
-          ><span class="tag is-light is-warning ml-2">comming soon</span></a
-        >
-      </li>
-    </ul>
-    <p class="menu-label">Resources</p>
-    <ul class="menu-list">
-      <li>
-        <a href="https://pricaimcit.services.brown.edu/erddap/index.html"
-          >ERDDAP Server</a
-        >
-      </li>
-      <li><a href="https://ridatadiscovery.org">RIDDC Home</a></li>
-    </ul>
+    <div class="has-text-right">
+      <button type="button" class="button bars" @click="toggle">
+        <fa v-if="!collapsed" :icon="['far', 'arrow-left']" />
+        <fa v-else :icon="['far', 'arrow-right']" />
+      </button>
+    </div>
+    <div>
+      <p v-if="!collapsed" class="menu-label">
+        Narraganssett Bay Data Explorer
+      </p>
+      <p v-else class="menu-label">
+        <abbr title="Narraganssett Bay Data Explorer">NBDE</abbr>
+      </p>
+      <ul class="menu-list">
+        <li>
+          <nuxt-link
+            :to="{
+              name: 'index'
+            }"
+          >
+            <fa :icon="['far', 'home']" />
+            <span v-if="!collapsed">Home</span>
+          </nuxt-link>
+        </li>
+        <li>
+          <nuxt-link
+            :to="{
+              name: 'about'
+            }"
+          >
+            <fa :icon="['far', 'info-circle']" />
+            <span v-if="!collapsed">About</span></nuxt-link
+          >
+        </li>
+      </ul>
+      <p v-if="!collapsed" class="menu-label">
+        Exploration Datasets
+      </p>
+      <p v-else class="menu-label">
+        <abbr title="Exploration Datasets">DATA</abbr>
+      </p>
+      <ul class="menu-list">
+        <li v-for="item in datasets" :key="item.route">
+          <nuxt-link
+            v-if="item.available"
+            :class="{ 'is-active': route === item.route }"
+            :aria-disabled="!item.available"
+            :to="{
+              name: item.route
+            }"
+          >
+            <span v-if="!collapsed">{{ item.name }}</span>
+            <span v-else
+              ><abbr :title="item.name" class="collapsed-flex-item">
+                <fa :icon="['far', 'poll']" class="mr-1" />
+                <span>{{ item.name | initials }}</span>
+              </abbr></span
+            >
+          </nuxt-link>
+          <a
+            v-else
+            disabled
+            :aria-disabled="!item.available"
+            class="not-allowed-cursor"
+          >
+            <span v-if="!collapsed">{{ item.name }}</span>
+            <span v-else
+              ><abbr :title="item.name" class="collapsed-flex-item">
+                <fa :icon="['far', 'poll']" class="mr-1" />
+                <span>{{ item.name | initials }}</span>
+              </abbr></span
+            >
+            <span v-if="!collapsed" class="tag is-light is-warning ml-2"
+              >comming soon</span
+            ></a
+          >
+        </li>
+      </ul>
+      <p v-if="!collapsed" class="menu-label">
+        Resources
+      </p>
+      <p v-else class="menu-label">
+        <abbr title="Resources">Src</abbr>
+      </p>
+      <ul class="menu-list">
+        <li>
+          <a href="https://pricaimcit.services.brown.edu/erddap/index.html">
+            <span v-if="!collapsed">
+              <fa :icon="['far', 'database']" class="mr-1" />
+              ERDDAP Server</span
+            >
+            <span v-else>
+              <abbr title="ERDDAP Server" class="collapsed-flex-item">
+                <fa :icon="['far', 'database']" class="mr-1" />
+                <span> {{ 'ERDDAP Server' | initials }}</span>
+              </abbr></span
+            >
+          </a>
+        </li>
+        <li>
+          <a href="https://ridatadiscovery.org">
+            <span v-if="!collapsed"
+              ><abbr title="Rhode Island Data Discovery Center"
+                ><fa :icon="['far', 'circle']" class="mr-1" />RIDDC</abbr
+              >
+              Home</span
+            >
+            <span v-else>
+              <abbr
+                title="Rhode Island Data Discovery Center Home"
+                class="collapsed-flex-item"
+              >
+                <fa :icon="['far', 'circle']" class="mr-1" />
+                <span> {{ 'RIDDC Home' | initials }}</span>
+              </abbr></span
+            ></a
+          >
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  filters: {
+    initials(str) {
+      return str
+        .split(' ')
+        .map((s) => s[0].toUpperCase())
+        .join('');
+    }
+  },
   data() {
     return {
+      collapsed: false,
       datasets: [
         {
           name: 'Historical Buoy Data',
@@ -79,6 +154,12 @@ export default {
     route() {
       return this.$route.name.replace('-dashboard', '');
     }
+  },
+  methods: {
+    toggle() {
+      this.collapsed = !this.collapsed;
+      return this.$emit('toggle', this.collapsed);
+    }
   }
 };
 </script>
@@ -86,5 +167,17 @@ export default {
 <style lang="scss">
 .not-allowed-cursor {
   cursor: not-allowed;
+}
+.bars {
+  border: none !important;
+}
+.collapsed-flex-item {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  margin-left: -0.35rem;
+  span {
+    font-size: 0.6rem;
+  }
 }
 </style>

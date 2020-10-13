@@ -35,7 +35,7 @@
                 :options="variables"
               ></multiselect>
             </div>
-            <font-awesome-icon
+            <fa
               v-if="summary.length < 13"
               icon="compass"
               spin

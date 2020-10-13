@@ -19,7 +19,7 @@
       >
     </template>
     <template #main-header
-      ><span class="title"><font-awesome-icon icon="chart-area" />Viz</span>
+      ><span class="title"><fa icon="chart-area" />Viz</span>
     </template>
     <template #main-section>
       <ChartContainer width="one-third">

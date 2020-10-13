@@ -1,6 +1,6 @@
 <template>
   <div v-if="loading" class="loading-container">
-    <font-awesome-icon icon="compass" spin class="compass-loading" />
+    <fa icon="compass" spin class="compass-loading" />
   </div>
 </template>
 <script>

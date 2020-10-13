@@ -8,7 +8,7 @@
           <Brown class="brown sponsor-logo" />
         </div>
         <p class="footer-left-email">
-          <font-awesome-icon class="envelope-icon" icon="envelope" />
+          <fa class="envelope-icon" icon="envelope" />
           <a :href="'mailto:' + about.contact_email">{{
             about.contact_email
           }}</a>
@@ -22,7 +22,7 @@
       </div>
     </section>
     <section class="footer-grid-bottom">
-      <font-awesome-icon icon="copyright" />
+      <fa icon="copyright" />
       <span class="copyright-span">{{ year }}</span>
       <span class="copyright-span">{{ application.title }}</span>
     </section>
