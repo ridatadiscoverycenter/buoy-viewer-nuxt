@@ -36,14 +36,20 @@ const vegaBaseMixin = {
   },
   data() {
     return {
-      view: null
+      view: null,
+      resizeObserver: null,
+      parentElement: null
     };
   },
   mounted() {
+    const el = document.querySelector('#' + this.id);
+    this.parentElement = el.closest('.chart');
+
     this.updatePlot();
 
     this.$nextTick(() => {
-      window.addEventListener('resize', this.resizePlot);
+      this.resizeObserver = new ResizeObserver((_) => this.resizePlot());
+      this.resizeObserver.observe(this.parentElement);
     });
   },
   updated() {
@@ -52,16 +58,20 @@ const vegaBaseMixin = {
   beforeDestory() {
     if (this.view) {
       this.view.finalize();
-      window.removeEventListener('resize', this.resizePlot);
+      this.resizeObserver.unobserve(this.parentElement);
     }
   },
   methods: {
     getWidth() {
-      const el = document.querySelector('#' + this.id);
-      const p = el.closest('.chart');
-      return Math.max(this.minWidth, p.clientWidth) - this.actionsWidth;
+      return (
+        Math.max(this.minWidth, this.parentElement.clientWidth) -
+        this.actionsWidth
+      );
     },
     updatePlot() {
+      if (this.view) {
+        this.view.finalize();
+      }
       embed('#' + this.id, this.spec, {
         actions: this.includeActions,
         theme: 'vox',

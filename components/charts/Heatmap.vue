@@ -45,9 +45,9 @@ export default {
           {
             name: 'color',
             type: 'linear',
-            range: { scheme: 'cividis' },
+            range: { scheme: 'tealblues' },
             domain: { data: 'data', field: this.variable },
-            reverse: true,
+            reverse: false,
             zero: false,
             nice: true
           }
