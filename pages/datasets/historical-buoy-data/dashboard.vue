@@ -43,7 +43,7 @@
           hover over the lines to see more specific data.</template
         >
         <template #chart>
-          <MultiLineChart
+          <LineChart
             id="line-chart"
             :dataset="dataset"
             :variable="variable"
@@ -88,7 +88,7 @@
 import { mapState } from 'vuex';
 import Multiselect from 'vue-multiselect';
 import Map from '@/components/charts/Map.vue';
-import MultiLineChart from '@/components/charts/MultiLineChart.vue';
+import LineChart from '@/components/charts/LineChart.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 
@@ -97,7 +97,7 @@ export default {
   components: {
     Multiselect,
     Map,
-    MultiLineChart,
+    LineChart,
     Dashboard,
     ChartContainer
   },

@@ -59,7 +59,8 @@ export default {
 }
 .main-section {
   grid-area: main-section;
-  @extend .is-flex;
+  display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
