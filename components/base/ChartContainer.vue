@@ -44,14 +44,26 @@ export default {
 }
 .is-one-third {
   width: 32%;
+  @include mobile {
+    width: 100%;
+  }
 }
 .is-half {
   width: 49%;
+  @include mobile {
+    width: 100%;
+  }
 }
 .is-full {
   width: 100%;
+  @include mobile {
+    width: 100%;
+  }
 }
 .is-two-thirds {
   width: 66%;
+  @include mobile {
+    width: 100%;
+  }
 }
 </style>

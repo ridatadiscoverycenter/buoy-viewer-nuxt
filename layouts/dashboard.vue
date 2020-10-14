@@ -57,7 +57,8 @@ export default {
 }
 .main-section {
   grid-area: main-section;
-  @extend .is-flex;
+  display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
@@ -72,6 +73,14 @@ export default {
     'sidebar main-header'
     'sidebar main-nav'
     'sidebar main-section';
+  @include mobile {
+    grid-template-columns: auto;
+    grid-template-areas:
+      'sidebar'
+      'main-header'
+      'main-nav'
+      'main-section';
+  }
 }
 .dashboard-grid-collapsed {
   background-image: linear-gradient(to top left, whitesmoke, white);
@@ -81,5 +90,8 @@ export default {
     'sidebar main-header'
     'sidebar main-nav'
     'sidebar main-section';
+  @include mobile {
+    grid-template-columns: 8ch auto;
+  }
 }
 </style>

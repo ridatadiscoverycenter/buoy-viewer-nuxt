@@ -27,10 +27,7 @@ const vegaBaseMixin = {
     }
   },
   watch: {
-    dataset(newVal, oldValue) {
-      this.updatePlot();
-    },
-    variable(newValue, oldValue) {
+    spec(newVal, oldVal) {
       this.updatePlot();
     }
   },
