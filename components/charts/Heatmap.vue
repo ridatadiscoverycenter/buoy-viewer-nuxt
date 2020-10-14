@@ -45,9 +45,9 @@ export default {
           {
             name: 'color',
             type: 'linear',
-            range: { scheme: 'cividis' },
+            range: { scheme: 'tealblues' },
             domain: { data: 'data', field: this.variable },
-            reverse: true,
+            reverse: false,
             zero: false,
             nice: true
           }
@@ -86,7 +86,7 @@ export default {
                 width: { value: 12 },
                 height: { scale: 'y', band: 1 },
                 tooltip: {
-                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Station': datum.${this.y}, 'Count': datum.${this.variable}}`
+                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Buoy ID': datum.${this.y}, 'Count': datum.${this.variable}}`
                 }
               },
               update: {
