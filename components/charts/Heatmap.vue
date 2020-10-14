@@ -86,7 +86,7 @@ export default {
                 width: { value: 12 },
                 height: { scale: 'y', band: 1 },
                 tooltip: {
-                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Station': datum.${this.y}, 'Count': datum.${this.variable}}`
+                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Buoy ID': datum.${this.y}, 'Count': datum.${this.variable}}`
                 }
               },
               update: {

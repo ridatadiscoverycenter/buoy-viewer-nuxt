@@ -102,7 +102,8 @@ export default {
                 stroke: { value: 'steelblue' },
                 fill: { scale: 'color', field: 'buoyId' },
                 tooltip: {
-                  signal: 'datum'
+                  signal:
+                    '{"Buoy ID": datum.buoyId, "Latitude": datum.latitude, "Longitude": datum.longitude}'
                 }
               },
               update: {
