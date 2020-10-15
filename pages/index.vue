@@ -24,14 +24,15 @@
           </nuxt-link>
         </div>
       </div>
-      <Map
-        id="map"
-        class="item2 chart"
-        :min-width="300"
-        :dataset="coordinates"
-        :legend="false"
-        :include-actions="false"
-      />
+      <div class="item2 chart">
+        <Map
+          id="map"
+          :min-width="300"
+          :dataset="coordinates"
+          :legend="false"
+          :include-actions="false"
+        />
+      </div>
     </main>
     <figure>
       <img
@@ -144,7 +145,7 @@ $gradient3: #f8eade;
 .grid-container {
   background-image: linear-gradient($gradient1, $gradient2, $gradient3);
   display: grid !important;
-  grid-template-columns: 1fr 4fr 5fr 1fr;
+  grid-template-columns: 1fr 4fr minmax(300px, 5fr) 1fr;
   grid-template-rows: 2rem auto;
   grid-template-areas:
     '. . . . '
@@ -177,6 +178,8 @@ $gradient3: #f8eade;
   grid-area: area2;
   display: grid;
   justify-content: center;
+  align-content: center;
+  max-width: 100vw;
   @include mobile {
     display: none;
     visibility: hidden;
