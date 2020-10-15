@@ -10,7 +10,7 @@
           </h2>
           <nuxt-link
             :class="{ disabled: summary.length == 0 }"
-            class="button is-large is-warning"
+            class="button is-large cfa-button is-link"
             :to="{
               name: 'datasets-historical-buoy-data'
             }"
@@ -118,6 +118,12 @@ export default {
 $gradient1: #598daf;
 $gradient2: #fdbc89;
 $gradient3: #f8eade;
+.is-link {
+  background-color: rgb(89, 81, 139) !important;
+}
+.cfa-button {
+  @extend .has-text-light;
+}
 .brand-title {
   @extend .mb-0;
   @extend .mr-2;

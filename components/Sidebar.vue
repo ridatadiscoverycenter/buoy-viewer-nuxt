@@ -166,6 +166,9 @@ export default {
 
 <style lang="scss">
 @import 'bulma';
+.is-active {
+  background-color: rgb(89, 81, 139) !important;
+}
 .not-allowed-cursor {
   cursor: not-allowed;
 }
