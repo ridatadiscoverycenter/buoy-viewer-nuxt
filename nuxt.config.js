@@ -65,7 +65,9 @@ export default {
             'faPoll',
             'faArrowLeft',
             'faArrowRight',
-            'faCircle'
+            'faCircle',
+            'faTimes',
+            'faBars'
           ]
         }
       }

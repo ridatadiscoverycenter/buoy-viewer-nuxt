@@ -115,6 +115,9 @@ export default {
 
 <style lang="scss">
 @import 'bulma';
+$gradient1: #598daf;
+$gradient2: #fdbc89;
+$gradient3: #f8eade;
 .brand-title {
   @extend .mb-0;
   @extend .mr-2;
@@ -140,12 +143,20 @@ export default {
   }
 }
 .grid-container {
+  background-image: linear-gradient($gradient1, $gradient2, $gradient3);
   display: grid !important;
   grid-template-columns: 1fr 4fr minmax(300px, 5fr) 1fr;
   grid-template-rows: 2rem auto;
   grid-template-areas:
     '. . . . '
     '. area1 area2 .';
+  @include mobile {
+    grid-template-rows: auto 0px;
+    grid-template-columns: 1fr 20fr 1fr;
+    grid-template-areas:
+      '. area1 .'
+      '. area2 .';
+  }
 }
 
 .item1 {
@@ -169,8 +180,15 @@ export default {
   justify-content: center;
   align-content: center;
   max-width: 100vw;
+  @include mobile {
+    display: none;
+    visibility: hidden;
+  }
 }
 .waves {
   margin-top: -10rem;
+  @include mobile {
+    visibility: hidden;
+  }
 }
 </style>

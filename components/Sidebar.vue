@@ -2,11 +2,11 @@
   <div>
     <div class="has-text-right">
       <button type="button" class="button bars" @click="toggle">
-        <fa v-if="!collapsed" :icon="['far', 'arrow-left']" />
-        <fa v-else :icon="['far', 'arrow-right']" />
+        <fa v-if="!collapsed" :icon="['far', 'times']" />
+        <fa v-else :icon="['far', 'bars']" />
       </button>
     </div>
-    <div>
+    <div class="sidebar-body">
       <p v-if="!collapsed" class="menu-label">
         Narraganssett Bay Data Explorer
       </p>
@@ -165,11 +165,13 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'bulma';
 .not-allowed-cursor {
   cursor: not-allowed;
 }
 .bars {
   border: none !important;
+  background-color: whitesmoke !important;
 }
 .collapsed-flex-item {
   display: flex;
