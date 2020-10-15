@@ -1,125 +1,178 @@
 <template>
-  <svg></svg>
+  <div :id="id"></div>
 </template>
-<script>
-import * as d3 from 'd3';
 
+<script>
+import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 export default {
+  mixins: [vegaBaseMixin],
   props: {
-    dataset: {
-      type: Array,
+    variable: {
+      type: String,
       required: true
     },
     x: {
       type: String,
-      default: 'x'
+      required: true
     },
     y: {
       type: String,
-      default: 'y'
+      required: true
     }
-  },
-  data() {
-    return {
-      margin: { top: 10, bottom: 60, left: 10, right: 60 },
-      height: 200,
-      width: 200
-    };
   },
   computed: {
-    line() {
-      return d3
-        .line()
-        .x((d) => this.xScale(d[this.x]) + this.xScale.bandwidth() / 2)
-        .y((d) => this.yScale(d[this.y]));
-    },
-    xScale() {
-      return d3
-        .scaleBand()
-        .domain(this.dataset.map((d) => d[this.x]))
-        .rangeRound([this.margin.left, this.width - this.margin.right])
-        .padding(0.1);
-    },
-    yScale() {
-      return d3
-        .scaleLinear()
-        .domain([0, d3.max(this.dataset, (d) => d[this.y])])
-        .rangeRound([this.height - this.margin.bottom, this.margin.top]);
-    },
-    xAxis() {
-      return d3
-        .axisBottom(this.xScale)
-        .tickValues(
-          d3
-            .ticks(...d3.extent(this.xScale.domain()), this.dataset.length)
-            .filter((v) => this.xScale(v) !== undefined)
-        )
-        .tickSizeOuter(0);
-    },
-    yAxis() {
-      return d3.axisLeft(this.yScale).ticks(null, 's');
-    }
-  },
-  watch: {
-    dataset(newValue, oldValue) {
-      this.updatePlot();
-    }
-  },
-  mounted() {
-    this.plot();
-  },
-  methods: {
-    updatePlot() {
-      d3.select(`#${this.$attrs.id}`)
-        .select('.line')
-        .transition()
-        .attr('d', this.line(this.dataset));
+    spec() {
+      return {
+        $schema: 'https://vega.github.io/schema/vega/v5.json',
+        description:
+          'A basic line chart example, with value labels shown upon mouse hover.',
+        height: 500,
+        padding: 5,
 
-      d3.select('.x-ticks-line')
-        .transition()
-        .call(this.xAxis);
-
-      d3.select('.y-ticks-line')
-        .transition()
-        .call(this.yAxis);
-    },
-    plot() {
-      const svg = d3
-        .select(`#${this.$attrs.id}`)
-        .attr('viewBox', [0, 0, this.width, this.height]);
-      const g = svg.append('g');
-
-      g.append('path')
-        .attr('class', 'line')
-        .attr('fill', 'none')
-        .attr('stroke', 'currentColor')
-        .attr('stroke-miterlimit', 1)
-        .attr('stroke-width', 2)
-        .attr('stroke-linejoin', 'round')
-        .attr('d', this.line(this.dataset));
-
-      g.append('g')
-        .attr('transform', `translate(0,${this.height - this.margin.bottom})`)
-        .attr('class', 'x-ticks-line')
-        .call(this.xAxis);
-
-      svg
-        .append('g')
-        .attr('transform', `translate(${this.margin.left},0)`)
-        .attr('class', 'y-ticks-line')
-        .call(this.yAxis);
-      return svg;
+        signals: [
+          {
+            name: 'selected',
+            value: null,
+            on: [
+              {
+                events: '@legendSymbol:click, @legendLabel:click',
+                update: 'selected === datum.value ? null : datum.value',
+                force: true
+              },
+              {
+                events: 'mouseup[!event.item]',
+                update: 'null',
+                force: true
+              }
+            ]
+          }
+        ],
+        data: [
+          {
+            name: 'buoy',
+            values: this.dataset
+          }
+        ],
+        scales: [
+          {
+            name: 'xscale',
+            type: 'time',
+            domain: { data: 'buoy', field: this.x },
+            range: 'width',
+            padding: 0.05,
+            round: true
+          },
+          {
+            name: 'yscale',
+            type: 'linear',
+            domain: { data: 'buoy', field: this.variable },
+            nice: true,
+            zero: false,
+            range: 'height'
+          },
+          {
+            name: 'color',
+            type: 'ordinal',
+            range: { scheme: 'tableau20' },
+            domain: { data: 'buoy', field: this.y }
+          }
+        ],
+        axes: [
+          { orient: 'bottom', scale: 'xscale', labelAngle: 15, title: 'Time' },
+          { orient: 'left', scale: 'yscale', title: this.variable }
+        ],
+        legends: [
+          {
+            title: 'Buoys',
+            fill: 'color',
+            orient: 'bottom-right',
+            encode: {
+              symbols: {
+                name: 'legendSymbol',
+                interactive: true,
+                update: {
+                  strokeWidth: { value: 2 },
+                  opacity: [
+                    {
+                      test: '!selected || selected === datum.value',
+                      value: 1
+                    },
+                    { value: 0.15 }
+                  ],
+                  size: { value: 64 }
+                },
+                hover: {
+                  cursor: { value: 'pointer' }
+                }
+              },
+              labels: {
+                name: 'legendLabel',
+                interactive: true,
+                update: {
+                  opacity: [
+                    {
+                      test: '!selected || selected === datum.value',
+                      value: 1
+                    },
+                    { value: 0.25 }
+                  ],
+                  fontWeight: { value: 'normal' }
+                },
+                hover: {
+                  fontWeight: { value: 'bold' },
+                  cursor: { value: 'pointer' }
+                }
+              }
+            }
+          }
+        ],
+        marks: [
+          {
+            type: 'group',
+            from: {
+              facet: {
+                name: 'series',
+                data: 'buoy',
+                groupby: 'station_name'
+              }
+            },
+            marks: [
+              {
+                type: 'line',
+                from: { data: 'series' },
+                encode: {
+                  enter: {
+                    x: { scale: 'xscale', field: this.x },
+                    y: { scale: 'yscale', field: this.variable },
+                    stroke: { scale: 'color', field: this.y },
+                    strokeWidth: { value: 1 },
+                    tooltip: {
+                      signal: `{ '${this.variable}': datum.${this.variable}, 'Date': timeFormat(datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy ID': datum.${this.y} }`
+                    }
+                  },
+                  update: {
+                    interpolate: 'linear',
+                    defined: { signal: `isValid(datum.${this.variable})` },
+                    strokeOpacity: [
+                      {
+                        test: `!selected || selected === datum.station_name`,
+                        value: 0.7
+                      },
+                      { value: 0.15 }
+                    ]
+                  },
+                  hover: {
+                    strokeOpacity: { value: 1.0 }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      };
     }
   }
 };
 </script>
-<style lang="scss">
-@import 'bulma';
-.x-ticks-line,
-.y-ticks-line {
-  font-size: 0.3rem;
-}
-.line {
-  color: $info;
-}
-</style>
+
+<style lang="scss" scoped></style>

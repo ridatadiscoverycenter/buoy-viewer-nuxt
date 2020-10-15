@@ -10,7 +10,7 @@
           </h2>
           <nuxt-link
             :class="{ disabled: summary.length == 0 }"
-            class="button is-large is-warning"
+            class="button is-large cfa-button is-link"
             :to="{
               name: 'datasets-historical-buoy-data'
             }"
@@ -24,14 +24,15 @@
           </nuxt-link>
         </div>
       </div>
-      <Map
-        id="map"
-        class="item2 chart"
-        :min-width="300"
-        :dataset="coordinates"
-        :legend="false"
-        :include-actions="false"
-      />
+      <div class="item2 chart">
+        <Map
+          id="map"
+          :min-width="300"
+          :dataset="coordinates"
+          :legend="false"
+          :include-actions="false"
+        />
+      </div>
     </main>
     <figure>
       <img
@@ -114,6 +115,15 @@ export default {
 
 <style lang="scss">
 @import 'bulma';
+$gradient1: #598daf;
+$gradient2: #fdbc89;
+$gradient3: #f8eade;
+.is-link {
+  background-color: rgb(89, 81, 139) !important;
+}
+.cfa-button {
+  @extend .has-text-light;
+}
 .brand-title {
   @extend .mb-0;
   @extend .mr-2;
@@ -139,12 +149,20 @@ export default {
   }
 }
 .grid-container {
+  background-image: linear-gradient($gradient1, $gradient2, $gradient3);
   display: grid !important;
-  grid-template-columns: 1fr 4fr 5fr 1fr;
+  grid-template-columns: 1fr 4fr minmax(300px, 5fr) 1fr;
   grid-template-rows: 2rem auto;
   grid-template-areas:
     '. . . . '
     '. area1 area2 .';
+  @include mobile {
+    grid-template-rows: auto 0px;
+    grid-template-columns: 1fr 20fr 1fr;
+    grid-template-areas:
+      '. area1 .'
+      '. area2 .';
+  }
 }
 
 .item1 {
@@ -166,8 +184,17 @@ export default {
   grid-area: area2;
   display: grid;
   justify-content: center;
+  align-content: center;
+  max-width: 100vw;
+  @include mobile {
+    display: none;
+    visibility: hidden;
+  }
 }
 .waves {
   margin-top: -10rem;
+  @include mobile {
+    visibility: hidden;
+  }
 }
 </style>

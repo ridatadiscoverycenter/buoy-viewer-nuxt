@@ -87,7 +87,7 @@ export default {
             encode: {
               enter: {
                 strokeWidth: { value: 1 },
-                stroke: { value: 'slategray' },
+                stroke: { value: '#d3d3d3' },
                 fill: { value: 'whitesmoke' }
               }
             },
@@ -99,7 +99,7 @@ export default {
             encode: {
               enter: {
                 size: { value: 100 },
-                stroke: { value: 'steelblue' },
+                stroke: { scale: 'color', field: 'buoyId' },
                 fill: { scale: 'color', field: 'buoyId' },
                 tooltip: {
                   signal:

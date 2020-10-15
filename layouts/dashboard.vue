@@ -42,6 +42,8 @@ export default {
   grid-area: sidebar;
   @extend .px-4;
   @extend .py-4;
+  overflow: hidden;
+  background-color: whitesmoke;
 }
 .main-header {
   grid-area: main-header;
@@ -57,12 +59,14 @@ export default {
 }
 .main-section {
   grid-area: main-section;
-  @extend .is-flex;
+  display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   @extend .px-4;
   @extend .py-4;
+  z-index: 20;
 }
 .dashboard-grid {
   background-image: linear-gradient(to top left, whitesmoke, white);
@@ -72,6 +76,14 @@ export default {
     'sidebar main-header'
     'sidebar main-nav'
     'sidebar main-section';
+  @include mobile {
+    grid-template-columns: 100vw;
+    grid-template-areas:
+      'sidebar'
+      'main-header'
+      'main-nav'
+      'main-section';
+  }
 }
 .dashboard-grid-collapsed {
   background-image: linear-gradient(to top left, whitesmoke, white);
@@ -81,5 +93,14 @@ export default {
     'sidebar main-header'
     'sidebar main-nav'
     'sidebar main-section';
+  @include mobile {
+    grid-template-columns: 100vw;
+    grid-template-rows: 3.5rem auto auto auto;
+    grid-template-areas:
+      'sidebar'
+      'main-header'
+      'main-nav'
+      'main-section';
+  }
 }
 </style>
