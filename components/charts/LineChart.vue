@@ -147,7 +147,7 @@ export default {
                     stroke: { scale: 'color', field: this.y },
                     strokeWidth: { value: 1 },
                     tooltip: {
-                      signal: 'datum'
+                      signal: `{ '${this.variable}': datum.${this.variable}, 'Date': timeFormat(datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy ID': datum.${this.y} }`
                     }
                   },
                   update: {
