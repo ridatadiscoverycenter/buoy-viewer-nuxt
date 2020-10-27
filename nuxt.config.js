@@ -1,6 +1,9 @@
 export default {
   ssr: true,
   components: true,
+  router: {
+    base: '/narrbay_explorer/'
+  },
   /*
    ** Headers of the page
    */
