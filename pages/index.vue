@@ -143,6 +143,7 @@ $gradient3: #f8eade;
 }
 .disabled {
   background-color: #efefef !important;
+  color: $grey !important;
   cursor: not-allowed;
   svg {
     margin-left: 1rem;

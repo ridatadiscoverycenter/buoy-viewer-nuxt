@@ -71,7 +71,8 @@ export default {
             'faCircle',
             'faTimes',
             'faBars'
-          ]
+          ],
+          duotone: ['faLifeRing']
         }
       }
     ]
@@ -93,7 +94,15 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: 'https://pricaimcit.services.brown.edu/erddap/tabledap',
+    headers: {
+      common: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  },
   /*
    ** Build configuration
    */

@@ -10,23 +10,6 @@ const erddapClient = axios.create({
 });
 
 export default {
-  getBuoyData({ id, variable, year }) {
-    const yearStart = year ? year.toString() : '2003';
-    const yearEnd = year ? year.toString() : '2012';
-    return erddapClient.get(
-      `/combined_e784_bee5_492e.geoJson?${variable},time,latitude,longitude&station_name="${id}"&time>=${yearStart}-01-01T12:00:00Z&time<=${yearEnd}-12-31T12:00:00Z`
-    );
-  },
-  getMultiBuoyJsonData({ ids, variable, year }) {
-    const yearStart = year ? year.toString() : '2003';
-    const yearEnd = year ? year.toString() : '2012';
-    const promisseArray = ids.map((id) => {
-      return erddapClient.get(
-        `/combined_e784_bee5_492e.json?${variable},time,station_name&station_name="${id}"&time>=${yearStart}-01-01T12:00:00Z&time<=${yearEnd}-12-31T12:00:00Z`
-      );
-    });
-    return promisseArray;
-  },
   getMultiBuoyGeoJsonData({ ids, variable, start, end }) {
     const startDate = start ?? '2003-01-01T12:00:00Z';
     const endDate = end ?? '2012-12-31T12:00:00Z';
