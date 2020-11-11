@@ -1,6 +1,6 @@
 <template>
-  <div class="eplore-form">
-    <div class="explore-form-inputs">
+  <BaseForm>
+    <template #inputs>
       <div class="control-item">
         <label for="buoy-select" class="label">Select Buoys</label>
         <multiselect
@@ -28,9 +28,9 @@
         <label for="date-select" class="label">Select Date Range</label>
         <date-picker id="date-select" v-model="dateRange" range></date-picker>
       </div>
-    </div>
+    </template>
 
-    <div class="explore-form-inputs">
+    <template #buttons>
       <nuxt-link
         class="button is-link"
         :to="{
@@ -39,8 +39,8 @@
         }"
         >Visualize</nuxt-link
       >
-    </div>
-  </div>
+    </template>
+  </BaseForm>
 </template>
 
 <script>
@@ -48,10 +48,13 @@ import { mapState } from 'vuex';
 import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
 
+import BaseForm from '@/components/base/BaseForm.vue';
+
 export default {
   components: {
     Multiselect,
-    DatePicker
+    DatePicker,
+    BaseForm
   },
   props: {
     initVariable: {
@@ -97,16 +100,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.explore-form-inputs {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.mx-datepicker-range {
-  width: 100% !important;
-}
-</style>

@@ -68,26 +68,30 @@
           {{ startDate.slice(0, 10) }} to {{ endDate.slice(0, 10) }}</template
         >
         <template #chart>
-          <div class="control-item">
-            <label for="file-format" class="label">File format</label>
-            <multiselect
-              id="file-format"
-              v-model="fileFormat"
-              class="multiselect"
-              :options="fileFormats"
-            ></multiselect>
-          </div>
+          <BaseForm>
+            <template #inputs>
+              <div class="control-item">
+                <label for="file-format" class="label">File format</label>
+                <multiselect
+                  id="file-format"
+                  v-model="fileFormat"
+                  class="multiselect"
+                  :options="fileFormats"
+                ></multiselect>
+              </div>
+            </template>
 
-          <div class="download-buttons">
-            <a
-              v-for="buoy in buoyIds"
-              :key="'download' + buoy"
-              role="button"
-              class="button is-link control-item-button mr-2 my-2"
-              :href="downloadUrl(buoy)"
-              >Download {{ buoy }} Data</a
-            >
-          </div>
+            <template #buttons>
+              <a
+                v-for="buoy in buoyIds"
+                :key="'download' + buoy"
+                role="button"
+                class="button is-link control-item-button mr-2 my-2"
+                :href="downloadUrl(buoy)"
+                >Download {{ buoy }} Data</a
+              >
+            </template>
+          </BaseForm>
         </template>
       </ChartContainer>
       <ChartContainer width="half">
@@ -117,6 +121,7 @@ import LineChart from '@/components/charts/LineChart.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
+import BaseForm from '@/components/base/BaseForm.vue';
 
 export default {
   layout: 'dashboard',
@@ -126,7 +131,8 @@ export default {
     LineChart,
     Dashboard,
     ChartContainer,
-    ExploreForm
+    ExploreForm,
+    BaseForm
   },
   async fetch({ store, error, query }) {
     try {
@@ -192,12 +198,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.download-buttons {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-</style>

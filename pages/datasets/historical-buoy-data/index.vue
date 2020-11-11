@@ -120,7 +120,7 @@
         </template>
       </ChartContainer>
 
-      <ChartContainer width="one-third">
+      <ChartContainer width="half">
         <template #title>Download</template>
         <template #subtitle
           >If you prefer, we provide the raw data for you to download in various
@@ -128,45 +128,52 @@
           one file for each buoy.</template
         >
         <template #chart>
-          <div class="control-item">
-            <label for="file-format" class="label">File format</label>
-            <multiselect
-              id="file-format"
-              v-model="fileFormat"
-              class="multiselect"
-              :options="fileFormats"
-            ></multiselect>
-          </div>
+          <BaseForm>
+            <template #inputs>
+              <div class="control-item">
+                <label for="file-format" class="label">File format</label>
+                <multiselect
+                  id="file-format"
+                  v-model="fileFormat"
+                  class="multiselect"
+                  :options="fileFormats"
+                ></multiselect>
+              </div>
 
-          <div class="control-item">
-            <label for="buoy-id" class="label">Buoy ID</label>
-            <multiselect
-              id="buoy-id"
-              v-model="downloadBuoy"
-              class="multiselect"
-              :options="buoys"
-            ></multiselect>
-          </div>
+              <div class="control-item">
+                <label for="buoy-id" class="label">Buoy ID</label>
+                <multiselect
+                  id="buoy-id"
+                  v-model="downloadBuoy"
+                  class="multiselect"
+                  :options="buoys"
+                ></multiselect>
+              </div>
 
-          <div class="control-item">
-            <label for="variable-select-download" class="label"
-              >Select Variable</label
-            >
-            <multiselect
-              id="variable-select-download"
-              v-model="downloadVariables"
-              class="multiselect"
-              :options="variables"
-              :multiple="true"
-            ></multiselect>
-          </div>
-          <a
-            role="button"
-            class="button is-link control-item-button"
-            :href="downloadUrl"
-            >Download Data</a
-          ></template
-        >
+              <div class="control-item">
+                <label for="variable-select-download" class="label"
+                  >Select Variable</label
+                >
+                <multiselect
+                  id="variable-select-download"
+                  v-model="downloadVariables"
+                  class="multiselect"
+                  :options="variables"
+                  :multiple="true"
+                ></multiselect>
+              </div>
+            </template>
+
+            <template #buttons>
+              <a
+                role="button"
+                class="button is-link control-item-button"
+                :href="downloadUrl"
+                >Download Data</a
+              >
+            </template>
+          </BaseForm>
+        </template>
       </ChartContainer>
     </template>
   </Dashboard>
@@ -182,6 +189,7 @@ import Heatmap from '@/components/charts/Heatmap.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
+import BaseForm from '@/components/base/BaseForm.vue';
 
 export default {
   layout: 'dashboard',
@@ -191,7 +199,8 @@ export default {
     Multiselect,
     Dashboard,
     ChartContainer,
-    ExploreForm
+    ExploreForm,
+    BaseForm
   },
   data() {
     return {
@@ -270,6 +279,7 @@ export default {
   @extend .py-2;
   @extend .px-2;
   flex-grow: 1;
+  min-width: 250px;
 }
 .container-main-first {
   @extend .my-6;
@@ -297,6 +307,10 @@ export default {
   align-self: center;
   font-size: 20rem !important;
   color: $link;
+}
+
+.mx-datepicker-range {
+  width: 100% !important;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
