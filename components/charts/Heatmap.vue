@@ -1,7 +1,3 @@
-<template>
-  <div :id="id"></div>
-</template>
-
 <script>
 import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 export default {

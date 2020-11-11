@@ -1,7 +1,3 @@
-<template>
-  <div :id="id"></div>
-</template>
-
 <script>
 import topojson from '@/static/ri.json';
 import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
@@ -115,7 +111,7 @@ export default {
         ]
       };
     },
-    spec() {
+    baseSpec() {
       return this.legend
         ? { ...this.basicSpec, ...this.legendSpec }
         : this.basicSpec;
