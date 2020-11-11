@@ -93,7 +93,7 @@
       <ChartContainer width="half">
         <template #title>Keep Exploring</template>
         <template #subtitle>
-          Try a different variable, adding or removing buoyrs, or changing your
+          Try a different variable, adding or removing buoys, or changing the
           date range!
         </template>
         <template #chart>
@@ -198,6 +198,6 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 </style>
