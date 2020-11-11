@@ -11,17 +11,22 @@
         Make sure you selected a data range for which we have data.
       </p>
     </div>
-    <nuxt-link to="/">
+    <a @click="goBack">
       <fa :icon="['fas', 'arrow-left']" class="mr-2" />
-      Back to home</nuxt-link
-    >
+      Back
+    </a>
   </main>
 </template>
 
 <script>
 export default {
   // eslint-disable-next-line vue/require-prop-types
-  props: ['error']
+  props: ['error'],
+  methods: {
+    goBack() {
+      this.$router.back();
+    }
+  }
 };
 </script>
 
