@@ -31,6 +31,7 @@
           :dataset="coordinates"
           :legend="false"
           :include-actions="false"
+          :enable-darkmode="false"
         />
       </div>
     </main>
@@ -67,7 +68,6 @@ export default {
     }
   },
   created() {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     if (this.coordinates.length === 0) {
       this.$store.dispatch('buoy/fetchBuoyCoordinates', {
         ids: this.buoys

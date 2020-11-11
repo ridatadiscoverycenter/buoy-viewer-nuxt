@@ -27,7 +27,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['@brown-ccv/disco-styles'],
+  css: [],
   /*
    ** Plugins to load before mounting the App
    */
@@ -81,6 +81,7 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
+    '@nuxtjs/bulma',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module

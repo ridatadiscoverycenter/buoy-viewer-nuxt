@@ -73,7 +73,7 @@
               </abbr></span
             >
             <span v-if="!collapsed" class="tag is-light is-warning ml-2"
-              >comming soon</span
+              >coming soon</span
             ></a
           >
         </li>

@@ -2,21 +2,23 @@
   <Dashboard>
     <template #main-nav>
       <nuxt-link
-        class="plot-nav is-size-4"
+        class="plot-nav is-size-5"
         :to="{
           name: 'index'
         }"
       >
         <span>Home</span></nuxt-link
       >
-      <span class="ml-4 is-size-4">/</span>
+      <span class="ml-4 is-size-5">/</span>
       <nuxt-link
-        class="plot-nav is-size-4"
+        class="plot-nav is-size-5"
         :to="{
           name: 'datasets-historical-buoy-data'
         }"
         ><span class="ml-4">Summary</span></nuxt-link
       >
+      <span class="ml-4 is-size-5">/</span>
+      <span class="ml-4 plot-nav is-size-5">Explore</span>
     </template>
     <template #main-header
       ><span class="title"
@@ -31,7 +33,12 @@
           >Hover over the circles to find out the buoy locations.</template
         >
         <template #chart>
-          <Map id="map" :height="400" :dataset="filterCoordinates" />
+          <Map
+            id="map"
+            :height="400"
+            :dataset="filterCoordinates"
+            :enable-darkmode="false"
+          />
         </template>
       </ChartContainer>
 
@@ -49,6 +56,7 @@
             :variable="variable"
             x="time"
             y="station_name"
+            :enable-darkmode="false"
           />
         </template>
       </ChartContainer>
@@ -70,14 +78,30 @@
             ></multiselect>
           </div>
 
-          <a
-            v-for="buoy in buoyIds"
-            :key="'download' + buoy"
-            role="button"
-            class="button is-link control-item-button mr-2 my-2"
-            :href="downloadUrl(buoy)"
-            >Download {{ buoy }} Data</a
-          >
+          <div class="download-buttons">
+            <a
+              v-for="buoy in buoyIds"
+              :key="'download' + buoy"
+              role="button"
+              class="button is-link control-item-button mr-2 my-2"
+              :href="downloadUrl(buoy)"
+              >Download {{ buoy }} Data</a
+            >
+          </div>
+        </template>
+      </ChartContainer>
+      <ChartContainer width="half">
+        <template #title>Keep Exploring</template>
+        <template #subtitle>
+          Try a different variable, adding or removing buoyrs, or changing your
+          date range!
+        </template>
+        <template #chart>
+          <ExploreForm
+            :init-variable="variable"
+            :init-buoys="buoyIds"
+            :init-date-range="[startDate, endDate]"
+          />
         </template>
       </ChartContainer>
     </template>
@@ -87,10 +111,12 @@
 <script>
 import { mapState } from 'vuex';
 import Multiselect from 'vue-multiselect';
+
 import Map from '@/components/charts/Map.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
+import ExploreForm from '@/components/ExploreForm.vue';
 
 export default {
   layout: 'dashboard',
@@ -99,7 +125,8 @@ export default {
     Map,
     LineChart,
     Dashboard,
-    ChartContainer
+    ChartContainer,
+    ExploreForm
   },
   async fetch({ store, error, query }) {
     try {
@@ -165,3 +192,12 @@ export default {
   }
 };
 </script>
+
+<style>
+.download-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+</style>
