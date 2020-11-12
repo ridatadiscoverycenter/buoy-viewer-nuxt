@@ -15,6 +15,10 @@
       <fa :icon="['fas', 'arrow-left']" class="mr-2" />
       Back
     </a>
+    <nuxt-link to="/">
+      <fa :icon="['fas', 'home']" class="mr-2" />
+      Home</nuxt-link
+    >
   </main>
 </template>
 

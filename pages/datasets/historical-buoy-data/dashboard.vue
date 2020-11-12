@@ -1,115 +1,118 @@
 <template>
-  <Dashboard>
-    <template #main-nav>
-      <nuxt-link
-        class="plot-nav is-size-5"
-        :to="{
-          name: 'index'
-        }"
-      >
-        <span>Home</span></nuxt-link
-      >
-      <span class="ml-4 is-size-5">/</span>
-      <nuxt-link
-        class="plot-nav is-size-5"
-        :to="{
-          name: 'datasets-historical-buoy-data'
-        }"
-        ><span class="ml-4">Summary</span></nuxt-link
-      >
-      <span class="ml-4 is-size-5">/</span>
-      <span class="ml-4 plot-nav is-size-5">Explore</span>
-    </template>
-    <template #main-header
-      ><span class="title"
-        ><fa icon="chart-area" class="mr-2" />Historical Buoy Data -
-        Dashboard</span
-      >
-    </template>
-    <template #main-section>
-      <ChartContainer width="one-third">
-        <template #title>Buoy Locations</template>
-        <template #subtitle
-          >Hover over the circles to find out the buoy locations.</template
+  <div>
+    <Dashboard>
+      <template #main-nav>
+        <nuxt-link
+          class="plot-nav is-size-5"
+          :to="{
+            name: 'index'
+          }"
         >
-        <template #chart>
-          <Map
-            id="map"
-            :height="400"
-            :dataset="filterCoordinates"
-            :enable-darkmode="false"
-          />
-        </template>
-      </ChartContainer>
-
-      <ChartContainer width="two-thirds">
-        <template #title>{{ variable }}</template>
-        <template #subtitle
-          >This plot shows {{ variable }} over the period between
-          {{ startDate.slice(0, 10) }} and {{ endDate.slice(0, 10) }}. You can
-          hover over the lines to see more specific data.</template
+          <span>Home</span></nuxt-link
         >
-        <template #chart>
-          <LineChart
-            id="line-chart"
-            :dataset="dataset"
-            :variable="variable"
-            x="time"
-            y="station_name"
-            :enable-darkmode="false"
-          />
-        </template>
-      </ChartContainer>
-
-      <ChartContainer width="half">
-        <template #title>Download Selected Data</template>
-        <template #subtitle
-          >Selected data includes {{ variable }} from
-          {{ startDate.slice(0, 10) }} to {{ endDate.slice(0, 10) }}</template
+        <span class="ml-4 is-size-5">/</span>
+        <nuxt-link
+          class="plot-nav is-size-5"
+          :to="{
+            name: 'datasets-historical-buoy-data'
+          }"
+          ><span class="ml-4">Summary</span></nuxt-link
         >
-        <template #chart>
-          <BaseForm>
-            <template #inputs>
-              <div class="control-item">
-                <label for="file-format" class="label">File format</label>
-                <multiselect
-                  id="file-format"
-                  v-model="fileFormat"
-                  class="multiselect"
-                  :options="fileFormats"
-                ></multiselect>
-              </div>
-            </template>
+        <span class="ml-4 is-size-5">/</span>
+        <span class="ml-4 plot-nav is-size-5">Explore</span>
+      </template>
+      <template #main-header
+        ><span class="title"
+          ><fa icon="chart-area" class="mr-2" />Historical Buoy Data -
+          Dashboard</span
+        >
+      </template>
+      <template #main-section>
+        <ChartContainer width="one-third">
+          <template #title>Buoy Locations</template>
+          <template #subtitle
+            >Hover over the circles to find out the buoy locations.</template
+          >
+          <template #chart>
+            <Map
+              id="map"
+              :height="400"
+              :dataset="filterCoordinates"
+              :enable-darkmode="false"
+            />
+          </template>
+        </ChartContainer>
 
-            <template #buttons>
-              <a
-                v-for="buoy in buoyIds"
-                :key="'download' + buoy"
-                role="button"
-                class="button is-link control-item-button mr-2 my-2"
-                :href="downloadUrl(buoy)"
-                >Download {{ buoy }} Data</a
-              >
-            </template>
-          </BaseForm>
-        </template>
-      </ChartContainer>
-      <ChartContainer width="half">
-        <template #title>Keep Exploring</template>
-        <template #subtitle>
-          Try a different variable, adding or removing buoys, or changing the
-          date range!
-        </template>
-        <template #chart>
-          <ExploreForm
-            :init-variable="variable"
-            :init-buoys="buoyIds"
-            :init-date-range="[startDate, endDate]"
-          />
-        </template>
-      </ChartContainer>
-    </template>
-  </Dashboard>
+        <ChartContainer width="two-thirds">
+          <template #title>{{ variable }}</template>
+          <template #subtitle
+            >This plot shows {{ variable }} over the period between
+            {{ startDate.slice(0, 10) }} and {{ endDate.slice(0, 10) }}. You can
+            hover over the lines to see more specific data.</template
+          >
+          <template #chart>
+            <LineChart
+              id="line-chart"
+              :dataset="dataset"
+              :variable="variable"
+              x="time"
+              y="station_name"
+              :enable-darkmode="false"
+            />
+          </template>
+        </ChartContainer>
+
+        <ChartContainer width="half">
+          <template #title>Download Selected Data</template>
+          <template #subtitle
+            >Selected data includes {{ variable }} from
+            {{ startDate.slice(0, 10) }} to {{ endDate.slice(0, 10) }}</template
+          >
+          <template #chart>
+            <BaseForm>
+              <template #inputs>
+                <div class="control-item">
+                  <label for="file-format" class="label">File format</label>
+                  <multiselect
+                    id="file-format"
+                    v-model="fileFormat"
+                    class="multiselect"
+                    :options="fileFormats"
+                  ></multiselect>
+                </div>
+              </template>
+
+              <template #buttons>
+                <a
+                  v-for="buoy in buoyIds"
+                  :key="'download' + buoy"
+                  role="button"
+                  class="button is-link control-item-button mr-2 my-2"
+                  :href="downloadUrl(buoy)"
+                  >Download {{ buoy }} Data</a
+                >
+              </template>
+            </BaseForm>
+          </template>
+        </ChartContainer>
+        <ChartContainer width="half">
+          <template #title>Keep Exploring</template>
+          <template #subtitle>
+            Try a different variable, adding or removing buoys, or changing the
+            date range!
+          </template>
+          <template #chart>
+            <ExploreForm
+              :init-variable="variable"
+              :init-buoys="buoyIds"
+              :init-date-range="[startDate, endDate]"
+            />
+          </template>
+        </ChartContainer>
+      </template>
+    </Dashboard>
+    <CompassLoading :manual-load="loading" />
+  </div>
 </template>
 
 <script>
@@ -122,6 +125,7 @@ import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import BaseForm from '@/components/base/BaseForm.vue';
+import CompassLoading from '@/components/loading.vue';
 
 export default {
   layout: 'dashboard',
@@ -132,20 +136,24 @@ export default {
     Dashboard,
     ChartContainer,
     ExploreForm,
-    BaseForm
+    BaseForm,
+    CompassLoading
   },
-  async fetch({ store, error, query }) {
+  async fetch() {
     try {
-      const ids = query.buoyIds.split(',');
+      this.loading = true;
+      const ids = this.$route.query.buoyIds.split(',');
       const payload = {
-        variable: query.slug.split(',')[0],
-        start: query.slug.split(',')[1],
-        end: query.slug.split(',')[2],
+        variable: this.$route.query.slug.split(',')[0],
+        start: this.$route.query.slug.split(',')[1],
+        end: this.$route.query.slug.split(',')[2],
         ids
       };
-      await store.dispatch('buoy/fetchDataGeoJson', payload);
+      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
+      this.loading = false;
     } catch (e) {
-      error({
+      this.loading = false;
+      this.$nuxt.context.error({
         statusCode: 503,
         message: 'Unable to fetch data at this time. Try again later.'
       });
@@ -154,12 +162,13 @@ export default {
   data() {
     return {
       sideHidden: false,
-      fileFormat: 'json'
+      fileFormat: 'json',
+      loading: false
     };
   },
   computed: {
     ...mapState('buoy', ['coordinates', 'buoyData']),
-    ...mapState('variables', ['baseUrl', 'fileFormats']),
+    ...mapState('variables', ['baseUrl', 'fileFormats', 'buoys']),
     variable() {
       return this.$route.query.slug.split(',')[0];
     },
@@ -173,7 +182,7 @@ export default {
     dataset() {
       return this.buoyData
         .filter((arr) => arr[this.variable] !== null)
-        .reduce((a, b) => a.concat(b));
+        .reduce((a, b) => a.concat(b), []);
     },
     buoyIds() {
       return this.$route.query.buoyIds.split(',');
@@ -184,10 +193,15 @@ export default {
       });
     }
   },
+  watch: {
+    '$route.query': function(newQuery, oldQuery) { // eslint-disable-line
+      this.$fetch();
+    }
+  },
   created() {
     if (this.coordinates.length === 0) {
       this.$store.dispatch('buoy/fetchBuoyCoordinates', {
-        ids: this.buoyIds
+        ids: this.buoys
       });
     }
   },

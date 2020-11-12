@@ -216,7 +216,7 @@ export default {
     ...mapState('variables', ['buoys', 'variables', 'fileFormats', 'baseUrl']),
     ...mapState('buoy', ['coordinates']),
     dataArr() {
-      return this.summary.reduce((a, b) => _.concat(a, b));
+      return this.summary.reduce((a, b) => _.concat(a, b), []);
     },
     downloadUrl() {
       return `${this.baseUrl}${this.fileFormat}?${this.downloadVariables},time,latitude,longitude&station_name="${this.downloadBuoy}"`;

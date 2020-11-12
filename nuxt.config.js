@@ -56,6 +56,7 @@ export default {
             'faChartArea',
             'faDownload',
             'faArrowLeft',
+            'faHome',
             'faBars'
           ]
         },
