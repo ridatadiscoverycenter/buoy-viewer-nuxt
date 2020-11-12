@@ -8,6 +8,8 @@
         }"
         ><span>Home</span></nuxt-link
       >
+      <span class="ml-4 is-size-5">/</span>
+      <span class="ml-4 plot-nav is-size-5">Summary</span>
     </template>
     <template #main-header
       ><h1 class="title">Historical Buoy Data - Summary</h1></template
@@ -49,6 +51,7 @@
               x="date"
               y="station"
               :variable="variable"
+              :enable-darkmode="false"
             />
           </div>
         </template>
@@ -59,9 +62,15 @@
           >Hover over the circles to find out the buoy locations.</template
         >
         <template #chart>
-          <Map id="map" :height="400" :dataset="coordinates" />
+          <Map
+            id="map"
+            :height="400"
+            :dataset="coordinates"
+            :enable-darkmode="false"
+          />
         </template>
       </ChartContainer>
+
       <ChartContainer width="half">
         <template #title>Explore</template>
         <template #subtitle
@@ -71,46 +80,8 @@
           available.</template
         >
         <template #chart>
-          <div class="control-item">
-            <label for="buoy-select" class="label">Select Buoys</label>
-            <multiselect
-              id="buoy-select"
-              v-model="selectedBuoys"
-              class="multiselect"
-              :options="buoys"
-              :multiple="true"
-            ></multiselect>
-          </div>
-
-          <div class="control-item">
-            <label for="variable-select-visualize" class="label"
-              >Select Variable</label
-            >
-            <multiselect
-              id="variable-select-visualize"
-              v-model="selectedVariable"
-              class="multiselect"
-              :options="variables"
-            ></multiselect>
-          </div>
-
-          <div class="control-item">
-            <label for="date-select" class="label">Select Date Range</label>
-            <date-picker
-              id="date-select"
-              v-model="dateRange"
-              range
-            ></date-picker>
-          </div>
-          <nuxt-link
-            class="button is-link"
-            :to="{
-              name: 'datasets-historical-buoy-data-dashboard',
-              query: { buoyIds: selectedBuoysString, slug }
-            }"
-            >Visualize</nuxt-link
-          ></template
-        >
+          <ExploreForm />
+        </template>
       </ChartContainer>
 
       <ChartContainer width="half">
@@ -149,7 +120,7 @@
         </template>
       </ChartContainer>
 
-      <ChartContainer width="one-third">
+      <ChartContainer width="half">
         <template #title>Download</template>
         <template #subtitle
           >If you prefer, we provide the raw data for you to download in various
@@ -157,45 +128,52 @@
           one file for each buoy.</template
         >
         <template #chart>
-          <div class="control-item">
-            <label for="file-format" class="label">File format</label>
-            <multiselect
-              id="file-format"
-              v-model="fileFormat"
-              class="multiselect"
-              :options="fileFormats"
-            ></multiselect>
-          </div>
+          <BaseForm>
+            <template #inputs>
+              <div class="control-item">
+                <label for="file-format" class="label">File format</label>
+                <multiselect
+                  id="file-format"
+                  v-model="fileFormat"
+                  class="multiselect"
+                  :options="fileFormats"
+                ></multiselect>
+              </div>
 
-          <div class="control-item">
-            <label for="buoy-id" class="label">Buoy ID</label>
-            <multiselect
-              id="buoy-id"
-              v-model="downloadBuoy"
-              class="multiselect"
-              :options="buoys"
-            ></multiselect>
-          </div>
+              <div class="control-item">
+                <label for="buoy-id" class="label">Buoy ID</label>
+                <multiselect
+                  id="buoy-id"
+                  v-model="downloadBuoy"
+                  class="multiselect"
+                  :options="buoys"
+                ></multiselect>
+              </div>
 
-          <div class="control-item">
-            <label for="variable-select-download" class="label"
-              >Select Variable</label
-            >
-            <multiselect
-              id="variable-select-download"
-              v-model="downloadVariables"
-              class="multiselect"
-              :options="variables"
-              :multiple="true"
-            ></multiselect>
-          </div>
-          <a
-            role="button"
-            class="button is-link control-item-button"
-            :href="downloadUrl"
-            >Download Data</a
-          ></template
-        >
+              <div class="control-item">
+                <label for="variable-select-download" class="label"
+                  >Select Variable</label
+                >
+                <multiselect
+                  id="variable-select-download"
+                  v-model="downloadVariables"
+                  class="multiselect"
+                  :options="variables"
+                  :multiple="true"
+                ></multiselect>
+              </div>
+            </template>
+
+            <template #buttons>
+              <a
+                role="button"
+                class="button is-link control-item-button"
+                :href="downloadUrl"
+                >Download Data</a
+              >
+            </template>
+          </BaseForm>
+        </template>
       </ChartContainer>
     </template>
   </Dashboard>
@@ -205,11 +183,13 @@
 import { mapState } from 'vuex';
 import _ from 'lodash';
 import Multiselect from 'vue-multiselect';
-import DatePicker from 'vue2-datepicker';
+
 import Map from '@/components/charts/Map.vue';
 import Heatmap from '@/components/charts/Heatmap.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
+import ExploreForm from '@/components/ExploreForm.vue';
+import BaseForm from '@/components/base/BaseForm.vue';
 
 export default {
   layout: 'dashboard',
@@ -217,15 +197,14 @@ export default {
     Map,
     Heatmap,
     Multiselect,
-    DatePicker,
     Dashboard,
-    ChartContainer
+    ChartContainer,
+    ExploreForm,
+    BaseForm
   },
   data() {
     return {
       variable: 'WaterTempSurface',
-      selectedBuoys: [],
-      selectedVariable: '',
       dateRange: null,
       fileFormat: 'json',
       downloadBuoy: '',
@@ -237,18 +216,7 @@ export default {
     ...mapState('variables', ['buoys', 'variables', 'fileFormats', 'baseUrl']),
     ...mapState('buoy', ['coordinates']),
     dataArr() {
-      return this.summary.reduce((a, b) => _.concat(a, b));
-    },
-    selectedBuoysString() {
-      return this.selectedBuoys.join(',');
-    },
-    slug() {
-      try {
-        const isoDate = this.dateRange.map((date) => date.toISOString());
-        return [this.selectedVariable].concat(isoDate).join(',');
-      } catch {
-        return null;
-      }
+      return this.summary.reduce((a, b) => _.concat(a, b), []);
     },
     downloadUrl() {
       return `${this.baseUrl}${this.fileFormat}?${this.downloadVariables},time,latitude,longitude&station_name="${this.downloadBuoy}"`;
@@ -309,6 +277,9 @@ export default {
 }
 .control-item {
   @extend .py-2;
+  @extend .px-2;
+  flex-grow: 1;
+  min-width: 250px;
 }
 .container-main-first {
   @extend .my-6;
@@ -336,6 +307,10 @@ export default {
   align-self: center;
   font-size: 20rem !important;
   color: $link;
+}
+
+.mx-datepicker-range {
+  width: 100% !important;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

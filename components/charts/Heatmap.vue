@@ -1,9 +1,6 @@
-<template>
-  <div :id="id"></div>
-</template>
-
 <script>
-import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
+import { vegaBaseMixin } from '@brown-ccv/disco-vue-components';
+
 export default {
   mixins: [vegaBaseMixin],
   props: {
@@ -21,7 +18,7 @@ export default {
     }
   },
   computed: {
-    spec() {
+    baseSpec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         height: 300,
