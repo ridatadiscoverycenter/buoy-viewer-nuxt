@@ -26,7 +26,12 @@
 
       <div class="control-item">
         <label for="date-select" class="label">Select Date Range</label>
-        <date-picker id="date-select" v-model="dateRange" range></date-picker>
+        <date-picker
+          id="date-select"
+          v-model="dateRange"
+          :disabled-date="disabledDate"
+          range
+        ></date-picker>
       </div>
     </template>
 
@@ -44,7 +49,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
 
@@ -86,6 +91,7 @@ export default {
   },
   computed: {
     ...mapState('variables', ['buoys', 'variables']),
+    ...mapGetters('worker', ['getMinDate', 'getMaxDate']),
     slug() {
       try {
         const isoDate = this.dateRange.map((date) => date.toISOString());
@@ -96,6 +102,11 @@ export default {
     },
     selectedBuoysString() {
       return this.selectedBuoys.join(',');
+    }
+  },
+  methods: {
+    disabledDate(date) {
+      return date < this.getMinDate || date > this.getMaxDate;
     }
   }
 };

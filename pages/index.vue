@@ -79,7 +79,7 @@ export default {
       try {
         const summary = JSON.parse(localStorage.getItem('riddcBuoy'));
         summary
-          .reduce((a, b) => a.concat(b))
+          .reduce((a, b) => a.concat(b), [])
           .forEach((datum) => {
             datum.date = new Date(datum.date);
             this.$store.dispatch('worker/setSummary', datum);
