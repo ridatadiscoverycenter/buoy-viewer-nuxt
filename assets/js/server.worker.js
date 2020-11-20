@@ -3,18 +3,16 @@ import { state } from '@/store/variables';
 import ErddapService from '@/services/ErddapService';
 
 const fetchDataGeoJson = (payload) => {
-  return Promise.all(ErddapService.getMultiBuoyGeoJsonData(payload)).then(
-    (response) => {
-      const data = response.map((datum) => {
-        return datum.data.features.map((feature) => {
-          const date = new Date(feature.properties.time);
-          feature.properties.time = date;
-          return feature.properties;
-        });
+  return ErddapService.getMultiBuoyGeoJsonData(payload).then((response) => {
+    const data = response.map((datum) => {
+      return datum.data.features.map((feature) => {
+        const date = new Date(feature.properties.time);
+        feature.properties.time = date;
+        return feature.properties;
       });
-      return data;
-    }
-  );
+    });
+    return data;
+  });
 };
 
 self.addEventListener('message', (event) => {
