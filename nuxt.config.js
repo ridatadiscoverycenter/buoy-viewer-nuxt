@@ -95,7 +95,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'https://pricaimcit.services.brown.edu/erddap/tabledap',
+    baseURL: 'http://localhost:3004/erddap',
     headers: {
       common: {
         Accept: 'application/json',

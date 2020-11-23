@@ -250,7 +250,6 @@ export default {
       }
     }
   },
-
   methods: {
     addToLocalStorage() {
       localStorage.setItem('riddcBuoy', JSON.stringify(this.summary));

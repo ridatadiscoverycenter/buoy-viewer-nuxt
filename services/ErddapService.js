@@ -11,8 +11,8 @@ const erddapClient = axios.create({
 
 export default {
   getMultiBuoyGeoJsonData({ ids, variable, start, end }) {
-    const startDate = start ?? '2003-01-01T12:00:00Z';
-    const endDate = end ?? '2012-12-31T12:00:00Z';
+    const startDate = start !== undefined ? start : '2003-01-01T12:00:00Z';
+    const endDate = end !== undefined ? end : '2012-12-31T12:00:00Z';
     return erddapClient.get(
       `/buoy/query?datasetId=combined_e784_bee5_492e&ids=${ids}&variable=${variable}&start=${startDate}&end=${endDate}`
     );

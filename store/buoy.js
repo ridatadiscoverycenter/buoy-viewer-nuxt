@@ -1,5 +1,3 @@
-import ErddapService from '@/services/ErddapService';
-
 export const state = () => ({
   buoyData: [],
   coordinates: []
@@ -14,15 +12,22 @@ export const mutations = {
   }
 };
 export const actions = {
-  fetchDataGeoJson({ commit }, payload) {
-    return ErddapService.getMultiBuoyGeoJsonData(payload).then((response) => {
-      const data = response.data.map((datum) => {
-        const date = new Date(datum.time);
-        datum.time = date;
-        return datum;
+  fetchSummaryData({ commit }, payload) {},
+  fetchDataGeoJson({ commit }, { ids, variable, start, end }) {
+    const startDate = start !== undefined ? start : '2003-01-01T12:00:00Z';
+    const endDate = end !== undefined ? end : '2012-12-31T12:00:00Z';
+    return this.$axios
+      .$get(
+        `/buoy/query?datasetId=combined_e784_bee5_492e&ids=${ids}&variable=${variable}&start=${startDate}&end=${endDate}`
+      )
+      .then((response) => {
+        const data = response.map((datum) => {
+          const date = new Date(datum.time);
+          datum.time = date;
+          return datum;
+        });
+        commit('SET_BUOY_DATA', data);
       });
-      commit('SET_BUOY_DATA', data);
-    });
   },
   fetchBuoyCoordinates({ commit }, { ids }) {
     let payload;
@@ -31,8 +36,10 @@ export const actions = {
     } else {
       payload = { ids };
     }
-    return ErddapService.getBuoysCoordinates(payload).then((response) => {
-      commit('SET_BUOY_COORDINATES', response.data);
-    });
+    return this.$axios
+      .$get(`/buoy/coordinates?ids=${payload.ids}`)
+      .then((response) => {
+        commit('SET_BUOY_COORDINATES', response);
+      });
   }
 };
