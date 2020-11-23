@@ -49,7 +49,7 @@
               :dataset="summary"
               :min-width="400"
               x="date"
-              y="station"
+              y="station_name"
               :variable="variable"
               :enable-darkmode="false"
             />
