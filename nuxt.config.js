@@ -31,7 +31,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~/plugins/web-worker.js', ssr: false }],
+  plugins: [],
   /*
    ** Nuxt.js dev-modules
    */
@@ -117,14 +117,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {
-      if (ctx.isClient) {
-        config.module.rules.push({
-          test: /\.worker\.js$/,
-          loader: 'worker-loader',
-          exclude: /(node_modules)/
-        });
-      }
-    }
+    extend(config, ctx) {}
   }
 };

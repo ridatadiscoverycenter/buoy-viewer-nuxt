@@ -1,6 +1,7 @@
 export const state = () => ({
   buoyData: [],
-  coordinates: []
+  coordinates: [],
+  summary: []
 });
 
 export const mutations = {
@@ -9,10 +10,21 @@ export const mutations = {
   },
   SET_BUOY_COORDINATES(state, payload) {
     state.coordinates = payload;
+  },
+  SET_SUMMARY_DATA(state, payload) {
+    state.summary = payload;
   }
 };
 export const actions = {
-  fetchSummaryData({ commit }, payload) {},
+  fetchSummaryData({ commit }, { end }) {
+    return this.$axios.$get(`/buoy/summary?end=${end}`).then((response) => {
+      const dateParsed = response.map((d) => {
+        d.date = new Date(d.date);
+        return d;
+      });
+      commit('SET_SUMMARY_DATA', dateParsed);
+    });
+  },
   fetchDataGeoJson({ commit }, { ids, variable, start, end }) {
     const startDate = start !== undefined ? start : '2003-01-01T12:00:00Z';
     const endDate = end !== undefined ? end : '2012-12-31T12:00:00Z';
