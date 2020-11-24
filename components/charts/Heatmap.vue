@@ -61,7 +61,7 @@ export default {
             orient: 'left',
             scale: 'y',
             domain: false,
-            title: 'Buoy ID'
+            title: 'Buoy'
           }
         ],
         legends: [

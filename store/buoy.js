@@ -19,7 +19,7 @@ export const actions = {
   fetchSummaryData({ commit }, { end }) {
     return this.$axios.$get(`/buoy/summary?end=${end}`).then((response) => {
       const dateParsed = response.map((d) => {
-        d.date = new Date(d.date);
+        d.date = new Date(d.dt_ym);
         return d;
       });
       commit('SET_SUMMARY_DATA', dateParsed);

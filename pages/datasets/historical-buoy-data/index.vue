@@ -225,7 +225,7 @@ export default {
     }
     if (this.summary.length === 0) {
       this.$store.dispatch('buoy/fetchSummaryData', {
-        end: '2012-12-31T12:00:00Z'
+        end: '2015-07-01T12:00:00Z'
       });
     }
   }
