@@ -8,6 +8,6 @@ RUN yarn install
 
 ENV HOST 0.0.0.0   # Insensitive environment variable
 
-EXPOSE 3000
+EXPOSE 8080
 
 CMD ["yarn", "prod"]

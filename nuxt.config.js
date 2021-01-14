@@ -1,8 +1,11 @@
 export default {
+  server: {
+    port: 8080
+  },
   ssr: true,
   components: true,
   router: {
-    base: '/narrbay_explorer/'
+    base: '/'
   },
   /*
    ** Headers of the page
@@ -95,7 +98,8 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'http://localhost:3004/erddap',
+    baseURL: 'https://api.riddc.brown.edu/erddap',
+    // baseURL: 'http://localhost:8080/erddap',
     headers: {
       common: {
         Accept: 'application/json',

@@ -16,8 +16,8 @@ export const mutations = {
   }
 };
 export const actions = {
-  fetchSummaryData({ commit }, { end }) {
-    return this.$axios.$get(`/buoy/summary?end=${end}`).then((response) => {
+  fetchSummaryData({ commit }) {
+    return this.$axios.$get('/buoy/summary').then((response) => {
       const dateParsed = response.map((d) => {
         d.date = new Date(d.dt_ym);
         return d;
