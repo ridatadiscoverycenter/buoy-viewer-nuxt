@@ -53,7 +53,7 @@
           <template #chart>
             <LineChart
               id="line-chart"
-              :dataset="dataset"
+              :dataset="buoyData"
               :variable="variable"
               x="time"
               y="station_name"
@@ -142,12 +142,11 @@ export default {
   async fetch() {
     try {
       this.loading = true;
-      const ids = this.$route.query.buoyIds.split(',');
       const payload = {
         variable: this.$route.query.slug.split(',')[0],
         start: this.$route.query.slug.split(',')[1],
         end: this.$route.query.slug.split(',')[2],
-        ids
+        ids: this.$route.query.buoyIds
       };
       await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
       this.loading = false;
@@ -178,11 +177,6 @@ export default {
     },
     endDate() {
       return this.$route.query.slug.split(',')[2];
-    },
-    dataset() {
-      return this.buoyData
-        .filter((arr) => arr[this.variable] !== null)
-        .reduce((a, b) => a.concat(b), []);
     },
     buoyIds() {
       return this.$route.query.buoyIds.split(',');

@@ -9,18 +9,13 @@
             Narragansett Bay
           </h2>
           <nuxt-link
-            :class="{ disabled: summary.length == 0 }"
             class="button is-large cfa-button is-link"
             :to="{
               name: 'datasets-historical-buoy-data'
             }"
           >
             <span class="action-button">Start Exploring</span>
-            <fa
-              class="ml-3 action-button"
-              :icon="['fas', 'compass']"
-              :spin="summary.length == 0"
-            />
+            <fa class="ml-3 action-button" :icon="['fas', 'compass']" />
           </nuxt-link>
         </div>
       </div>
@@ -48,67 +43,20 @@
 
 <script>
 import { mapState } from 'vuex';
-import _ from 'lodash';
 import Map from '@/components/charts/Map.vue';
 export default {
   components: {
     Map
   },
   computed: {
-    ...mapState('worker', ['loaded', 'summary']),
     ...mapState('variables', ['buoys']),
-    ...mapState('buoy', ['coordinates']),
-    dataArr: {
-      get() {
-        return 0;
-      },
-      set() {
-        return this.summary.reduce((a, b) => _.concat(a, b)).length();
-      }
-    }
+    ...mapState('buoy', ['coordinates'])
   },
   created() {
     if (this.coordinates.length === 0) {
       this.$store.dispatch('buoy/fetchBuoyCoordinates', {
         ids: this.buoys
       });
-    }
-  },
-  beforeMount() {
-    if (process.browser && this.summary.length < 13) {
-      try {
-        const summary = JSON.parse(localStorage.getItem('riddcBuoy'));
-        summary
-          .reduce((a, b) => a.concat(b), [])
-          .forEach((datum) => {
-            datum.date = new Date(datum.date);
-            this.$store.dispatch('worker/setSummary', datum);
-          });
-        this.$store.dispatch('worker/loaded', true);
-      } catch {
-        this.$store.dispatch('worker/loaded', false);
-      }
-    }
-  },
-  mounted() {
-    const buoyChunks = _.chunk(this.buoys, 1);
-    if (process.browser) {
-      if (this.summary.length === 0) {
-        buoyChunks.forEach((chunk) => {
-          const worker = this.$worker.createWorker();
-          this.$store.dispatch('worker/loaded', false);
-          worker.addEventListener('message', this.workerResponseHandler);
-          worker.postMessage({ buoys: chunk });
-        });
-      } else {
-        this.$store.dispatch('worker/loaded', true);
-      }
-    }
-  },
-  methods: {
-    workerResponseHandler(event) {
-      this.$store.dispatch('worker/loaded', true);
-      this.$store.dispatch('worker/setSummary', event.data);
     }
   }
 };

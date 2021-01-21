@@ -46,10 +46,10 @@
             <Heatmap
               v-if="!(summary.length === 0)"
               id="heatmap"
-              :dataset="dataArr"
+              :dataset="summary"
               :min-width="400"
               x="date"
-              y="station"
+              y="station_name"
               :variable="variable"
               :enable-darkmode="false"
             />
@@ -181,7 +181,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import _ from 'lodash';
 import Multiselect from 'vue-multiselect';
 
 import Map from '@/components/charts/Map.vue';
@@ -212,21 +211,10 @@ export default {
     };
   },
   computed: {
-    ...mapState('worker', ['summary']),
     ...mapState('variables', ['buoys', 'variables', 'fileFormats', 'baseUrl']),
-    ...mapState('buoy', ['coordinates']),
-    dataArr() {
-      return this.summary.reduce((a, b) => _.concat(a, b), []);
-    },
+    ...mapState('buoy', ['coordinates', 'summary']),
     downloadUrl() {
       return `${this.baseUrl}${this.fileFormat}?${this.downloadVariables},time,latitude,longitude&station_name="${this.downloadBuoy}"`;
-    }
-  },
-  watch: {
-    summary(newVal) {
-      if (newVal.length === 13 && process.browser) {
-        this.addToLocalStorage();
-      }
     }
   },
   created() {
@@ -235,25 +223,8 @@ export default {
         ids: this.buoys
       });
     }
-    if (process.browser && this.summary.length < 13) {
-      try {
-        const summary = JSON.parse(localStorage.getItem('riddcBuoy'));
-        summary
-          .reduce((a, b) => a.concat(b))
-          .forEach((datum) => {
-            datum.date = new Date(datum.date);
-            this.$store.dispatch('worker/setSummary', datum);
-          });
-        this.$store.dispatch('worker/loaded', true);
-      } catch {
-        this.$store.dispatch('worker/loaded', false);
-      }
-    }
-  },
-
-  methods: {
-    addToLocalStorage() {
-      localStorage.setItem('riddcBuoy', JSON.stringify(this.summary));
+    if (this.summary.length === 0) {
+      this.$store.dispatch('buoy/fetchSummaryData');
     }
   }
 };

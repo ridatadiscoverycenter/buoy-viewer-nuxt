@@ -73,7 +73,7 @@ export default {
           {
             name: 'color',
             type: 'ordinal',
-            domain: { data: 'points', field: 'buoyId' },
+            domain: { data: 'points', field: 'station_name' },
             range: { scheme: 'tableau20' }
           }
         ],
@@ -96,11 +96,11 @@ export default {
             encode: {
               enter: {
                 size: { value: 100 },
-                stroke: { scale: 'color', field: 'buoyId' },
-                fill: { scale: 'color', field: 'buoyId' },
+                stroke: { scale: 'color', field: 'station_name' },
+                fill: { scale: 'color', field: 'station_name' },
                 tooltip: {
                   signal:
-                    '{"Buoy ID": datum.buoyId, "Latitude": datum.latitude, "Longitude": datum.longitude}'
+                    '{"Buoy ID": datum.buoyId, "Station Name": datum.station_name, "Latitude": datum.latitude, "Longitude": datum.longitude}'
                 }
               },
               update: {

@@ -1,8 +1,11 @@
 export default {
+  server: {
+    port: 8080
+  },
   ssr: true,
   components: true,
   router: {
-    base: '/narrbay_explorer/'
+    base: '/'
   },
   /*
    ** Headers of the page
@@ -31,7 +34,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [{ src: '~/plugins/web-worker.js', ssr: false }],
+  plugins: [],
   /*
    ** Nuxt.js dev-modules
    */
@@ -95,7 +98,8 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'https://pricaimcit.services.brown.edu/erddap/tabledap',
+    baseURL: 'https://api.riddc.brown.edu/erddap',
+    // baseURL: 'http://localhost:8080/erddap',
     headers: {
       common: {
         Accept: 'application/json',
@@ -117,14 +121,6 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {
-      if (ctx.isClient) {
-        config.module.rules.push({
-          test: /\.worker\.js$/,
-          loader: 'worker-loader',
-          exclude: /(node_modules)/
-        });
-      }
-    }
+    extend(config, ctx) {}
   }
 };

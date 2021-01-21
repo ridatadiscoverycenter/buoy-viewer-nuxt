@@ -61,7 +61,7 @@ export default {
             orient: 'left',
             scale: 'y',
             domain: false,
-            title: 'Buoy ID'
+            title: 'Buoy'
           }
         ],
         legends: [
@@ -83,7 +83,7 @@ export default {
                 width: { value: 12 },
                 height: { scale: 'y', band: 1 },
                 tooltip: {
-                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Buoy ID': datum.${this.y}, 'Count': datum.${this.variable}}`
+                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Station Name': datum.${this.y}, 'Buoy ID': datum.station, 'Count': datum.${this.variable}}`
                 }
               },
               update: {
