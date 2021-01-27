@@ -12,20 +12,18 @@
       <span class="ml-4 plot-nav is-size-5">Summary</span>
     </template>
     <template #main-header
-      ><h1 class="title">Historical Buoy Data - Summary</h1></template
+      ><h1 class="title">Osean State Ocean Model - Summary</h1></template
     >
     <template #main-section>
       <ChartContainer width="two-thirds">
         <template #title>Available Data</template>
         <template #subtitle>
-          This dataset spans from 2003 to 2012. The heatmap below summarizes the
-          number of observations collected for each month for different
-          variables. Use this heatmap to help you decide what data you want to
-          visualize or download. When you have an idea, go ahead and select the
-          buoys, variables and dates to explore. Or download the data in the
-          most appropriate format for your analyses! To begin, select a variable
-          to see what data is available.</template
-        >
+          The Ocean State Ocean Model (OSOM) is an application of the Regional
+          Ocean Modeling System spanning the Rhode Island waterways, including
+          Narragansett Bay, Mt. Hope Bay, larger rivers, and the Block Island
+          Shelf circulation from Long Island to Nantucket. The data is available
+          for all days and all stations for the years highlighted below.
+        </template>
         <template #chart>
           <div class="is-flex-column">
             <div class="control-item control-item-first">
@@ -95,26 +93,26 @@
             <nuxt-link
               class="button is-link mb-2"
               :to="{
-                name: 'datasets-historical-buoy-data-dashboard',
+                name: 'datasets-model-buoy-data-dashboard',
                 query: {
                   buoyIds: 'bid2,bid3',
                   slug:
-                    'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
+                    'WaterTempSurface,206-05-01T04%3A00%3A00.000Z,2006-10-31T04%3A00%3A00.000Z'
                 }
               }"
-              >Buoys 2 and 3, Water Temperature 2010-2011</nuxt-link
+              >Buoys 2 and 3, Water Temperature 2006</nuxt-link
             >
             <nuxt-link
               class="button is-link mb-2"
               :to="{
-                name: 'datasets-historical-buoy-data-dashboard',
+                name: 'datasets-model-buoy-data-dashboard',
                 query: {
                   buoyIds: 'bid15,bid17',
                   slug:
-                    'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
+                    'SalinityBottom,20018-05-01T04%3A00%3A00.000Z,20018-10-31T04%3A00%3A00.000Z'
                 }
               }"
-              >Buoys 15 and 17, depth 2008-2009</nuxt-link
+              >Buoys 15 and 17, Salinity 2018</nuxt-link
             >
           </div>
         </template>
@@ -141,11 +139,51 @@
           one file for each buoy.</template
         >
         <template #chart>
-          <DownloadForm
-            :variables="variables"
-            :buoys="buoys"
-            :dataset-id="datasetId"
-          />
+          <BaseForm>
+            <template #inputs>
+              <div class="control-item">
+                <label for="file-format" class="label">File format</label>
+                <multiselect
+                  id="file-format"
+                  v-model="fileFormat"
+                  class="multiselect"
+                  :options="fileFormats"
+                ></multiselect>
+              </div>
+
+              <div class="control-item">
+                <label for="buoy-id" class="label">Buoy ID</label>
+                <multiselect
+                  id="buoy-id"
+                  v-model="downloadBuoy"
+                  class="multiselect"
+                  :options="buoys"
+                ></multiselect>
+              </div>
+
+              <div class="control-item">
+                <label for="variable-select-download" class="label"
+                  >Select Variable</label
+                >
+                <multiselect
+                  id="variable-select-download"
+                  v-model="downloadVariables"
+                  class="multiselect"
+                  :options="variables"
+                  :multiple="true"
+                ></multiselect>
+              </div>
+            </template>
+
+            <template #buttons>
+              <a
+                role="button"
+                class="button is-link control-item-button"
+                :href="downloadUrl"
+                >Download Data</a
+              >
+            </template>
+          </BaseForm>
         </template>
       </ChartContainer>
     </template>
@@ -161,7 +199,7 @@ import Heatmap from '@/components/charts/Heatmap.vue';
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
-import DownloadForm from '@/components/DownloadForm.vue';
+import BaseForm from '@/components/base/BaseForm.vue';
 
 export default {
   layout: 'dashboard',
@@ -172,25 +210,27 @@ export default {
     Dashboard,
     ChartContainer,
     ExploreForm,
-    DownloadForm
+    BaseForm
   },
   data() {
     return {
       variable: 'WaterTempSurface',
-      dateRange: null
+      dateRange: null,
+      fileFormat: 'json',
+      downloadBuoy: '',
+      downloadVariables: []
     };
   },
   computed: {
-    ...mapState('buoy', ['variables', 'coordinates', 'summary']),
-    buoys() {
-      return this.coordinates.map((val) => val.buoyId);
+    ...mapState('variables', ['variables', 'fileFormats', 'baseUrl']),
+    ...mapState('buoy', ['coordinates', 'summary']),
+    downloadUrl() {
+      return `${this.baseUrl}${this.fileFormat}?${this.downloadVariables},time,latitude,longitude&station_name="${this.downloadBuoy}"`;
     }
   },
   created() {
     if (this.coordinates.length === 0) {
-      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
-        ids: this.buoys
-      });
+      this.$store.dispatch('buoy/fetchBuoyCoordinates');
     }
     if (this.summary.length === 0) {
       this.$store.dispatch('buoy/fetchSummaryData');

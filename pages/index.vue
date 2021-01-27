@@ -49,14 +49,11 @@ export default {
     Map
   },
   computed: {
-    ...mapState('variables', ['buoys']),
     ...mapState('buoy', ['coordinates'])
   },
   created() {
     if (this.coordinates.length === 0) {
-      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
-        ids: this.buoys
-      });
+      this.$store.dispatch('buoy/fetchBuoyCoordinates');
     }
   }
 };

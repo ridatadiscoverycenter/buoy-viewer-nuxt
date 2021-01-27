@@ -1,6 +1,6 @@
 export default {
   server: {
-    port: 8080
+    port: 8081
   },
   ssr: true,
   components: true,
@@ -98,8 +98,8 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'https://api.riddc.brown.edu/erddap',
-    // baseURL: 'http://localhost:8080/erddap',
+    baseURL:
+      process.env.RIDDC_API_BASEURL || 'https://api.riddc.brown.edu/erddap',
     headers: {
       common: {
         Accept: 'application/json',

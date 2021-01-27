@@ -143,6 +143,11 @@ export default {
           available: true
         },
         {
+          name: 'OSOM Model Buoy Data',
+          route: 'datasets-model-buoy-data',
+          available: true
+        },
+        {
           name: 'Phytoplankton TS',
           route: 'datasets-phytoplankton-timeseries',
           available: false

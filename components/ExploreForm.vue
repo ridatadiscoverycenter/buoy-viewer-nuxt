@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
 
@@ -80,6 +80,14 @@ export default {
       default() {
         return [];
       }
+    },
+    variables: {
+      type: Array,
+      required: true
+    },
+    buoys: {
+      type: Array,
+      required: true
     }
   },
   data() {
@@ -90,7 +98,6 @@ export default {
     };
   },
   computed: {
-    ...mapState('variables', ['buoys', 'variables']),
     ...mapGetters('worker', ['getMinDate', 'getMaxDate']),
     slug() {
       try {
