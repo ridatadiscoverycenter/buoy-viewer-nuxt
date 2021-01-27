@@ -42,6 +42,14 @@ export default {
                 force: true
               }
             ]
+          },
+          {
+            name: 'hovered',
+            value: null,
+            on: [
+              { events: '@voronoi:mouseover', update: 'datum' },
+              { events: '@voronoi:mouseout', update: 'null' }
+            ]
           }
         ],
         data: [
@@ -125,6 +133,23 @@ export default {
         ],
         marks: [
           {
+            type: 'symbol',
+            zindex: 1,
+            encode: {
+              enter: {
+                size: { value: 20 }
+              },
+              update: {
+                fill: [
+                  { test: '!hovered', value: 'transparent' },
+                  { value: 'black' }
+                ],
+                x: { signal: 'hovered && hovered.x' },
+                y: { signal: 'hovered && hovered.y' }
+              }
+            }
+          },
+          {
             type: 'group',
             from: {
               facet: {
@@ -136,6 +161,7 @@ export default {
             marks: [
               {
                 type: 'line',
+                name: 'lines',
                 from: { data: 'series' },
                 encode: {
                   enter: {
@@ -143,9 +169,7 @@ export default {
                     y: { scale: 'yscale', field: this.variable },
                     stroke: { scale: 'color', field: this.y },
                     strokeWidth: { value: 1 },
-                    tooltip: {
-                      signal: `{ '${this.variable}': datum.${this.variable}, 'Date': timeFormat(datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy ID': datum.${this.y} }`
-                    }
+                    interactive: false
                   },
                   update: {
                     interpolate: 'linear',
@@ -162,6 +186,28 @@ export default {
                     strokeOpacity: { value: 1.0 }
                   }
                 }
+              },
+              {
+                type: 'path',
+                name: 'voronoi',
+                from: { data: 'lines' },
+                encode: {
+                  enter: {
+                    stroke: { value: 'transparent' },
+                    fill: { value: 'transparent' },
+                    tooltip: {
+                      signal: `{ '${this.variable}': datum.datum.${this.variable}, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy ID': datum.datum.${this.y} }`
+                    }
+                  }
+                },
+                transform: [
+                  {
+                    type: 'voronoi',
+                    x: 'datum.x',
+                    y: 'datum.y',
+                    size: [{ signal: 'width' }, { signal: 'height' }]
+                  }
+                ]
               }
             ]
           }

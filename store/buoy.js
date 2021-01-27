@@ -2,7 +2,10 @@ export const state = () => ({
   buoyData: [],
   coordinates: [],
   summary: [],
-  variables: []
+  variables: [],
+  datasetId: 'combined_e784_bee5_492e',
+  minDate: new Date(0),
+  maxDate: new Date()
 });
 
 export const mutations = {
@@ -17,16 +20,32 @@ export const mutations = {
   },
   SET_BUOY_VARIABLES(state, payload) {
     state.variables = payload;
+  },
+  SET_MIN_DATE(state, payload) {
+    state.minDate = payload;
+  },
+  SET_MAX_DATE(state, payload) {
+    state.maxDate = payload;
   }
 };
 export const actions = {
   fetchSummaryData({ commit }) {
     return this.$axios.$get('/buoy/summary').then((response) => {
+      let minDate = new Date();
+      let maxDate = new Date(0);
       const dateParsed = response.map((d) => {
-        d.date = new Date(d.dt_ym);
+        d.date = new Date(d.time);
+        if (d.date < minDate) {
+          minDate = d.date;
+        }
+        if (d.date > maxDate) {
+          maxDate = d.date;
+        }
         return d;
       });
       commit('SET_SUMMARY_DATA', dateParsed);
+      commit('SET_MIN_DATE', minDate);
+      commit('SET_MAX_DATE', maxDate);
     });
   },
   fetchDataGeoJson({ commit }, { ids, variable, start, end }) {

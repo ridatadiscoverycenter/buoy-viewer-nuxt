@@ -84,12 +84,10 @@
 
               <template #buttons>
                 <a
-                  v-for="buoy in buoyIds"
-                  :key="'download' + buoy"
                   role="button"
                   class="button is-link control-item-button mr-2 my-2"
-                  :href="downloadUrl(buoy)"
-                  >Download {{ buoy }} Data</a
+                  :href="downloadUrl()"
+                  >Download Data</a
                 >
               </template>
             </BaseForm>
@@ -106,6 +104,10 @@
               :init-variable="variable"
               :init-buoys="buoyIds"
               :init-date-range="[startDate, endDate]"
+              :variables="variables"
+              :buoys="buoys"
+              :min-date="minDate"
+              :max-date="maxDate"
             />
           </template>
         </ChartContainer>
@@ -166,8 +168,18 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', ['coordinates', 'buoyData']),
-    ...mapState('variables', ['baseUrl', 'fileFormats', 'buoys']),
+    ...mapState('buoy', [
+      'coordinates',
+      'buoyData',
+      'datasetId',
+      'variables',
+      'minDate',
+      'maxDate'
+    ]),
+    ...mapState('variables', ['baseUrl', 'fileFormats']),
+    buoys() {
+      return this.variables.map((val) => val.buoyId);
+    },
     variable() {
       return this.$route.query.slug.split(',')[0];
     },
@@ -192,16 +204,13 @@ export default {
       this.$fetch();
     }
   },
-  created() {
-    if (this.coordinates.length === 0) {
-      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
-        ids: this.buoys
-      });
-    }
-  },
   methods: {
-    downloadUrl(buoyId) {
-      return `${this.baseUrl}${this.fileFormat}?${this.variable},time,latitude,longitude&time>=${this.startDate}&time<=${this.endDate}&station_name="${buoyId}"`;
+    downloadUrl() {
+      return `${this.baseUrl}/tabledap/${this.datasetId}.${this.fileFormat}?${
+        this.variable
+      },station_name,time,latitude,longitude&time>=${this.startDate}&time<=${
+        this.endDate
+      }&station_name=~"(${this.buoyIds.join('|')})"`;
     }
   }
 };

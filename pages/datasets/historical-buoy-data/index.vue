@@ -37,12 +37,6 @@
                 :options="variables"
               ></multiselect>
             </div>
-            <fa
-              v-if="summary.length < 13"
-              icon="compass"
-              spin
-              class="compass-loading"
-            />
             <Heatmap
               v-if="!(summary.length === 0)"
               id="heatmap"
@@ -53,6 +47,7 @@
               :variable="variable"
               :enable-darkmode="false"
             />
+            <fa v-else icon="compass" spin class="compass-loading" />
           </div>
         </template>
       </ChartContainer>
@@ -80,7 +75,7 @@
           available.</template
         >
         <template #chart>
-          <ExploreForm />
+          <ExploreForm :variables="variables" :buoys="buoys" />
         </template>
       </ChartContainer>
 
@@ -129,7 +124,7 @@
           Shelf circulation from Long Island to Nantucket.
         </template>
         <template #chart>
-          <ExploreForm />
+          <ExploreForm :variables="variables" :buoys="buoys" />
         </template>
       </ChartContainer>
 
@@ -164,7 +159,6 @@ import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
 
 export default {
-  layout: 'dashboard',
   components: {
     Map,
     Heatmap,
@@ -181,19 +175,9 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', ['variables', 'coordinates', 'summary']),
+    ...mapState('buoy', ['variables', 'coordinates', 'summary', 'datasetId']),
     buoys() {
       return this.coordinates.map((val) => val.buoyId);
-    }
-  },
-  created() {
-    if (this.coordinates.length === 0) {
-      this.$store.dispatch('buoy/fetchBuoyCoordinates', {
-        ids: this.buoys
-      });
-    }
-    if (this.summary.length === 0) {
-      this.$store.dispatch('buoy/fetchSummaryData');
     }
   }
 };

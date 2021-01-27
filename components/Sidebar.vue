@@ -145,7 +145,7 @@ export default {
         {
           name: 'OSOM Model Buoy Data',
           route: 'datasets-model-buoy-data',
-          available: true
+          available: false
         },
         {
           name: 'Phytoplankton TS',

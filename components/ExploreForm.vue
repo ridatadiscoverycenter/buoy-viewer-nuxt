@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
 
@@ -88,22 +87,48 @@ export default {
     buoys: {
       type: Array,
       required: true
+    },
+    minDate: {
+      type: Date,
+      required: false,
+      default() {
+        return new Date(0);
+      }
+    },
+    maxDate: {
+      type: Date,
+      required: false,
+      default() {
+        return new Date();
+      }
     }
   },
   data() {
     return {
       selectedBuoys: [...this.initBuoys],
       selectedVariable: this.initVariable,
-      dateRange: this.initDateRange.map((date) => new Date(date.split('T')[0]))
+      dateRange: this.initDateRange.map((date) => {
+        // show UTC date even though diplay is local
+        const dateParts = date
+          .split('T')[0]
+          .split('-')
+          .map((val) => parseInt(val));
+        return new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+      })
     };
   },
   computed: {
-    ...mapGetters('worker', ['getMinDate', 'getMaxDate']),
     slug() {
       try {
-        const isoDate = this.dateRange.map((date) => date.toISOString());
+        const isoDate = this.dateRange.map((date) => {
+          // convert to UTC from Local
+          return new Date(
+            Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+          ).toISOString();
+        });
         return [this.selectedVariable].concat(isoDate).join(',');
-      } catch {
+      } catch (e) {
+        console.log(e);
         return null;
       }
     },
@@ -113,7 +138,10 @@ export default {
   },
   methods: {
     disabledDate(date) {
-      return date < this.getMinDate || date > this.getMaxDate;
+      const utcDate = new Date(
+        `${date.getFullYear()}-${date.getMonth}-${date.getDate()}`
+      );
+      return utcDate < this.minDate || utcDate > this.maxDate;
     }
   }
 };
