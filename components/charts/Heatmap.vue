@@ -22,14 +22,16 @@ export default {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         height: 300,
-        data: {
-          name: 'data',
-          values: this.dataset
-        },
+        data: [
+          {
+            name: 'data',
+            values: this.dataset
+          }
+        ],
         scales: [
           {
             name: 'x',
-            type: 'time',
+            type: 'utc',
             domain: { data: 'data', field: this.x },
             range: 'width'
           },
@@ -80,10 +82,13 @@ export default {
               enter: {
                 x: { scale: 'x', field: this.x },
                 y: { scale: 'y', field: this.y },
-                width: { value: 12 },
                 height: { scale: 'y', band: 1 },
+                width: {
+                  signal:
+                    "scale('x', timeOffset('month', now())) - scale('x', now())"
+                },
                 tooltip: {
-                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Station Name': datum.${this.y}, 'Buoy ID': datum.station, 'Count': datum.${this.variable}}`
+                  signal: `{'Date': utcFormat(datum.${this.x}, '%B %Y'), 'Station Name': datum.${this.y}, 'Buoy ID': datum.station, 'Count': datum.${this.variable}}`
                 }
               },
               update: {

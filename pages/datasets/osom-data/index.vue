@@ -12,19 +12,19 @@
       <span class="ml-4 plot-nav is-size-5">Summary</span>
     </template>
     <template #main-header
-      ><h1 class="title">Historical Buoy Data - Summary</h1></template
+      ><h1 class="title">
+        Osean State Osean Model (OSOM) Data - Summary
+      </h1></template
     >
     <template #main-section>
       <ChartContainer width="two-thirds">
         <template #title>Available Data</template>
         <template #subtitle>
-          This dataset spans from 2003 to 2012. The heatmap below summarizes the
-          number of observations collected for each month for different
-          variables. Use this heatmap to help you decide what data you want to
-          visualize or download. When you have an idea, go ahead and select the
-          buoys, variables and dates to explore. Or download the data in the
-          most appropriate format for your analyses! To begin, select a variable
-          to see what data is available.</template
+          The Ocean State Ocean Model (OSOM) is an application of the Regional
+          Ocean Modeling System spanning the Rhode Island waterways, including
+          Narragansett Bay, Mt. Hope Bay, larger rivers, and the Block Island
+          Shelf circulation from Long Island to Nantucket. Re think this viz -
+          if a year exists, it always will.</template
         >
         <template #chart>
           <div class="is-flex-column">
@@ -80,7 +80,7 @@
             :buoys="buoys"
             :min-date="minDate"
             :max-date="maxDate"
-            dataset="historical-buoy-data"
+            dataset="osom-data"
           />
         </template>
       </ChartContainer>
@@ -96,26 +96,26 @@
             <nuxt-link
               class="button is-link mb-2"
               :to="{
-                name: 'datasets-historical-buoy-data-dashboard',
+                name: 'datasets-osom-data-dashboard',
                 query: {
                   buoyIds: 'bid2,bid3',
                   slug:
-                    'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
+                    'WaterTempSurface,2006-01-01T04%3A00%3A00.000Z,2007-01-01T04%3A00%3A00.000Z'
                 }
               }"
-              >Buoys 2 and 3, Water Temperature 2010-2011</nuxt-link
+              >Buoys 2 and 3, Water Temperature 2006</nuxt-link
             >
             <nuxt-link
               class="button is-link mb-2"
               :to="{
-                name: 'datasets-historical-buoy-data-dashboard',
+                name: 'datasets-osom-data-dashboard',
                 query: {
                   buoyIds: 'bid15,bid17',
                   slug:
-                    'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
+                    'SalinitySurface,2018-01-01T04%3A00%3A00.000Z,2019-01-01T04%3A00%3A00.000Z'
                 }
               }"
-              >Buoys 15 and 17, depth 2008-2009</nuxt-link
+              >Buoys 15 and 17, Salinity 20018</nuxt-link
             >
           </div>
         </template>
@@ -168,7 +168,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', [
+    ...mapState('model', [
       'variables',
       'coordinates',
       'summary',

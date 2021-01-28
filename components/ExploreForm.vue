@@ -39,7 +39,7 @@
       <nuxt-link
         class="button is-link"
         :to="{
-          name: 'datasets-historical-buoy-data-dashboard',
+          name: datasetName,
           query: { buoyIds: selectedBuoysString, slug }
         }"
         >Visualize</nuxt-link
@@ -101,6 +101,10 @@ export default {
       default() {
         return new Date();
       }
+    },
+    dataset: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -133,12 +137,15 @@ export default {
     },
     selectedBuoysString() {
       return this.selectedBuoys.join(',');
+    },
+    datasetName() {
+      return `datasets-${this.dataset}-dashboard`;
     }
   },
   methods: {
     disabledDate(date) {
       const utcDate = new Date(
-        `${date.getFullYear()}-${date.getMonth}-${date.getDate()}`
+        `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       );
       return utcDate < this.minDate || utcDate > this.maxDate;
     }

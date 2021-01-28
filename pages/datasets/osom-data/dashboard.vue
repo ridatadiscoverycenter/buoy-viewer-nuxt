@@ -14,7 +14,7 @@
         <nuxt-link
           class="plot-nav is-size-5"
           :to="{
-            name: 'datasets-historical-buoy-data'
+            name: 'datasets-osom-data'
           }"
           ><span class="ml-4">Summary</span></nuxt-link
         >
@@ -93,7 +93,6 @@
             </BaseForm>
           </template>
         </ChartContainer>
-
         <ChartContainer width="half">
           <template #title>Keep Exploring</template>
           <template #subtitle>
@@ -109,7 +108,7 @@
               :buoys="buoys"
               :min-date="minDate"
               :max-date="maxDate"
-              dataset="historical-buoy-data"
+              dataset="osom-data"
             />
           </template>
         </ChartContainer>
@@ -152,7 +151,7 @@ export default {
         end: this.$route.query.slug.split(',')[2],
         ids: this.$route.query.buoyIds
       };
-      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
+      await this.$store.dispatch('model/fetchDataGeoJson', payload);
       this.loading = false;
     } catch (e) {
       this.loading = false;
@@ -170,7 +169,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', [
+    ...mapState('model', [
       'coordinates',
       'buoyData',
       'datasetId',

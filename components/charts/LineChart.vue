@@ -52,12 +52,14 @@ export default {
             ]
           }
         ],
+
         data: [
           {
             name: 'buoy',
             values: this.dataset
           }
         ],
+
         scales: [
           {
             name: 'xscale',

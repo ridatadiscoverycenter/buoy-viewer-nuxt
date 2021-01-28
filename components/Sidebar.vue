@@ -144,8 +144,8 @@ export default {
         },
         {
           name: 'Ocean State Ocean Model',
-          route: 'datasets-model-buoy-data',
-          available: false
+          route: 'datasets-osom-data',
+          available: true
         },
         {
           name: 'Phytoplankton TS',
