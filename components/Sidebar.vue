@@ -143,7 +143,7 @@ export default {
           available: true
         },
         {
-          name: 'OSOM Model Buoy Data',
+          name: 'Ocean State Ocean Model',
           route: 'datasets-model-buoy-data',
           available: false
         },

@@ -128,7 +128,6 @@ export default {
         });
         return [this.selectedVariable].concat(isoDate).join(',');
       } catch (e) {
-        console.log(e);
         return null;
       }
     },

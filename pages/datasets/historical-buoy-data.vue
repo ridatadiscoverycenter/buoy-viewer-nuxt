@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <p>I am the parent</p>
-    <NuxtChild />
-  </div>
+  <NuxtChild />
 </template>
 
 <script>
