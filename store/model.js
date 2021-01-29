@@ -1,7 +1,7 @@
 import { summaryData, buoyData } from '@/utils/store_actions';
 
 export const state = () => ({
-  buoyData: [],
+  modelData: [],
   coordinates: [],
   summary: [],
   variables: [],

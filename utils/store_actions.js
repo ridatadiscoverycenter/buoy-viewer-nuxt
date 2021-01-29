@@ -34,6 +34,6 @@ export const buoyData = (axios, route) => (
         datum.time = date;
         return datum;
       });
-      commit('mutate', { property: 'buoyData', with: data });
+      commit('mutate', { property: `${route}Data`, with: data });
     });
 };

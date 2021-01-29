@@ -57,7 +57,7 @@ export default {
   @extend .px-4;
   @extend .py-4;
 }
-.main-section {
+.main-section > div {
   grid-area: main-section;
   display: flex;
   flex-direction: row;

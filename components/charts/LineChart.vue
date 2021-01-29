@@ -15,6 +15,13 @@ export default {
     y: {
       type: String,
       required: true
+    },
+    compareDataset: {
+      type: Array,
+      required: false,
+      default() {
+        return [];
+      }
     }
   },
   computed: {
@@ -57,6 +64,10 @@ export default {
           {
             name: 'buoy',
             values: this.dataset
+          },
+          {
+            name: 'compare',
+            values: this.compareDataset
           }
         ],
 
@@ -64,7 +75,12 @@ export default {
           {
             name: 'xscale',
             type: 'time',
-            domain: { data: 'buoy', field: this.x },
+            domain: {
+              fields: [
+                { data: 'buoy', field: this.x },
+                { data: 'compare', field: this.x }
+              ]
+            },
             range: 'width',
             padding: 0.05,
             round: true
@@ -72,7 +88,12 @@ export default {
           {
             name: 'yscale',
             type: 'linear',
-            domain: { data: 'buoy', field: this.variable },
+            domain: {
+              fields: [
+                { data: 'buoy', field: this.variable },
+                { data: 'compare', field: this.variable }
+              ]
+            },
             nice: true,
             zero: false,
             range: 'height'
@@ -84,10 +105,12 @@ export default {
             domain: { data: 'buoy', field: this.y }
           }
         ],
+
         axes: [
           { orient: 'bottom', scale: 'xscale', labelAngle: 15, title: 'Time' },
           { orient: 'left', scale: 'yscale', title: this.variable }
         ],
+
         legends: [
           {
             title: 'Buoys',
@@ -133,6 +156,7 @@ export default {
             }
           }
         ],
+
         marks: [
           {
             type: 'symbol',
@@ -151,6 +175,7 @@ export default {
               }
             }
           },
+
           {
             type: 'symbol',
             name: 'secret_symbols',
@@ -163,6 +188,7 @@ export default {
               }
             }
           },
+
           {
             type: 'path',
             name: 'voronoi',
@@ -185,6 +211,7 @@ export default {
               }
             ]
           },
+
           {
             type: 'group',
             from: {
@@ -206,6 +233,44 @@ export default {
                     stroke: { scale: 'color', field: this.y },
                     strokeWidth: { value: 1 },
                     interactive: false
+                  },
+                  update: {
+                    defined: { signal: `isValid(datum.${this.variable})` },
+                    strokeOpacity: [
+                      {
+                        test: `!selected || selected === datum.station_name`,
+                        value: 0.7
+                      },
+                      { value: 0.15 }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+
+          {
+            type: 'group',
+            from: {
+              facet: {
+                name: 'compare_series',
+                data: 'compare',
+                groupby: 'station_name'
+              }
+            },
+            marks: [
+              {
+                type: 'line',
+                name: 'lines',
+                from: { data: 'compare_series' },
+                encode: {
+                  enter: {
+                    x: { scale: 'xscale', field: this.x },
+                    y: { scale: 'yscale', field: this.variable },
+                    stroke: { scale: 'color', field: this.y },
+                    strokeWidth: { value: 1 },
+                    interactive: false,
+                    strokeDash: { value: [2, 2] }
                   },
                   update: {
                     defined: { signal: `isValid(datum.${this.variable})` },

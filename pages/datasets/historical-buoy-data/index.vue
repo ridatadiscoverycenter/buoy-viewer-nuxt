@@ -1,165 +1,134 @@
 <template>
-  <Dashboard>
-    <template #main-nav>
-      <nuxt-link
-        class="plot-nav is-size-5 py-5"
-        :to="{
-          name: 'index'
-        }"
-        ><span>Home</span></nuxt-link
+  <div>
+    <ChartContainer width="two-thirds">
+      <template #title>Available Data</template>
+      <template #subtitle>
+        This dataset spans from 2003 to 2012. The heatmap below summarizes the
+        number of observations collected for each month for different variables.
+        Use this heatmap to help you decide what data you want to visualize or
+        download. When you have an idea, go ahead and select the buoys,
+        variables and dates to explore. Or download the data in the most
+        appropriate format for your analyses! To begin, select a variable to see
+        what data is available.</template
       >
-      <span class="ml-4 is-size-5">/</span>
-      <span class="ml-4 plot-nav is-size-5">Summary</span>
-    </template>
-    <template #main-header
-      ><h1 class="title">Historical Buoy Data - Summary</h1></template
-    >
-    <template #main-section>
-      <ChartContainer width="two-thirds">
-        <template #title>Available Data</template>
-        <template #subtitle>
-          This dataset spans from 2003 to 2012. The heatmap below summarizes the
-          number of observations collected for each month for different
-          variables. Use this heatmap to help you decide what data you want to
-          visualize or download. When you have an idea, go ahead and select the
-          buoys, variables and dates to explore. Or download the data in the
-          most appropriate format for your analyses! To begin, select a variable
-          to see what data is available.</template
-        >
-        <template #chart>
-          <div class="is-flex-column">
-            <div class="control-item control-item-first">
-              <label for="variable" class="label">Variable</label>
-              <multiselect
-                id="variable"
-                v-model="variable"
-                class="multiselect"
-                :options="variables"
-              ></multiselect>
-            </div>
-            <Heatmap
-              v-if="!(summary.length === 0)"
-              id="heatmap"
-              :dataset="summary"
-              :min-width="400"
-              x="date"
-              y="station_name"
-              :variable="variable"
-              :enable-darkmode="false"
-            />
-            <fa v-else icon="compass" spin class="compass-loading" />
+      <template #chart>
+        <div class="is-flex-column">
+          <div class="control-item control-item-first">
+            <label for="variable" class="label">Variable</label>
+            <multiselect
+              id="variable"
+              v-model="variable"
+              class="multiselect"
+              :options="variables"
+            ></multiselect>
           </div>
-        </template>
-      </ChartContainer>
-      <ChartContainer width="one-third">
-        <template #title>Buoy Locations</template>
-        <template #subtitle
-          >Hover over the circles to find out the buoy locations.</template
-        >
-        <template #chart>
-          <Map
-            id="map"
-            :height="400"
-            :dataset="coordinates"
+          <Heatmap
+            v-if="!(summary.length === 0)"
+            id="heatmap"
+            :dataset="summary"
+            :min-width="400"
+            x="date"
+            y="station_name"
+            :variable="variable"
             :enable-darkmode="false"
           />
-        </template>
-      </ChartContainer>
+          <fa v-else icon="compass" spin class="compass-loading" />
+        </div>
+      </template>
+    </ChartContainer>
 
-      <ChartContainer width="half">
-        <template #title>Explore</template>
-        <template #subtitle
-          >Here you can generate a line plot comparing one variable for multiple
-          buoys over time. Just select the variable, the buoys, and the time
-          range. Use the heatmap above to check what data are
-          available.</template
-        >
-        <template #chart>
-          <ExploreForm
-            :variables="variables"
-            :buoys="buoys"
-            :min-date="minDate"
-            :max-date="maxDate"
-            dataset="historical-buoy-data"
-          />
-        </template>
-      </ChartContainer>
+    <BuoyLocations :coordinates="coordinates" />
 
-      <ChartContainer width="half">
-        <template #title>Not sure what to explore?</template>
-        <template #subtitle>
-          Here are a few pre-selected scenarios for you. Just pick one and start
-          exploring.</template
-        >
-        <template #chart>
-          <div class="is-flex-column">
-            <nuxt-link
-              class="button is-link mb-2"
-              :to="{
-                name: 'datasets-historical-buoy-data-dashboard',
-                query: {
-                  buoyIds: 'bid2,bid3',
-                  slug:
-                    'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
-                }
-              }"
-              >Buoys 2 and 3, Water Temperature 2010-2011</nuxt-link
-            >
-            <nuxt-link
-              class="button is-link mb-2"
-              :to="{
-                name: 'datasets-historical-buoy-data-dashboard',
-                query: {
-                  buoyIds: 'bid15,bid17',
-                  slug:
-                    'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
-                }
-              }"
-              >Buoys 15 and 17, depth 2008-2009</nuxt-link
-            >
-          </div>
-        </template>
-      </ChartContainer>
+    <ChartContainer width="half">
+      <template #title>Explore</template>
+      <template #subtitle
+        >Here you can generate a line plot comparing one variable for multiple
+        buoys over time. Just select the variable, the buoys, and the time
+        range. Use the heatmap above to check what data are available.</template
+      >
+      <template #chart>
+        <ExploreForm
+          :variables="variables"
+          :buoys="buoys"
+          :min-date="minDate"
+          :max-date="maxDate"
+          dataset="historical-buoy-data"
+        />
+      </template>
+    </ChartContainer>
 
-      <ChartContainer width="half">
-        <template #title>Download</template>
-        <template #subtitle
-          >If you prefer, we provide the raw data for you to download in various
-          file formats. Just select the options below. You'll need to download
-          one file for each buoy.</template
-        >
-        <template #chart>
-          <DownloadForm
-            :variables="variables"
-            :buoys="buoys"
-            :dataset-id="datasetId"
-          />
-        </template>
-      </ChartContainer>
-    </template>
-  </Dashboard>
+    <ChartContainer width="half">
+      <template #title>Not sure what to explore?</template>
+      <template #subtitle>
+        Here are a few pre-selected scenarios for you. Just pick one and start
+        exploring.</template
+      >
+      <template #chart>
+        <div class="is-flex-column">
+          <nuxt-link
+            class="button is-link mb-2"
+            :to="{
+              name: 'datasets-historical-buoy-data-dashboard',
+              query: {
+                buoyIds: 'bid2,bid3',
+                slug:
+                  'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
+              }
+            }"
+            >Buoys 2 and 3, Water Temperature 2010-2011</nuxt-link
+          >
+          <nuxt-link
+            class="button is-link mb-2"
+            :to="{
+              name: 'datasets-historical-buoy-data-dashboard',
+              query: {
+                buoyIds: 'bid15,bid17',
+                slug:
+                  'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
+              }
+            }"
+            >Buoys 15 and 17, depth 2008-2009</nuxt-link
+          >
+        </div>
+      </template>
+    </ChartContainer>
+
+    <ChartContainer width="half">
+      <template #title>Download</template>
+      <template #subtitle
+        >If you prefer, we provide the raw data for you to download in various
+        file formats. Just select the options below. You'll need to download one
+        file for each buoy.</template
+      >
+      <template #chart>
+        <DownloadForm
+          :variables="variables"
+          :buoys="buoys"
+          :dataset-id="datasetId"
+        />
+      </template>
+    </ChartContainer>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import Multiselect from 'vue-multiselect';
 
-import Map from '@/components/charts/Map.vue';
 import Heatmap from '@/components/charts/Heatmap.vue';
-import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
+import BuoyLocations from '@/components/buoy/Locations.vue';
 
 export default {
   components: {
-    Map,
     Heatmap,
     Multiselect,
-    Dashboard,
     ChartContainer,
     ExploreForm,
-    DownloadForm
+    DownloadForm,
+    BuoyLocations
   },
   data() {
     return {
