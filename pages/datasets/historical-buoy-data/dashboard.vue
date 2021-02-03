@@ -1,10 +1,11 @@
 <template>
   <div>
-    <BuoyLocations :coordinates="filterCoordinates" />
+    <BuoyLocations :coordinates="filterCoordinates" :color-map="colorMap" />
 
     <BuoyLineChart
       :dataset="buoyData"
       :variable="variable"
+      :color-map="colorMap"
       :start-dt-str="startDate.slice(0, 10)"
       :end-dt-str="endDate.slice(0, 10)"
       :compare-dataset="modelData"
@@ -95,7 +96,8 @@ export default {
       'datasetId',
       'variables',
       'minDate',
-      'maxDate'
+      'maxDate',
+      'colorMap'
     ]),
     ...mapState('model', ['modelData']),
     buoys() {

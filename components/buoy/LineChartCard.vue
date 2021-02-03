@@ -28,6 +28,8 @@
         :dataset="dataset"
         :compare-dataset="compare ? compareDataset : []"
         :variable="variable"
+        :color-domain="colorDomain"
+        :color-range="colorRange"
         x="time"
         y="station_name"
         :enable-darkmode="false"
@@ -37,6 +39,8 @@
 </template>
 
 <script>
+import * as aq from 'arquero';
+
 import LineChart from '@/components/charts/LineChart.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 
@@ -48,6 +52,10 @@ export default {
   props: {
     variable: {
       type: String,
+      required: true
+    },
+    colorMap: {
+      type: Object,
       required: true
     },
     startDtStr: {
@@ -80,6 +88,19 @@ export default {
       compare: false,
       compareText: 'Add To Plot'
     };
+  },
+  computed: {
+    colorDomain() {
+      const stations = aq
+        .from(this.dataset)
+        .groupby('station_name')
+        .count()
+        .objects();
+      return stations.map((v) => v.station_name);
+    },
+    colorRange() {
+      return this.colorDomain.map((v) => this.colorMap[v]);
+    }
   },
   methods: {
     toggleCompare() {

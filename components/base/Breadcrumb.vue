@@ -12,7 +12,7 @@
         >
         <span class="mx-4 is-size-5">/</span>
       </span>
-      <span v-else class="ml-4 plot-nav is-size-5">{{ link.name }}</span>
+      <span v-else class="plot-nav is-size-5">{{ link.name }}</span>
     </span>
   </div>
 </template>

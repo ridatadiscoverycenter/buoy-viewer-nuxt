@@ -1,4 +1,5 @@
 import { summaryData, buoyData } from '@/utils/store_actions';
+import { constructColorMap } from '@/utils/palette';
 
 export const state = () => ({
   modelData: [],
@@ -7,7 +8,8 @@ export const state = () => ({
   variables: [],
   datasetId: 'model_data_77bb_15c2_6ab3',
   minDate: new Date(0),
-  maxDate: new Date()
+  maxDate: new Date(),
+  colorMap: {}
 });
 
 export const mutations = {
@@ -26,6 +28,8 @@ export const actions = {
   fetchBuoyCoordinates({ commit }) {
     return this.$axios.$get('/model/coordinates').then((response) => {
       commit('mutate', { property: 'coordinates', with: response });
+      const colorMap = constructColorMap(response.map((v) => v.station_name));
+      commit('mutate', { property: 'colorMap', with: colorMap });
     });
   },
   fetchBuoyVariables({ commit }) {

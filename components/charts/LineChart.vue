@@ -22,6 +22,14 @@ export default {
       default() {
         return [];
       }
+    },
+    colorDomain: {
+      type: Array,
+      required: true
+    },
+    colorRange: {
+      type: Array,
+      required: true
     }
   },
   computed: {
@@ -101,8 +109,8 @@ export default {
           {
             name: 'color',
             type: 'ordinal',
-            range: { scheme: 'tableau20' },
-            domain: { data: 'buoy', field: this.y }
+            range: this.colorRange,
+            domain: this.colorDomain
           }
         ],
 
