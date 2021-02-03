@@ -76,6 +76,10 @@ export default {
           {
             name: 'compare',
             values: this.compareDataset
+          },
+          {
+            name: 'union',
+            source: ['buoy', 'compare']
           }
         ],
 
@@ -84,10 +88,7 @@ export default {
             name: 'xscale',
             type: 'time',
             domain: {
-              fields: [
-                { data: 'buoy', field: this.x },
-                { data: 'compare', field: this.x }
-              ]
+              fields: [{ data: 'union', field: this.x }]
             },
             range: 'width',
             padding: 0.05,
@@ -97,10 +98,7 @@ export default {
             name: 'yscale',
             type: 'linear',
             domain: {
-              fields: [
-                { data: 'buoy', field: this.variable },
-                { data: 'compare', field: this.variable }
-              ]
+              fields: [{ data: 'union', field: this.variable }]
             },
             nice: true,
             zero: false,
@@ -187,7 +185,7 @@ export default {
           {
             type: 'symbol',
             name: 'secret_symbols',
-            from: { data: 'buoy' },
+            from: { data: 'union' },
             encode: {
               enter: {
                 fill: { value: 'transparent' },
