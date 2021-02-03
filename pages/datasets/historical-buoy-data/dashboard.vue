@@ -10,6 +10,7 @@
       :end-dt-str="endDate.slice(0, 10)"
       :compare-dataset="modelData"
       compare-name="OSOM"
+      dataset-name="Historical"
     />
 
     <BuoyQueryDownload

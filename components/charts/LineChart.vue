@@ -145,15 +145,15 @@ export default {
           {
             name: 'buoy',
             values: this.dataset,
-            transforms: [
-              { type: 'formula', as: 'dataset', expr: this.datasetName }
+            transform: [
+              { type: 'formula', as: 'dataset', expr: `'${this.datasetName}'` }
             ]
           },
           {
             name: 'compare',
             values: this.compareDataset,
-            transforms: [
-              { type: 'formula', as: 'dataset', expr: this.compareName }
+            transform: [
+              { type: 'formula', as: 'dataset', expr: `'${this.compareName}'` }
             ]
           },
           {
@@ -264,8 +264,8 @@ export default {
             from: {
               facet: {
                 name: 'series',
-                data: 'buoy',
-                groupby: 'station_name'
+                data: 'union',
+                groupby: ['station_name', 'dataset']
               }
             },
             marks: [
@@ -278,44 +278,7 @@ export default {
                     x: { scale: 'xscale', field: this.x },
                     y: { scale: 'yscale', field: this.variable },
                     stroke: { scale: 'color', field: this.y },
-                    strokeWidth: { value: this.datasetLineWidth },
-                    interactive: false
-                  },
-                  update: {
-                    defined: { signal: `isValid(datum.${this.variable})` },
-                    strokeOpacity: [
-                      {
-                        test: `!selected || selected === datum.station_name`,
-                        value: 0.7
-                      },
-                      { value: 0.15 }
-                    ]
-                  }
-                }
-              }
-            ]
-          },
-
-          {
-            type: 'group',
-            from: {
-              facet: {
-                name: 'compare_series',
-                data: 'compare',
-                groupby: 'station_name'
-              }
-            },
-            marks: [
-              {
-                type: 'line',
-                name: 'lines',
-                from: { data: 'compare_series' },
-                encode: {
-                  enter: {
-                    x: { scale: 'xscale', field: this.x },
-                    y: { scale: 'yscale', field: this.variable },
-                    stroke: { scale: 'color', field: this.y },
-                    strokeWidth: { value: this.compareLineWidth },
+                    strokeWidth: { scale: 'lineWidth', field: 'dataset' },
                     interactive: false
                   },
                   update: {
