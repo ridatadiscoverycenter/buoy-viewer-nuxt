@@ -8,7 +8,7 @@
         Narragansett Bay, Mt. Hope Bay, larger rivers, and the Block Island
         Shelf circulation from Long Island to Nantucket. Data is available by
         the year at 1.5 hour increments. As the model covers the entire
-        Naraggansett Bay, data is always available at all buoy locations.
+        Narragansett Bay, data is always available at all buoy locations.
       </template>
       <template #chart>
         <div class="is-flex-column">
