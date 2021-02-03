@@ -7,11 +7,17 @@
       more specific data.</template
     >
     <template #chart>
-      <div v-if="compareDataset.length > 0">
-        <input id="compare-checkbox" v-model="compare" type="checkbox" />
-        <label for="compare-checkbox"
-          >{{ compareName }} data availble - compare?</label
-        >
+      <div
+        v-if="compareDataset.length > 0"
+        class="notification is-info is-light mx-4 px-4 py-2"
+      >
+        <fa :icon="['fas', 'info-circle']" class="mr-1" />
+        <span class="is-size-6 mr-4">
+          {{ compareName }} data is available which matches your query
+        </span>
+        <button class="button is-info is-small" @click="toggleCompare">
+          {{ compareText }}
+        </button>
       </div>
 
       <p v-if="dataset.length === 0">No Data Matches the Query</p>
@@ -71,8 +77,19 @@ export default {
   },
   data() {
     return {
-      compare: false
+      compare: false,
+      compareText: 'Add To Plot'
     };
+  },
+  methods: {
+    toggleCompare() {
+      this.compare = !this.compare;
+      if (this.compare) {
+        this.compareText = 'Remove From Plot';
+      } else {
+        this.compareText = 'Add To Plot';
+      }
+    }
   }
 };
 </script>

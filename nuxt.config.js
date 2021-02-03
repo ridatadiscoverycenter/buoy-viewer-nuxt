@@ -60,7 +60,8 @@ export default {
             'faDownload',
             'faArrowLeft',
             'faHome',
-            'faBars'
+            'faBars',
+            'faInfoCircle'
           ]
         },
         proIcons: {
