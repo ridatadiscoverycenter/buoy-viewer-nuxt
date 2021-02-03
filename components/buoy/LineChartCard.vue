@@ -26,7 +26,11 @@
         v-else
         id="line-chart"
         :dataset="dataset"
+        :dataset-name="datasetName"
+        :dataset-line-width="datasetLineWidth"
         :compare-dataset="compare ? compareDataset : []"
+        :compare-name="compareName"
+        :compare-line-width="compareLineWidth"
         :variable="variable"
         :color-domain="colorDomain"
         :color-range="colorRange"
@@ -70,6 +74,10 @@ export default {
       type: Array,
       required: true
     },
+    datasetName: {
+      type: String,
+      required: true
+    },
     compareDataset: {
       type: Array,
       required: false,
@@ -81,6 +89,16 @@ export default {
       type: String,
       required: false,
       default: 'Other'
+    },
+    compareLineWidth: {
+      type: Number,
+      required: false,
+      default: 0.8
+    },
+    datasetLineWidth: {
+      type: Number,
+      required: false,
+      default: 2.2
     }
   },
   data() {

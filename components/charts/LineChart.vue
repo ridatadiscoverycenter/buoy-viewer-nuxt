@@ -23,6 +23,22 @@ export default {
         return [];
       }
     },
+    compareLineWidth: {
+      type: Number,
+      required: true
+    },
+    compareName: {
+      type: String,
+      required: true
+    },
+    datasetName: {
+      type: String,
+      required: true
+    },
+    datasetLineWidth: {
+      type: Number,
+      required: true
+    },
     colorDomain: {
       type: Array,
       required: true
@@ -33,6 +49,63 @@ export default {
     }
   },
   computed: {
+    legends() {
+      const leg = [
+        {
+          title: 'Buoys',
+          fill: 'color',
+          orient: 'bottom-right',
+          encode: {
+            symbols: {
+              name: 'legendSymbol',
+              interactive: true,
+              update: {
+                strokeWidth: { value: 2 },
+                opacity: [
+                  {
+                    test: '!selected || selected === datum.value',
+                    value: 1
+                  },
+                  { value: 0.15 }
+                ],
+                size: { value: 64 }
+              },
+              hover: {
+                cursor: { value: 'pointer' }
+              }
+            },
+            labels: {
+              name: 'legendLabel',
+              interactive: true,
+              update: {
+                opacity: [
+                  {
+                    test: '!selected || selected === datum.value',
+                    value: 1
+                  },
+                  { value: 0.25 }
+                ],
+                fontWeight: { value: 'normal' }
+              },
+              hover: {
+                fontWeight: { value: 'bold' },
+                cursor: { value: 'pointer' }
+              }
+            }
+          }
+        }
+      ];
+      if (this.compareDataset.length > 0) {
+        leg.push({
+          title: 'Datasets',
+          strokeWidth: 'lineWidth',
+          orient: 'bottom-right',
+          symbolType: 'stroke'
+        });
+      }
+
+      return leg;
+    },
     baseSpec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
@@ -71,11 +144,17 @@ export default {
         data: [
           {
             name: 'buoy',
-            values: this.dataset
+            values: this.dataset,
+            transforms: [
+              { type: 'formula', as: 'dataset', expr: this.datasetName }
+            ]
           },
           {
             name: 'compare',
-            values: this.compareDataset
+            values: this.compareDataset,
+            transforms: [
+              { type: 'formula', as: 'dataset', expr: this.compareName }
+            ]
           },
           {
             name: 'union',
@@ -109,6 +188,12 @@ export default {
             type: 'ordinal',
             range: this.colorRange,
             domain: this.colorDomain
+          },
+          {
+            name: 'lineWidth',
+            type: 'ordinal',
+            range: [this.datasetLineWidth, this.compareLineWidth],
+            domain: [this.datasetName, this.compareName]
           }
         ],
 
@@ -117,51 +202,7 @@ export default {
           { orient: 'left', scale: 'yscale', title: this.variable }
         ],
 
-        legends: [
-          {
-            title: 'Buoys',
-            fill: 'color',
-            orient: 'bottom-right',
-            encode: {
-              symbols: {
-                name: 'legendSymbol',
-                interactive: true,
-                update: {
-                  strokeWidth: { value: 2 },
-                  opacity: [
-                    {
-                      test: '!selected || selected === datum.value',
-                      value: 1
-                    },
-                    { value: 0.15 }
-                  ],
-                  size: { value: 64 }
-                },
-                hover: {
-                  cursor: { value: 'pointer' }
-                }
-              },
-              labels: {
-                name: 'legendLabel',
-                interactive: true,
-                update: {
-                  opacity: [
-                    {
-                      test: '!selected || selected === datum.value',
-                      value: 1
-                    },
-                    { value: 0.25 }
-                  ],
-                  fontWeight: { value: 'normal' }
-                },
-                hover: {
-                  fontWeight: { value: 'bold' },
-                  cursor: { value: 'pointer' }
-                }
-              }
-            }
-          }
-        ],
+        legends: this.legends,
 
         marks: [
           {
@@ -237,7 +278,7 @@ export default {
                     x: { scale: 'xscale', field: this.x },
                     y: { scale: 'yscale', field: this.variable },
                     stroke: { scale: 'color', field: this.y },
-                    strokeWidth: { value: 1 },
+                    strokeWidth: { value: this.datasetLineWidth },
                     interactive: false
                   },
                   update: {
@@ -274,9 +315,8 @@ export default {
                     x: { scale: 'xscale', field: this.x },
                     y: { scale: 'yscale', field: this.variable },
                     stroke: { scale: 'color', field: this.y },
-                    strokeWidth: { value: 1 },
-                    interactive: false,
-                    strokeDash: { value: [2, 2] }
+                    strokeWidth: { value: this.compareLineWidth },
+                    interactive: false
                   },
                   update: {
                     defined: { signal: `isValid(datum.${this.variable})` },
