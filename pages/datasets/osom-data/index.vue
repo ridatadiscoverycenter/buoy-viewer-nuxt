@@ -6,28 +6,23 @@
         The Ocean State Ocean Model (OSOM) is an application of the Regional
         Ocean Modeling System spanning the Rhode Island waterways, including
         Narragansett Bay, Mt. Hope Bay, larger rivers, and the Block Island
-        Shelf circulation from Long Island to Nantucket. Re think this viz - if
-        a year exists, it always will.</template
-      >
+        Shelf circulation from Long Island to Nantucket. Data is available by
+        the year at 1.5 hour increments. As the model covers the entire
+        Naraggansett Bay, data is always available at all buoy locations.
+      </template>
       <template #chart>
         <div class="is-flex-column">
-          <div class="control-item control-item-first">
-            <label for="variable" class="label">Variable</label>
-            <multiselect
-              id="variable"
-              v-model="variable"
-              class="multiselect"
-              :options="variables"
-            ></multiselect>
-          </div>
           <Heatmap
             v-if="!(summary.length === 0)"
             id="heatmap"
-            :dataset="summary"
+            :dataset="heatmapSummary"
             :min-width="400"
             x="date"
-            y="station_name"
-            :variable="variable"
+            y="variable"
+            y-title="Variable"
+            x-title="Year"
+            x-unit="year"
+            variable="count"
             :enable-darkmode="false"
           />
           <fa v-else icon="compass" spin class="compass-loading" />
@@ -111,7 +106,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import Multiselect from 'vue-multiselect';
+import * as aq from 'arquero';
 
 import Heatmap from '@/components/charts/Heatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
@@ -122,7 +117,6 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 export default {
   components: {
     Heatmap,
-    Multiselect,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -145,6 +139,12 @@ export default {
     ]),
     buoys() {
       return this.coordinates.map((val) => val.buoyId);
+    },
+    heatmapSummary() {
+      return aq
+        .from(this.summary)
+        .fold(this.variables, { as: ['variable', 'count'] })
+        .objects();
     }
   }
 };

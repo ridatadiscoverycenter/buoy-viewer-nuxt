@@ -29,6 +29,7 @@
     "@nuxtjs/dotenv": "^1.4.0",
     "@nuxtjs/fontawesome": "^1.1.2",
     "@vue/composition-api": "^1.0.0-beta.11",
+    "arquero": "^2.2.0",
     "lodash": "^4.17.20",
     "nuxt": "^2.13.1",
     "nuxt-fontawesome": "^0.4.0",
