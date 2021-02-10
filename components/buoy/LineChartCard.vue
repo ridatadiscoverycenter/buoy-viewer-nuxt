@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer width="two-thirds">
+  <ChartContainer width="two-thirds" :height="3">
     <template #title>{{ variable }}</template>
     <template #subtitle
       >This plot shows {{ variable }} over the period between
@@ -20,7 +20,12 @@
         </button>
       </div>
 
-      <p v-if="dataset.length === 0">No Data Matches the Query</p>
+      <div
+        v-if="dataset.length === 0"
+        class="notification is-danger is-light mx-4 px-4 py-2 has-text-centered"
+      >
+        <p><strong>No Data Matches the Query</strong></p>
+      </div>
 
       <LineChart
         v-else

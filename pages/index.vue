@@ -27,6 +27,8 @@
           :legend="false"
           :include-actions="false"
           :enable-darkmode="false"
+          :color-domain="colorDomain"
+          :color-range="colorRange"
         />
       </div>
     </main>
@@ -42,6 +44,8 @@
 </template>
 
 <script>
+import * as aq from 'arquero';
+
 import { mapState } from 'vuex';
 import Map from '@/components/charts/Map.vue';
 export default {
@@ -49,7 +53,22 @@ export default {
     Map
   },
   computed: {
-    ...mapState('buoy', ['coordinates'])
+    ...mapState('buoy', ['coordinates', 'colorMap']),
+    colorDomain() {
+      if (this.coordinates.length > 0) {
+        const stations = aq
+          .from(this.coordinates)
+          .groupby('station_name')
+          .count()
+          .objects();
+        return stations.map((v) => v.station_name);
+      } else {
+        return [];
+      }
+    },
+    colorRange() {
+      return this.colorDomain.map((v) => this.colorMap[v]);
+    }
   },
   created() {
     if (this.coordinates.length === 0) {

@@ -158,7 +158,10 @@ export default {
           },
           {
             name: 'union',
-            source: ['buoy', 'compare']
+            source: ['buoy', 'compare'],
+            transform: [
+              { type: 'filter', expr: `isDefined(datum.${this.variable})` }
+            ]
           }
         ],
 

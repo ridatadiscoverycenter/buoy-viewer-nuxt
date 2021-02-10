@@ -57,7 +57,7 @@
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half">
+    <ChartContainer width="half" :height="1">
       <template #title>Not sure what to explore?</template>
       <template #subtitle>
         Here are a few pre-selected scenarios for you. Just pick one and start
@@ -97,8 +97,7 @@
       <template #title>Download</template>
       <template #subtitle
         >If you prefer, we provide the raw data for you to download in various
-        file formats. Just select the options below. You'll need to download one
-        file for each buoy.</template
+        file formats. Just select from the options below.</template
       >
       <template #chart>
         <DownloadForm

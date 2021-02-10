@@ -45,29 +45,6 @@ export default {
   overflow: hidden;
   background-color: whitesmoke;
 }
-.main-header {
-  grid-area: main-header;
-  border-bottom: 1px solid #a4b1bf;
-  @extend .px-4;
-  @extend .py-4;
-}
-.main-nav {
-  grid-area: main-nav;
-  border-bottom: 1px solid #a4b1bf;
-  @extend .px-4;
-  @extend .py-4;
-}
-.main-section > div {
-  grid-area: main-section;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  @extend .px-4;
-  @extend .py-4;
-  z-index: 20;
-}
 .dashboard-grid {
   background-image: linear-gradient(to top left, whitesmoke, white);
   display: grid;

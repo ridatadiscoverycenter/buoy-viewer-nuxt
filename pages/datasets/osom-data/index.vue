@@ -50,7 +50,7 @@
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half">
+    <ChartContainer width="half" :height="1">
       <template #title>Not sure what to explore?</template>
       <template #subtitle>
         Here are a few pre-selected scenarios for you. Just pick one and start
@@ -86,12 +86,29 @@
       </template>
     </ChartContainer>
 
+    <ChartContainer width="half" :height="1">
+      <template #title>Learn More</template>
+      <template #subtitle
+        >The Ocean State Ocean Model is an ongoing project, learn more about its
+        history, current status, publications, and how to use the data with the
+        <a
+          href="https://riddc-jupyter-book.web.app/notebooks/fox-kemper/first_example_aquarius.html"
+          >RIDDC Data Articles</a
+        ></template
+      >
+    </ChartContainer>
+
     <ChartContainer width="half">
       <template #title>Download</template>
       <template #subtitle
         >If you prefer, we provide the raw data for you to download in various
-        file formats. Just select the options below. You'll need to download one
-        file for each buoy.</template
+        file formats. Just select from the options below. If you would like to
+        download data for the full model geography (not just at buoy locations),
+        visit
+        <a
+          href="https://pricaimcit.services.brown.edu/erddap/griddap/model_data_57db_4a85_81d9.html"
+          >ERDDAP</a
+        >.</template
       >
       <template #chart>
         <DownloadForm

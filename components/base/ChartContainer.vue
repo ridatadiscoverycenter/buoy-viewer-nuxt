@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-container" :class="['is-' + width]">
+  <div class="chart-container" :class="['is-' + width, 'is-height-' + height]">
     <header class="chart-header">
       <h2 class="title"><slot name="title"></slot></h2>
       <h3 class="subtitle"><slot name="subtitle"></slot></h3>
@@ -16,6 +16,10 @@ export default {
     width: {
       type: String,
       default: 'full'
+    },
+    height: {
+      type: Number,
+      default: 2
     }
   }
 };
@@ -24,6 +28,7 @@ export default {
 <style lang="scss" scoped>
 @import 'bulma';
 .chart-container {
+  margin-bottom: 0 !important;
   @extend .box;
   display: flex;
   flex-direction: column;
@@ -43,27 +48,36 @@ export default {
   width: 100%;
 }
 .is-one-third {
-  width: 32%;
+  grid-column-start: span 2;
   @include mobile {
-    width: 100%;
+    grid-column-start: span 1;
   }
 }
 .is-half {
-  width: 49%;
+  grid-column-start: span 3;
   @include mobile {
-    width: 100%;
+    grid-column-start: span 1;
   }
 }
 .is-full {
-  width: 100%;
+  grid-column-start: span 6;
   @include mobile {
-    width: 100%;
+    grid-column-start: span 1;
   }
 }
 .is-two-thirds {
-  width: 66%;
+  grid-column-start: span 4;
   @include mobile {
-    width: 100%;
+    grid-column-start: span 1;
   }
+}
+.is-height-1 {
+  grid-row-start: span 1;
+}
+.is-height-2 {
+  grid-row-start: span 2;
+}
+.is-height-3 {
+  grid-row-start: span 3;
 }
 </style>
