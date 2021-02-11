@@ -107,6 +107,18 @@
         />
       </template>
     </ChartContainer>
+
+    <ChartContainer width="half" :height="1">
+      <template #title>Learn More</template>
+      <template #subtitle
+        >The historical data available on this site has been compiled from the
+        <a
+          href="http://www.dem.ri.gov/programs/emergencyresponse/bart/stations.php"
+          >Narragansett Bay Fixed-Site Monitoring Network</a
+        >. See <a href="nbfsmn_disclaimer.pdf">the disclaimer</a> for more
+        information on the data as well as how to cite it.</template
+      >
+    </ChartContainer>
   </div>
 </template>
 
