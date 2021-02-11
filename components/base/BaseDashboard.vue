@@ -28,11 +28,6 @@
 }
 .main-section > div {
   grid-area: main-section;
-  // display: flex;
-  // flex-direction: row;
-  // flex-wrap: wrap;
-  // justify-content: space-between;
-  // align-items: flex-start;
   @extend .px-4;
   @extend .py-4;
   z-index: 20;
@@ -45,7 +40,6 @@
   align-items: stretch;
   justify-content: space-between;
   align-content: start;
-  // grid-auto-rows: 100px;
   grid-auto-flow: row;
   @include mobile {
     grid-template-columns: 100vw;
