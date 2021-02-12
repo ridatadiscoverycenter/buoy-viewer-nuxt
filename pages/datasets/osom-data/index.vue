@@ -92,7 +92,7 @@
         >The Ocean State Ocean Model is an ongoing project, learn more about its
         history, current status, publications, and how to use the data with the
         <a
-          href="https://riddc-jupyter-book.web.app/notebooks/fox-kemper/first_example_aquarius.html"
+          href="https://riddc-jupyter-book.web.app/notebooks/fox-kemper/osom_intro.html"
           >RIDDC Data Articles</a
         ></template
       >
