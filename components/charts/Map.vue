@@ -17,6 +17,14 @@ export default {
     background: {
       type: String,
       default: 'transparent'
+    },
+    colorDomain: {
+      type: Array,
+      required: true
+    },
+    colorRange: {
+      type: Array,
+      required: true
     }
   },
   data() {
@@ -73,8 +81,8 @@ export default {
           {
             name: 'color',
             type: 'ordinal',
-            domain: { data: 'points', field: 'station_name' },
-            range: { scheme: 'tableau20' }
+            range: this.colorRange,
+            domain: this.colorDomain
           }
         ],
         marks: [

@@ -11,14 +11,15 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Narragansett Bay Data Explorer',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
+        content:
+          'Explore historical and real-time data about water quality, temperature, and more from the Narragansett Bay.'
       }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }]
@@ -60,7 +61,8 @@ export default {
             'faDownload',
             'faArrowLeft',
             'faHome',
-            'faBars'
+            'faBars',
+            'faInfoCircle'
           ]
         },
         proIcons: {
@@ -98,8 +100,8 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'https://api.riddc.brown.edu/erddap',
-    // baseURL: 'http://localhost:8080/erddap',
+    baseURL:
+      process.env.RIDDC_API_BASEURL || 'https://api.riddc.brown.edu/erddap',
     headers: {
       common: {
         Accept: 'application/json',

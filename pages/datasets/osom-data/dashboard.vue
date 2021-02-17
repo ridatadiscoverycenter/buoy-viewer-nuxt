@@ -3,14 +3,16 @@
     <BuoyLocations :coordinates="filterCoordinates" :color-map="colorMap" />
 
     <BuoyLineChart
-      :dataset="buoyData"
+      :dataset="modelData"
+      dataset-name="OSOM"
+      :dataset-line-width="0.8"
       :variable="variable"
       :color-map="colorMap"
+      :compare-line-width="2.2"
       :start-dt-str="startDate.slice(0, 10)"
       :end-dt-str="endDate.slice(0, 10)"
-      :compare-dataset="modelData"
-      compare-name="OSOM"
-      dataset-name="Historical"
+      :compare-dataset="buoyData"
+      compare-name="Historical"
     />
 
     <BuoyQueryDownload
@@ -36,7 +38,7 @@
           :buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
-          dataset="historical-buoy-data"
+          dataset="osom-data"
         />
       </template>
     </ChartContainer>
@@ -73,8 +75,8 @@ export default {
         end: this.$route.query.slug.split(',')[2],
         ids: this.$route.query.buoyIds
       };
-      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
+      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
       this.loading = false;
     } catch (e) {
       this.loading = false;
@@ -91,16 +93,16 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', [
+    ...mapState('model', [
       'coordinates',
-      'buoyData',
+      'modelData',
       'datasetId',
       'variables',
       'minDate',
       'maxDate',
       'colorMap'
     ]),
-    ...mapState('model', ['modelData']),
+    ...mapState('buoy', ['buoyData']),
     buoys() {
       return this.coordinates.map((val) => val.buoyId);
     },

@@ -8,10 +8,10 @@
     </div>
     <div class="sidebar-body">
       <p v-if="!collapsed" class="menu-label">
-        Narraganssett Bay Data Explorer
+        Narragansett Bay Data Explorer
       </p>
       <p v-else class="menu-label">
-        <abbr title="Narraganssett Bay Data Explorer">NBDE</abbr>
+        <abbr title="Narragansett Bay Data Explorer">NBDE</abbr>
       </p>
       <ul class="menu-list">
         <li>
@@ -140,6 +140,11 @@ export default {
         {
           name: 'Historical Buoy Data',
           route: 'datasets-historical-buoy-data',
+          available: true
+        },
+        {
+          name: 'Ocean State Ocean Model',
+          route: 'datasets-osom-data',
           available: true
         },
         {

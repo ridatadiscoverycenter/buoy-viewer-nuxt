@@ -12,9 +12,24 @@ export default {
       type: String,
       required: true
     },
+    xTitle: {
+      type: String,
+      required: false,
+      default: 'Month/Year'
+    },
+    xUnit: {
+      type: String,
+      required: false,
+      default: 'month'
+    },
     y: {
       type: String,
       required: true
+    },
+    yTitle: {
+      type: String,
+      required: false,
+      default: 'Buoy'
     }
   },
   computed: {
@@ -22,28 +37,36 @@ export default {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         height: 300,
-        data: {
-          name: 'data',
-          values: this.dataset
-        },
+        data: [
+          {
+            name: 'rawData',
+            values: this.dataset
+          },
+          {
+            name: 'data',
+            source: 'rawData',
+            transform: [{ type: 'filter', expr: `datum.${this.variable} > 1` }]
+          }
+        ],
         scales: [
           {
             name: 'x',
-            type: 'time',
-            domain: { data: 'data', field: this.x },
+            type: 'utc',
+            domain: { data: 'rawData', field: this.x },
             range: 'width'
           },
           {
             name: 'y',
             type: 'band',
             domain: { data: 'data', field: this.y },
-            range: 'height'
+            range: 'height',
+            padding: 0.02
           },
           {
             name: 'color',
             type: 'linear',
             range: { scheme: 'tealblues' },
-            domain: { data: 'data', field: this.variable },
+            domain: { data: 'rawData', field: this.variable },
             reverse: false,
             zero: false,
             nice: true
@@ -54,14 +77,14 @@ export default {
             orient: 'bottom',
             scale: 'x',
             domain: false,
-            title: 'Month/Year',
+            title: this.xTitle,
             labelOverlap: 'parity'
           },
           {
             orient: 'left',
             scale: 'y',
             domain: false,
-            title: 'Buoy'
+            title: this.yTitle
           }
         ],
         legends: [
@@ -80,10 +103,12 @@ export default {
               enter: {
                 x: { scale: 'x', field: this.x },
                 y: { scale: 'y', field: this.y },
-                width: { value: 12 },
                 height: { scale: 'y', band: 1 },
+                width: {
+                  signal: `scale('x', timeOffset('${this.xUnit}', now())) - scale('x', now())`
+                },
                 tooltip: {
-                  signal: `{'Date': timeFormat(datum.${this.x}, '%B %Y'), 'Station Name': datum.${this.y}, 'Buoy ID': datum.station, 'Count': datum.${this.variable}}`
+                  signal: `{'Date': utcFormat(datum.${this.x}, '%B %Y'), '${this.yTitle}': datum.${this.y}, 'Buoy ID': datum.station, 'Count': datum.${this.variable}}`
                 }
               },
               update: {

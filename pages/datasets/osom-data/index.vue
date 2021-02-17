@@ -3,33 +3,26 @@
     <ChartContainer width="two-thirds">
       <template #title>Available Data</template>
       <template #subtitle>
-        This dataset spans from 2003 to 2012. The heatmap below summarizes the
-        number of observations collected for each month for different variables.
-        Use this heatmap to help you decide what data you want to visualize or
-        download. When you have an idea, go ahead and select the buoys,
-        variables and dates to explore. Or download the data in the most
-        appropriate format for your analyses! To begin, select a variable to see
-        what data is available.</template
-      >
+        The Ocean State Ocean Model (OSOM) is an application of the Regional
+        Ocean Modeling System spanning the Rhode Island waterways, including
+        Narragansett Bay, Mt. Hope Bay, larger rivers, and the Block Island
+        Shelf circulation from Long Island to Nantucket. Data is available by
+        the year at 1.5 hour increments. As the model covers the entire
+        Narragansett Bay, data is always available at all buoy locations.
+      </template>
       <template #chart>
         <div class="is-flex-column">
-          <div class="control-item control-item-first">
-            <label for="variable" class="label">Variable</label>
-            <multiselect
-              id="variable"
-              v-model="variable"
-              class="multiselect"
-              :options="variables"
-            ></multiselect>
-          </div>
           <Heatmap
             v-if="!(summary.length === 0)"
             id="heatmap"
-            :dataset="summary"
+            :dataset="heatmapSummary"
             :min-width="400"
             x="date"
-            y="station_name"
-            :variable="variable"
+            y="variable"
+            y-title="Variable"
+            x-title="Year"
+            x-unit="year"
+            variable="count"
             :enable-darkmode="false"
           />
           <fa v-else icon="compass" spin class="compass-loading" />
@@ -52,7 +45,7 @@
           :buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
-          dataset="historical-buoy-data"
+          dataset="osom-data"
         />
       </template>
     </ChartContainer>
@@ -68,36 +61,54 @@
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-historical-buoy-data-dashboard',
+              name: 'datasets-osom-data-dashboard',
               query: {
                 buoyIds: 'bid2,bid3',
                 slug:
-                  'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
+                  'WaterTempSurface,2006-01-01T04%3A00%3A00.000Z,2007-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >Buoys 2 and 3, Water Temperature 2010-2011</nuxt-link
+            >Buoys 2 and 3, Water Temperature 2006</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-historical-buoy-data-dashboard',
+              name: 'datasets-osom-data-dashboard',
               query: {
                 buoyIds: 'bid15,bid17',
                 slug:
-                  'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
+                  'SalinitySurface,2018-01-01T04%3A00%3A00.000Z,2019-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >Buoys 15 and 17, depth 2008-2009</nuxt-link
+            >Buoys 15 and 17, Salinity 2018</nuxt-link
           >
         </div>
       </template>
+    </ChartContainer>
+
+    <ChartContainer width="half" :height="1">
+      <template #title>Learn More</template>
+      <template #subtitle
+        >The Ocean State Ocean Model is an ongoing project, learn more about its
+        history, current status, publications, and how to use the data with the
+        <a
+          href="https://riddc-jupyter-book.web.app/notebooks/fox-kemper/osom_intro.html"
+          >RIDDC Data Articles</a
+        ></template
+      >
     </ChartContainer>
 
     <ChartContainer width="half">
       <template #title>Download</template>
       <template #subtitle
         >If you prefer, we provide the raw data for you to download in various
-        file formats. Just select from the options below.</template
+        file formats. Just select from the options below. If you would like to
+        download data for the full model geography (not just at buoy locations),
+        visit
+        <a
+          href="https://pricaimcit.services.brown.edu/erddap/griddap/model_data_57db_4a85_81d9.html"
+          >ERDDAP</a
+        >.</template
       >
       <template #chart>
         <DownloadForm
@@ -107,24 +118,12 @@
         />
       </template>
     </ChartContainer>
-
-    <ChartContainer width="half" :height="1">
-      <template #title>Learn More</template>
-      <template #subtitle
-        >The historical data available on this site has been compiled from the
-        <a
-          href="http://www.dem.ri.gov/programs/emergencyresponse/bart/stations.php"
-          >Narragansett Bay Fixed-Site Monitoring Network</a
-        >. See <a href="nbfsmn_disclaimer.pdf">the disclaimer</a> for more
-        information on the data as well as how to cite it.</template
-      >
-    </ChartContainer>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Multiselect from 'vue-multiselect';
+import * as aq from 'arquero';
 
 import Heatmap from '@/components/charts/Heatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
@@ -135,7 +134,6 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 export default {
   components: {
     Heatmap,
-    Multiselect,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -148,7 +146,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', [
+    ...mapState('model', [
       'variables',
       'coordinates',
       'summary',
@@ -159,6 +157,12 @@ export default {
     ]),
     buoys() {
       return this.coordinates.map((val) => val.buoyId);
+    },
+    heatmapSummary() {
+      return aq
+        .from(this.summary)
+        .fold(this.variables, { as: ['variable', 'count'] })
+        .objects();
     }
   }
 };
