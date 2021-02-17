@@ -1,6 +1,6 @@
 export default {
   server: {
-    port: process.env.RIDDC_DATA_EXPLORER_PORT || 8080
+    port: 8080
   },
   ssr: true,
   components: true,
@@ -44,7 +44,6 @@ export default {
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/moment',
     [
       '@nuxtjs/fontawesome',
       {
