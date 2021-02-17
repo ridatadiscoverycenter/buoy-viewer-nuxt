@@ -69,7 +69,7 @@
                   'WaterTempSurface,2006-01-01T04%3A00%3A00.000Z,2007-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >N. Prudence and Conimicut Pt, Water Temperature 2006</nuxt-link
+            >N. Prudence and Conimicut Pt, Water Temperature, 2006</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
@@ -81,7 +81,7 @@
                   'SalinitySurface,2018-01-01T04%3A00%3A00.000Z,2019-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >Greenwich Bay and GSO Dock, Salinity 2018</nuxt-link
+            >Greenwich Bay and GSO Dock, Salinity, 2018</nuxt-link
           >
         </div>
       </template>

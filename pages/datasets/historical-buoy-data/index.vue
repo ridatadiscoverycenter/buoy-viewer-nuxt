@@ -76,7 +76,7 @@
                   'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
               }
             }"
-            >N. Prudence and Conimicut Pt, Water Temperature
+            >N. Prudence and Conimicut Pt, Water Temperature,
             2010-2011</nuxt-link
           >
           <nuxt-link
@@ -89,7 +89,7 @@
                   'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
               }
             }"
-            >Greenwich Bay and GSO Dock, depth 2008-2009</nuxt-link
+            >Greenwich Bay and GSO Dock, Depth, 2008-2009</nuxt-link
           >
         </div>
       </template>
