@@ -1,6 +1,6 @@
 export default {
   server: {
-    port: process.env.RIDDC_DATA_EXPLORER_PORT || 8080
+    port: 8080
   },
   ssr: true,
   components: true,
