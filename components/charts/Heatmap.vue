@@ -108,7 +108,7 @@ export default {
                   signal: `scale('x', timeOffset('${this.xUnit}', now())) - scale('x', now())`
                 },
                 tooltip: {
-                  signal: `{'Date': utcFormat(datum.${this.x}, '%B %Y'), '${this.yTitle}': datum.${this.y}, 'Buoy ID': datum.station, 'Count': datum.${this.variable}}`
+                  signal: `{'Date': utcFormat(datum.${this.x}, '%B %Y'), '${this.yTitle}': datum.${this.y}, 'Count': datum.${this.variable}}`
                 }
               },
               update: {
