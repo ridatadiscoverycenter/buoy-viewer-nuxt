@@ -12,7 +12,7 @@
       </div>
 
       <div class="control-item">
-        <label for="buoy-id" class="label">Buoy ID</label>
+        <label for="buoy-id" class="label">Buoy</label>
         <multiselect
           id="buoy-id"
           v-model="downloadBuoys"
@@ -70,6 +70,10 @@ export default {
     datasetId: {
       type: String,
       required: true
+    },
+    coordinates: {
+      type: Array,
+      required: true
     }
   },
   data() {
@@ -82,9 +86,13 @@ export default {
   computed: {
     ...mapState('variables', ['fileFormats', 'baseUrl']),
     downloadUrl() {
+      const bids = this.coordinates
+        .filter((r) => this.downloadBuoys.includes(r.fullName))
+        .map((r) => r.buoyId);
+
       return `${this.baseUrl}/tabledap/${this.datasetId}.${this.fileFormat}?${
         this.downloadVariables
-      },time,latitude,longitude&station_name=~"(${this.downloadBuoys.join(
+      },time,latitude,longitude,station_name&station_name=~"(${bids.join(
         '|'
       )})"`;
     }

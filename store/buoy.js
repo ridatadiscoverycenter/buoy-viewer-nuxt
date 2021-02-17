@@ -27,7 +27,10 @@ export const actions = {
   },
   fetchBuoyCoordinates({ commit }) {
     return this.$axios.$get('/buoy/coordinates').then((response) => {
-      commit('mutate', { property: 'coordinates', with: response });
+      const coords = response.map((r) => {
+        return { fullName: `${r.station_name} (${r.buoyId})`, ...r };
+      });
+      commit('mutate', { property: 'coordinates', with: coords });
       const colorMap = constructColorMap(response.map((v) => v.station_name));
       commit('mutate', { property: 'colorMap', with: colorMap });
     });

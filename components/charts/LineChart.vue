@@ -248,7 +248,7 @@ export default {
                 stroke: { value: 'transparent' },
                 fill: { value: 'transparent' },
                 tooltip: {
-                  signal: `{ '${this.variable}': datum.datum.${this.variable}, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy ID': datum.datum.${this.y} }`
+                  signal: `{ '${this.variable}': datum.datum.${this.variable}, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y} }`
                 }
               }
             },
