@@ -1,13 +1,29 @@
+FROM node:12 as builder
+
+WORKDIR /app
+
+COPY package.json ./
+COPY .npmrc ./
+RUN yarn --frozen-lockfile --non-interactive
+COPY . ./
+
+ENV NODE_ENV=production
+RUN yarn build
+
+# remove dev dependencies for copy to app
+RUN yarn --frozen-lockfile --non-interactive --production
+
 FROM node:12
 
-ENV APP_DIR /app/
-WORKDIR ${APP_DIR}
+WORKDIR /app
+ENV HOST=0.0.0.0
 
-COPY . ./
-RUN yarn install
+ADD package.json ./
+ADD nuxt.config.js ./
 
-ENV HOST 0.0.0.0   # Insensitive environment variable
+COPY --from=builder ./app/node_modules ./node_modules/
+COPY --from=builder ./app/.nuxt ./.nuxt/
+COPY --from=builder ./app/static ./static/
 
 EXPOSE 8080
-
-CMD ["yarn", "prod"]
+CMD ["yarn", "start", "-p", "8080"]
