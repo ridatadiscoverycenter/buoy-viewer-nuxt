@@ -11,6 +11,7 @@
       :compare-dataset="modelData"
       compare-name="OSOM"
       dataset-name="Historical"
+      :loading="loading"
     />
 
     <BuoyQueryDownload
@@ -30,13 +31,14 @@
       <template #chart>
         <ExploreForm
           :init-variable="variable"
-          :init-buoys="buoyIds"
+          :init-buoys="stationNames"
           :init-date-range="[startDate, endDate]"
           :variables="variables"
           :buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
           dataset="historical-buoy-data"
+          :coordinates="coordinates"
         />
       </template>
     </ChartContainer>
@@ -102,7 +104,7 @@ export default {
     ]),
     ...mapState('model', ['modelData']),
     buoys() {
-      return this.coordinates.map((val) => val.buoyId);
+      return this.coordinates.map((val) => val.fullName);
     },
     variable() {
       return this.$route.query.slug.split(',')[0];
@@ -116,6 +118,11 @@ export default {
     },
     buoyIds() {
       return this.$route.query.buoyIds.split(',');
+    },
+    stationNames() {
+      return this.coordinates
+        .filter((r) => this.buoyIds.includes(r.buoyId))
+        .map((r) => r.fullName);
     },
     filterCoordinates() {
       return this.coordinates.filter((o) => {

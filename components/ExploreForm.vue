@@ -105,6 +105,10 @@ export default {
     dataset: {
       type: String,
       required: true
+    },
+    coordinates: {
+      type: Array,
+      required: true
     }
   },
   data() {
@@ -136,7 +140,10 @@ export default {
       }
     },
     selectedBuoysString() {
-      return this.selectedBuoys.join(',');
+      const bids = this.coordinates
+        .filter((r) => this.selectedBuoys.includes(r.fullName))
+        .map((r) => r.buoyId);
+      return bids.join(',');
     },
     datasetName() {
       return `datasets-${this.dataset}-dashboard`;

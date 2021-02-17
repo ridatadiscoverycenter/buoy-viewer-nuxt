@@ -46,6 +46,7 @@
           :min-date="minDate"
           :max-date="maxDate"
           dataset="osom-data"
+          :coordinates="coordinates"
         />
       </template>
     </ChartContainer>
@@ -68,7 +69,7 @@
                   'WaterTempSurface,2006-01-01T04%3A00%3A00.000Z,2007-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >Buoys 2 and 3, Water Temperature 2006</nuxt-link
+            >N. Prudence and Conimicut Pt, Water Temperature, 2006</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
@@ -80,7 +81,7 @@
                   'SalinitySurface,2018-01-01T04%3A00%3A00.000Z,2019-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >Buoys 15 and 17, Salinity 2018</nuxt-link
+            >Greenwich Bay and GSO Dock, Salinity, 2018</nuxt-link
           >
         </div>
       </template>
@@ -115,6 +116,7 @@
           :variables="variables"
           :buoys="buoys"
           :dataset-id="datasetId"
+          :coordinates="coordinates"
         />
       </template>
     </ChartContainer>
@@ -156,7 +158,7 @@ export default {
       'colorMap'
     ]),
     buoys() {
-      return this.coordinates.map((val) => val.buoyId);
+      return this.coordinates.map((val) => val.fullName);
     },
     heatmapSummary() {
       return aq

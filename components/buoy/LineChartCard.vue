@@ -8,7 +8,7 @@
     >
     <template #chart>
       <div
-        v-if="compareDataset.length > 0"
+        v-if="compareDataset.length > 0 && !loading"
         class="notification is-info is-light mx-4 px-4 py-2"
       >
         <fa :icon="['fas', 'info-circle']" class="mr-1" />
@@ -21,7 +21,7 @@
       </div>
 
       <div
-        v-if="dataset.length === 0"
+        v-if="dataset.length === 0 && !loading"
         class="notification is-danger is-light mx-4 px-4 py-2 has-text-centered"
       >
         <p><strong>No Data Matches the Query</strong></p>
@@ -104,6 +104,11 @@ export default {
       type: Number,
       required: false,
       default: 2.2
+    },
+    loading: {
+      type: Boolean,
+      rquired: false,
+      default: false
     }
   },
   data() {

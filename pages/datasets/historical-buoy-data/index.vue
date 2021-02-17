@@ -53,6 +53,7 @@
           :min-date="minDate"
           :max-date="maxDate"
           dataset="historical-buoy-data"
+          :coordinates="coordinates"
         />
       </template>
     </ChartContainer>
@@ -75,7 +76,8 @@
                   'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
               }
             }"
-            >Buoys 2 and 3, Water Temperature 2010-2011</nuxt-link
+            >N. Prudence and Conimicut Pt, Water Temperature,
+            2010-2011</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
@@ -87,7 +89,7 @@
                   'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
               }
             }"
-            >Buoys 15 and 17, depth 2008-2009</nuxt-link
+            >Greenwich Bay and GSO Dock, Depth, 2008-2009</nuxt-link
           >
         </div>
       </template>
@@ -104,6 +106,7 @@
           :variables="variables"
           :buoys="buoys"
           :dataset-id="datasetId"
+          :coordinates="coordinates"
         />
       </template>
     </ChartContainer>
@@ -158,7 +161,7 @@ export default {
       'colorMap'
     ]),
     buoys() {
-      return this.coordinates.map((val) => val.buoyId);
+      return this.coordinates.map((val) => val.fullName);
     }
   }
 };
