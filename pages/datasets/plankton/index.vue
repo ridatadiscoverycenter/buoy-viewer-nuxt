@@ -72,7 +72,7 @@
                 end: '2018-12-31T04%3A00%3A00.000Z'
               }
             }"
-            >Water Temperature, 1959-2018</nuxt-link
+            >Surface Water Temperature, 1959-2018</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
@@ -80,7 +80,7 @@
               name: 'datasets-plankton-dashboard',
               query: {
                 buoyIds: 'bid21',
-                variables: 'WaterTempSurface',
+                variables: 'SilicaBottom,SilicaSurface',
                 start: '2003-01-01T04%3A00%3A00.000Z',
                 end: '2009-12-31T04%3A00%3A00.000Z'
               }

@@ -6,7 +6,7 @@
       :dataset="modelData"
       dataset-name="OSOM"
       :dataset-line-width="0.8"
-      :variable="variable"
+      :variables="queryVariables"
       :compare-line-width="2.2"
       :start-dt-str="startDate.slice(0, 10)"
       :end-dt-str="endDate.slice(0, 10)"
@@ -16,7 +16,7 @@
     />
 
     <BuoyQueryDownload
-      :variable="variable"
+      :variables="queryVariables"
       :buoy-ids="buoyIds"
       :start-dt-str="startDate"
       :end-dt-str="endDate"
@@ -26,12 +26,11 @@
     <ChartContainer width="half">
       <template #title>Keep Exploring</template>
       <template #subtitle>
-        Try a different variable, adding or removing buoys, or changing the date
-        range!
+        Try different variables, buoys, or changing the date range!
       </template>
       <template #chart>
         <ExploreForm
-          :init-variable="variable"
+          :init-variables="queryVariables"
           :init-buoys="stationNames"
           :init-date-range="[startDate, endDate]"
           :variables="variables"
@@ -71,9 +70,9 @@ export default {
     try {
       this.loading = true;
       const payload = {
-        variable: this.$route.query.slug.split(',')[0],
-        start: this.$route.query.slug.split(',')[1],
-        end: this.$route.query.slug.split(',')[2],
+        variables: this.$route.query.variables,
+        start: this.$route.query.start,
+        end: this.$route.query.end,
         ids: this.$route.query.buoyIds
       };
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
@@ -106,15 +105,14 @@ export default {
     buoys() {
       return this.coordinates.map((val) => val.fullName);
     },
-    variable() {
-      return this.$route.query.slug.split(',')[0];
+    queryVariables() {
+      return this.$route.query.variables.split(',');
     },
     startDate() {
-      const start = this.$route.query.slug.split(',')[1];
-      return start;
+      return this.$route.query.start;
     },
     endDate() {
-      return this.$route.query.slug.split(',')[2];
+      return this.$route.query.end;
     },
     buoyIds() {
       return this.$route.query.buoyIds.split(',');

@@ -65,8 +65,9 @@
               name: 'datasets-osom-data-dashboard',
               query: {
                 buoyIds: 'bid2,bid3',
-                slug:
-                  'WaterTempSurface,2006-01-01T04%3A00%3A00.000Z,2007-01-01T04%3A00%3A00.000Z'
+                variables: 'WaterTempSurface,WaterTempBottom',
+                start: '2006-01-01T04%3A00%3A00.000Z',
+                end: '2007-01-01T04%3A00%3A00.000Z'
               }
             }"
             >N. Prudence and Conimicut Pt, Water Temperature, 2006</nuxt-link
@@ -77,11 +78,12 @@
               name: 'datasets-osom-data-dashboard',
               query: {
                 buoyIds: 'bid15,bid17',
-                slug:
-                  'SalinitySurface,2018-01-01T04%3A00%3A00.000Z,2019-01-01T04%3A00%3A00.000Z'
+                variables: 'SalinitySurface',
+                start: '2018-01-01T04%3A00%3A00.000Z',
+                end: '2019-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >Greenwich Bay and GSO Dock, Salinity, 2018</nuxt-link
+            >Greenwich Bay and GSO Dock, Surface Salinity, 2018</nuxt-link
           >
         </div>
       </template>

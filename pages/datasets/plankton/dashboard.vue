@@ -24,8 +24,7 @@
     <ChartContainer width="half">
       <template #title>Keep Exploring</template>
       <template #subtitle>
-        Try a different variable, adding or removing buoys, or changing the date
-        range!
+        Try different variables, buoys, or changing the date range!
       </template>
       <template #chart>
         <ExploreForm

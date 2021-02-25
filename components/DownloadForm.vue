@@ -2,7 +2,7 @@
   <BaseForm>
     <template #inputs>
       <div class="control-item">
-        <label for="file-format" class="label">File format</label>
+        <label for="file-format" class="label">File Format</label>
         <multiselect
           id="file-format"
           v-model="fileFormat"
@@ -12,7 +12,7 @@
       </div>
 
       <div class="control-item">
-        <label for="buoy-id" class="label">Buoy</label>
+        <label for="buoy-id" class="label">Buoys</label>
         <multiselect
           id="buoy-id"
           v-model="downloadBuoys"
@@ -23,9 +23,7 @@
       </div>
 
       <div class="control-item">
-        <label for="variable-select-download" class="label"
-          >Select Variable</label
-        >
+        <label for="variable-select-download" class="label">Variables</label>
         <multiselect
           id="variable-select-download"
           v-model="downloadVariables"
@@ -90,9 +88,11 @@ export default {
         .filter((r) => this.downloadBuoys.includes(r.fullName))
         .map((r) => r.buoyId);
 
-      return `${this.baseUrl}/tabledap/${this.datasetId}.${this.fileFormat}?${
-        this.downloadVariables
-      },time,latitude,longitude,station_name&station_name=~"(${bids.join(
+      return `${this.baseUrl}/tabledap/${this.datasetId}.${
+        this.fileFormat
+      }?${this.downloadVariables.join(
+        ','
+      )},time,latitude,longitude,station_name&station_name=~"(${bids.join(
         '|'
       )})"`;
     }

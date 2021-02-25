@@ -72,8 +72,9 @@
               name: 'datasets-historical-buoy-data-dashboard',
               query: {
                 buoyIds: 'bid2,bid3',
-                slug:
-                  'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
+                variables: 'WaterTempSurface,WaterTempBottom',
+                start: '2010-05-01T04%3A00%3A00.000Z',
+                end: '2011-10-31T04%3A00%3A00.000Z'
               }
             }"
             >N. Prudence and Conimicut Pt, Water Temperature,
@@ -85,8 +86,9 @@
               name: 'datasets-historical-buoy-data-dashboard',
               query: {
                 buoyIds: 'bid15,bid17',
-                slug:
-                  'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
+                variables: 'depth',
+                start: '2008-05-01T04%3A00%3A00.000Z',
+                end: '2009-10-31T04%3A00%3A00.000Z'
               }
             }"
             >Greenwich Bay and GSO Dock, Depth, 2008-2009</nuxt-link
