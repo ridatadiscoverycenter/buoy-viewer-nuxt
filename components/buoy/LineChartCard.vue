@@ -1,8 +1,8 @@
 <template>
   <ChartContainer width="two-thirds" :height="3">
-    <template #title>{{ variable }}</template>
+    <template #title>{{ variables.join(', ') }}</template>
     <template #subtitle
-      >This plot shows {{ variable }} over the period between
+      >This plot shows {{ variables.join(', ') }} over the period between
       {{ startDtStr }} and {{ endDtStr }}. You can hover over the lines to see
       more specific data.</template
     >
@@ -36,7 +36,7 @@
         :compare-dataset="compare ? compareDataset : []"
         :compare-name="compareName"
         :compare-line-width="compareLineWidth"
-        :variable="variable"
+        :variables="variables"
         :color-domain="colorDomain"
         :color-range="colorRange"
         x="time"
@@ -60,8 +60,8 @@ export default {
     ChartContainer
   },
   props: {
-    variable: {
-      type: String,
+    variables: {
+      type: Array,
       required: true
     },
     startDtStr: {
@@ -117,12 +117,16 @@ export default {
   computed: {
     ...mapState(['colorMap']),
     colorDomain() {
-      const stations = aq
-        .from(this.dataset)
-        .groupby('station_name')
-        .count()
-        .objects();
-      return stations.map((v) => v.station_name);
+      if (this.dataset.length > 0) {
+        const stations = aq
+          .from(this.dataset)
+          .groupby('station_name')
+          .count()
+          .objects();
+        return stations.map((v) => v.station_name);
+      } else {
+        return [];
+      }
     },
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);

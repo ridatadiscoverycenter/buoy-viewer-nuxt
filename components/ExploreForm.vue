@@ -14,13 +14,14 @@
 
       <div class="control-item">
         <label for="variable-select-visualize" class="label"
-          >Select Variable</label
+          >Select Variables (up to 4)</label
         >
         <multiselect
           id="variable-select-visualize"
-          v-model="selectedVariable"
+          v-model="selectedVariables"
           class="multiselect"
           :options="variables"
+          :multiple="true"
         ></multiselect>
       </div>
 
@@ -38,9 +39,15 @@
     <template #buttons>
       <nuxt-link
         class="button is-link"
+        tag="button"
+        :disabled="disable"
         :to="{
           name: datasetName,
-          query: { buoyIds: selectedBuoysString, slug }
+          query: {
+            buoyIds: selectedBuoysString,
+            variables: selectedVariablesString,
+            ...selectedDates
+          }
         }"
         >Visualize</nuxt-link
       >
@@ -61,10 +68,12 @@ export default {
     BaseForm
   },
   props: {
-    initVariable: {
-      type: String,
+    initVariables: {
+      type: Array,
       required: false,
-      default: ''
+      default() {
+        return [];
+      }
     },
     initBuoys: {
       type: Array,
@@ -114,7 +123,7 @@ export default {
   data() {
     return {
       selectedBuoys: [...this.initBuoys],
-      selectedVariable: this.initVariable,
+      selectedVariables: [...this.initVariables],
       dateRange: this.initDateRange.map((date) => {
         // show UTC date even though diplay is local
         const dateParts = date
@@ -126,7 +135,10 @@ export default {
     };
   },
   computed: {
-    slug() {
+    disable() {
+      return this.selectedVariables.length > 4;
+    },
+    selectedDates() {
       try {
         const isoDate = this.dateRange.map((date) => {
           // convert to UTC from Local
@@ -134,10 +146,13 @@ export default {
             Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
           ).toISOString();
         });
-        return [this.selectedVariable].concat(isoDate).join(',');
+        return { start: isoDate[0], end: isoDate[1] };
       } catch (e) {
         return null;
       }
+    },
+    selectedVariablesString() {
+      return this.selectedVariables.join(',');
     },
     selectedBuoysString() {
       const bids = this.coordinates

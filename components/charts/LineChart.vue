@@ -4,8 +4,8 @@ import { vegaBaseMixin } from '@brown-ccv/disco-vue-components';
 export default {
   mixins: [vegaBaseMixin],
   props: {
-    variable: {
-      type: String,
+    variables: {
+      type: Array,
       required: true
     },
     x: {
@@ -48,7 +48,23 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      dashes: [
+        [1, 0],
+        [1, 1],
+        [2, 1],
+        [3, 2]
+      ]
+    };
+  },
   computed: {
+    lineDashes() {
+      return this.dashes.slice(0, this.variables.length);
+    },
+    yTitle() {
+      return this.variables.length === 1 ? this.variables[0] : 'Variables';
+    },
     legends() {
       const leg = [
         {
@@ -99,6 +115,14 @@ export default {
         leg.push({
           title: 'Datasets',
           strokeWidth: 'lineWidth',
+          orient: 'bottom-right',
+          symbolType: 'stroke'
+        });
+      }
+      if (this.variables.length > 1) {
+        leg.push({
+          title: 'Variables',
+          strokeDash: 'lineDash',
           orient: 'bottom-right',
           symbolType: 'stroke'
         });
@@ -158,10 +182,7 @@ export default {
           },
           {
             name: 'union',
-            source: ['buoy', 'compare'],
-            transform: [
-              { type: 'filter', expr: `isDefined(datum.${this.variable})` }
-            ]
+            source: ['buoy', 'compare']
           }
         ],
 
@@ -180,7 +201,7 @@ export default {
             name: 'yscale',
             type: 'linear',
             domain: {
-              fields: [{ data: 'union', field: this.variable }]
+              fields: [{ data: 'union', field: 'value' }]
             },
             nice: true,
             zero: false,
@@ -197,12 +218,18 @@ export default {
             type: 'ordinal',
             range: [this.datasetLineWidth, this.compareLineWidth],
             domain: [this.datasetName, this.compareName]
+          },
+          {
+            name: 'lineDash',
+            type: 'ordinal',
+            range: this.lineDashes,
+            domain: this.variables
           }
         ],
 
         axes: [
           { orient: 'bottom', scale: 'xscale', labelAngle: 15, title: 'Time' },
-          { orient: 'left', scale: 'yscale', title: this.variable }
+          { orient: 'left', scale: 'yscale', title: this.yTitle }
         ],
 
         legends: this.legends,
@@ -234,7 +261,7 @@ export default {
               enter: {
                 fill: { value: 'transparent' },
                 x: { scale: 'xscale', field: this.x },
-                y: { scale: 'yscale', field: this.variable }
+                y: { scale: 'yscale', field: 'value' }
               }
             }
           },
@@ -248,7 +275,7 @@ export default {
                 stroke: { value: 'transparent' },
                 fill: { value: 'transparent' },
                 tooltip: {
-                  signal: `{ '${this.variable}': datum.datum.${this.variable}, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y} }`
+                  signal: `{ 'Variable': datum.datum.variable, 'Value': datum.datum.value, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y} }`
                 }
               }
             },
@@ -268,7 +295,7 @@ export default {
               facet: {
                 name: 'series',
                 data: 'union',
-                groupby: ['station_name', 'dataset']
+                groupby: ['station_name', 'variable', 'dataset']
               }
             },
             marks: [
@@ -279,13 +306,13 @@ export default {
                 encode: {
                   enter: {
                     x: { scale: 'xscale', field: this.x },
-                    y: { scale: 'yscale', field: this.variable },
+                    y: { scale: 'yscale', field: 'value' },
                     stroke: { scale: 'color', field: this.y },
                     strokeWidth: { scale: 'lineWidth', field: 'dataset' },
+                    strokeDash: { scale: 'lineDash', field: 'variable' },
                     interactive: false
                   },
                   update: {
-                    defined: { signal: `isValid(datum.${this.variable})` },
                     strokeOpacity: [
                       {
                         test: `!selected || selected === datum.station_name`,
@@ -304,5 +331,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>

@@ -17,6 +17,7 @@ export const initState = (route, datasetId) => {
   return baseState;
 };
 
+// not a fat arrow function so the `this` will refer to the vue instance
 export function baseActions(route) {
   return {
     fetchSummaryData(context) {
@@ -70,13 +71,13 @@ export const summaryData = (axios, route) => ({ commit }) => {
 
 export const buoyData = (axios, route) => (
   { commit, state },
-  { ids, variable, start, end }
+  { ids, variables, start, end }
 ) => {
   const startDate = start || state.minDate;
   const endDate = end || state.maxDate;
   return axios
     .$get(
-      `/${route}/query?ids=${ids}&variable=${variable}&start=${startDate}&end=${endDate}`
+      `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}`
     )
     .then((response) => {
       const data = response.map((datum) => {

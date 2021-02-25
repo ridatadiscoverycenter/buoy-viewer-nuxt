@@ -3,13 +3,15 @@
     <ChartContainer width="two-thirds">
       <template #title>Available Data</template>
       <template #subtitle>
-        This dataset spans from 2003 to 2012. The heatmap below summarizes the
-        number of observations collected for each month for different variables.
-        Use this heatmap to help you decide what data you want to visualize or
-        download. When you have an idea, go ahead and select the buoys,
-        variables and dates to explore. Or download the data in the most
-        appropriate format for your analyses! To begin, select a variable to see
-        what data is available.</template
+        Narragansett Bay Long-Term Plankton Time Series is one of the world’s
+        longest-running plankton surveys. Beginning in 1957, weekly samples have
+        been collected to assess the phytoplankton community and characterize
+        the physical parameters of Narragansett Bay. The heatmap below
+        summarizes the number of observations collected for each month for
+        different variables. Use this heatmap to help you decide what data you
+        want to visualize or download. When you have an idea, go ahead and
+        select the variables and dates to explore. Or download the data in the
+        most appropriate format for your analyses!</template
       >
       <template #chart>
         <div class="is-flex-column">
@@ -42,6 +44,7 @@
         <ExploreForm
           :variables="variables"
           :buoys="buoys"
+          :init-buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
           dataset="plankton"
@@ -64,12 +67,12 @@
               name: 'datasets-plankton-dashboard',
               query: {
                 buoyIds: 'bid21',
-                slug:
-                  'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
+                variables: 'WaterTempSurface',
+                start: '1959-01-01T04%3A00%3A00.000Z',
+                end: '2018-12-31T04%3A00%3A00.000Z'
               }
             }"
-            >N. Prudence and Conimicut Pt, Water Temperature,
-            2010-2011</nuxt-link
+            >Water Temperature, 1959-2018</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
@@ -77,11 +80,12 @@
               name: 'datasets-plankton-dashboard',
               query: {
                 buoyIds: 'bid21',
-                slug:
-                  'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
+                variables: 'WaterTempSurface',
+                start: '2003-01-01T04%3A00%3A00.000Z',
+                end: '2009-12-31T04%3A00%3A00.000Z'
               }
             }"
-            >Greenwich Bay and GSO Dock, Depth, 2008-2009</nuxt-link
+            >Silica, 2003-2009</nuxt-link
           >
         </div>
       </template>
@@ -97,6 +101,7 @@
         <DownloadForm
           :variables="variables"
           :buoys="buoys"
+          :init-buoys="buoys"
           :dataset-id="datasetId"
           :coordinates="coordinates"
         />
@@ -106,12 +111,23 @@
     <ChartContainer width="half" :height="1">
       <template #title>Learn More</template>
       <template #subtitle
-        >The historical data available on this site has been compiled from the
-        <a
-          href="http://www.dem.ri.gov/programs/emergencyresponse/bart/stations.php"
-          >Narragansett Bay Fixed-Site Monitoring Network</a
-        >. See <a href="nbfsmn_disclaimer.pdf">the disclaimer</a> for more
-        information on the data as well as how to cite it.</template
+        ><p>
+          The historical data available on this site has been compiled from the
+          <a href="https://web.uri.edu/plankton/"
+            >Narragansett Bay Time Series</a
+          >
+          and <a href="http://www.nabats.org/">NABATS.org</a>
+        </p>
+        <p>
+          <strong>To cite this data</strong>:
+          <a href="https://web.uri.edu/gso/research/plankton/data/"
+            >Plankton Time Data Page</a
+          >, and for data prior to 1999: please honor the contributions of Prof.
+          Smayda by properly citing the 1959 to 1997 NABATS data as: "Smayda,
+          T.J. &amp; the Bunker C community (1959-1997). Narragansett Bay
+          Plankton Time Series. Graduate School of Oceanography, URI. Data
+          available at: <a href="http://www.nabats.org/">NABATS.org</a>"
+        </p></template
       >
     </ChartContainer>
   </div>
