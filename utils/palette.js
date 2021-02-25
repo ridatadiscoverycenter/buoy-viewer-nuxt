@@ -21,11 +21,16 @@ const tableau20 = [
   '#d8b5a5'
 ];
 
-export const constructColorMap = (vals) => {
-  const map = {};
-  for (const [i, val] of vals.entries()) {
-    map[val] = tableau20[i];
-  }
+export const constructColorMap = (curMap, vals) => {
+  const map = { ...curMap };
+  const curKeys = Object.keys(curMap);
+  let nextColorInd = curKeys.length;
+  vals.forEach((val) => {
+    if (!curKeys.includes(val)) {
+      map[val] = tableau20[nextColorInd];
+      nextColorInd++;
+    }
+  });
   return map;
 };
 

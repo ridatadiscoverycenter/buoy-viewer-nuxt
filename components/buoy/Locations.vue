@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import * as aq from 'arquero';
 
 import ChartContainer from '@/components/base/ChartContainer.vue';
@@ -32,13 +33,10 @@ export default {
     coordinates: {
       type: Array,
       required: true
-    },
-    colorMap: {
-      type: Object,
-      required: true
     }
   },
   computed: {
+    ...mapState(['colorMap']),
     colorDomain() {
       if (this.coordinates.length > 0) {
         const stations = aq

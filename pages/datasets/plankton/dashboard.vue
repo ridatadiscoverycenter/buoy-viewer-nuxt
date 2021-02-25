@@ -3,13 +3,13 @@
     <BuoyLocations :coordinates="filterCoordinates" />
 
     <BuoyLineChart
-      :dataset="buoyData"
+      :dataset="planktonData"
       :variable="variable"
       :start-dt-str="startDate.slice(0, 10)"
       :end-dt-str="endDate.slice(0, 10)"
       :compare-dataset="modelData"
       compare-name="OSOM"
-      dataset-name="Historical"
+      dataset-name="Plankton"
       :loading="loading"
     />
 
@@ -36,7 +36,7 @@
           :buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
-          dataset="historical-buoy-data"
+          dataset="plankton"
           :coordinates="coordinates"
         />
       </template>
@@ -74,7 +74,7 @@ export default {
         end: this.$route.query.slug.split(',')[2],
         ids: this.$route.query.buoyIds
       };
-      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
+      await this.$store.dispatch('plankton/fetchDataGeoJson', payload);
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
       this.loading = false;
     } catch (e) {
@@ -92,9 +92,9 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', [
+    ...mapState('plankton', [
       'coordinates',
-      'buoyData',
+      'planktonData',
       'datasetId',
       'variables',
       'minDate',

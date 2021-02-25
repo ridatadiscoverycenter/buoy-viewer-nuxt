@@ -1,7 +1,4 @@
 export default {
-  server: {
-    port: 8080
-  },
   ssr: true,
   components: true,
   router: {

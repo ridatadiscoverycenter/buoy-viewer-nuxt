@@ -1,13 +1,12 @@
 <template>
   <div>
-    <BuoyLocations :coordinates="filterCoordinates" :color-map="colorMap" />
+    <BuoyLocations :coordinates="filterCoordinates" />
 
     <BuoyLineChart
       :dataset="modelData"
       dataset-name="OSOM"
       :dataset-line-width="0.8"
       :variable="variable"
-      :color-map="colorMap"
       :compare-line-width="2.2"
       :start-dt-str="startDate.slice(0, 10)"
       :end-dt-str="endDate.slice(0, 10)"
@@ -101,8 +100,7 @@ export default {
       'datasetId',
       'variables',
       'minDate',
-      'maxDate',
-      'colorMap'
+      'maxDate'
     ]),
     ...mapState('buoy', ['buoyData']),
     buoys() {

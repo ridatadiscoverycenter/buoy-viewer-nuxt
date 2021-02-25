@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import * as aq from 'arquero';
 
 import LineChart from '@/components/charts/LineChart.vue';
@@ -61,10 +62,6 @@ export default {
   props: {
     variable: {
       type: String,
-      required: true
-    },
-    colorMap: {
-      type: Object,
       required: true
     },
     startDtStr: {
@@ -118,6 +115,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['colorMap']),
     colorDomain() {
       const stations = aq
         .from(this.dataset)

@@ -37,7 +37,7 @@
       </template>
     </ChartContainer>
 
-    <BuoyLocations :coordinates="coordinates" :color-map="colorMap" />
+    <BuoyLocations :coordinates="coordinates" />
 
     <ChartContainer width="half">
       <template #title>Explore</template>
@@ -157,8 +157,7 @@ export default {
       'summary',
       'datasetId',
       'minDate',
-      'maxDate',
-      'colorMap'
+      'maxDate'
     ]),
     buoys() {
       return this.coordinates.map((val) => val.fullName);

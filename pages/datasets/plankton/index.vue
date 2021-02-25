@@ -3,13 +3,14 @@
     <ChartContainer width="two-thirds">
       <template #title>Available Data</template>
       <template #subtitle>
-        The Ocean State Ocean Model (OSOM) is an application of the Regional
-        Ocean Modeling System spanning the Rhode Island waterways, including
-        Narragansett Bay, Mt. Hope Bay, larger rivers, and the Block Island
-        Shelf circulation from Long Island to Nantucket. Data is available by
-        the year at 1.5 hour increments. As the model covers the entire
-        Narragansett Bay, data is always available at all buoy locations.
-      </template>
+        This dataset spans from 2003 to 2012. The heatmap below summarizes the
+        number of observations collected for each month for different variables.
+        Use this heatmap to help you decide what data you want to visualize or
+        download. When you have an idea, go ahead and select the buoys,
+        variables and dates to explore. Or download the data in the most
+        appropriate format for your analyses! To begin, select a variable to see
+        what data is available.</template
+      >
       <template #chart>
         <div class="is-flex-column">
           <Heatmap
@@ -20,8 +21,6 @@
             x="date"
             y="variable"
             y-title="Variable"
-            x-title="Year"
-            x-unit="year"
             variable="count"
             :enable-darkmode="false"
           />
@@ -45,7 +44,7 @@
           :buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
-          dataset="osom-data"
+          dataset="plankton"
           :coordinates="coordinates"
         />
       </template>
@@ -62,54 +61,37 @@
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-osom-data-dashboard',
+              name: 'datasets-plankton-dashboard',
               query: {
-                buoyIds: 'bid2,bid3',
+                buoyIds: 'bid21',
                 slug:
-                  'WaterTempSurface,2006-01-01T04%3A00%3A00.000Z,2007-01-01T04%3A00%3A00.000Z'
+                  'WaterTempSurface,2010-05-01T04%3A00%3A00.000Z,2011-10-31T04%3A00%3A00.000Z'
               }
             }"
-            >N. Prudence and Conimicut Pt, Water Temperature, 2006</nuxt-link
+            >N. Prudence and Conimicut Pt, Water Temperature,
+            2010-2011</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-osom-data-dashboard',
+              name: 'datasets-plankton-dashboard',
               query: {
-                buoyIds: 'bid15,bid17',
+                buoyIds: 'bid21',
                 slug:
-                  'SalinitySurface,2018-01-01T04%3A00%3A00.000Z,2019-01-01T04%3A00%3A00.000Z'
+                  'depth,2008-05-01T04%3A00%3A00.000Z,2009-10-31T04%3A00%3A00.000Z'
               }
             }"
-            >Greenwich Bay and GSO Dock, Salinity, 2018</nuxt-link
+            >Greenwich Bay and GSO Dock, Depth, 2008-2009</nuxt-link
           >
         </div>
       </template>
-    </ChartContainer>
-
-    <ChartContainer width="half" :height="1">
-      <template #title>Learn More</template>
-      <template #subtitle
-        >The Ocean State Ocean Model is an ongoing project, learn more about its
-        history, current status, publications, and how to use the data with the
-        <a
-          href="https://riddc-jupyter-book.web.app/notebooks/fox-kemper/osom_intro.html"
-          >RIDDC Data Articles</a
-        ></template
-      >
     </ChartContainer>
 
     <ChartContainer width="half">
       <template #title>Download</template>
       <template #subtitle
         >If you prefer, we provide the raw data for you to download in various
-        file formats. Just select from the options below. If you would like to
-        download data for the full model geography (not just at buoy locations),
-        visit
-        <a
-          href="https://pricaimcit.services.brown.edu/erddap/griddap/model_data_57db_4a85_81d9.html"
-          >ERDDAP</a
-        >.</template
+        file formats. Just select from the options below.</template
       >
       <template #chart>
         <DownloadForm
@@ -119,6 +101,18 @@
           :coordinates="coordinates"
         />
       </template>
+    </ChartContainer>
+
+    <ChartContainer width="half" :height="1">
+      <template #title>Learn More</template>
+      <template #subtitle
+        >The historical data available on this site has been compiled from the
+        <a
+          href="http://www.dem.ri.gov/programs/emergencyresponse/bart/stations.php"
+          >Narragansett Bay Fixed-Site Monitoring Network</a
+        >. See <a href="nbfsmn_disclaimer.pdf">the disclaimer</a> for more
+        information on the data as well as how to cite it.</template
+      >
     </ChartContainer>
   </div>
 </template>
@@ -148,7 +142,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('model', [
+    ...mapState('plankton', [
       'variables',
       'coordinates',
       'summary',

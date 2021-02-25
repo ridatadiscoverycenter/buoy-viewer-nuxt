@@ -45,15 +45,16 @@
 
 <script>
 import * as aq from 'arquero';
-
 import { mapState } from 'vuex';
+
 import Map from '@/components/charts/Map.vue';
 export default {
   components: {
     Map
   },
   computed: {
-    ...mapState('buoy', ['coordinates', 'colorMap']),
+    ...mapState('buoy', ['coordinates']),
+    ...mapState(['colorMap']),
     colorDomain() {
       if (this.coordinates.length > 0) {
         const stations = aq
