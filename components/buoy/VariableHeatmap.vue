@@ -20,7 +20,7 @@ import * as aq from 'arquero';
 import Heatmap from '@/components/charts/Heatmap.vue';
 
 export default {
-  comoonents: {
+  components: {
     Heatmap
   },
   props: {
