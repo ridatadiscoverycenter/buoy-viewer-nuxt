@@ -30,13 +30,18 @@ export default {
       type: String,
       required: false,
       default: 'Buoy'
+    },
+    height: {
+      type: Number,
+      required: false,
+      default: 300
     }
   },
   computed: {
     baseSpec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
-        height: 300,
+        height: this.height,
         data: [
           {
             name: 'rawData',

@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer width="one-third">
+  <ChartContainer width="one-third" :height="height">
     <template #title>Buoy Locations</template>
     <template #subtitle
       >Hover over the circles to find out the buoy locations.</template
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import * as aq from 'arquero';
 
 import ChartContainer from '@/components/base/ChartContainer.vue';
@@ -33,12 +34,14 @@ export default {
       type: Array,
       required: true
     },
-    colorMap: {
-      type: Object,
-      required: true
+    height: {
+      type: Number,
+      required: false,
+      default: 2
     }
   },
   computed: {
+    ...mapState(['colorMap']),
     colorDomain() {
       if (this.coordinates.length > 0) {
         const stations = aq

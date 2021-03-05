@@ -27,4 +27,9 @@ export default {};
   flex-wrap: wrap;
   justify-content: center;
 }
+
+/* used by download form and explore form fields */
+.control-item {
+  width: 100%;
+}
 </style>

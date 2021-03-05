@@ -1,78 +1,65 @@
 <template>
-  <div>
-    <BuoyLocations :coordinates="filterCoordinates" :color-map="colorMap" />
-
-    <BuoyLineChart
-      :dataset="buoyData"
-      :variable="variable"
-      :color-map="colorMap"
-      :start-dt-str="startDate.slice(0, 10)"
-      :end-dt-str="endDate.slice(0, 10)"
-      :compare-dataset="modelData"
-      compare-name="OSOM"
-      dataset-name="Historical"
-      :loading="loading"
-    />
-
-    <BuoyQueryDownload
-      :variable="variable"
-      :buoy-ids="buoyIds"
-      :start-dt-str="startDate"
-      :end-dt-str="endDate"
-      :dataset-id="datasetId"
-    />
-
-    <ChartContainer width="half">
-      <template #title>Keep Exploring</template>
-      <template #subtitle>
-        Try a different variable, adding or removing buoys, or changing the date
-        range!
-      </template>
-      <template #chart>
-        <ExploreForm
-          :init-variable="variable"
-          :init-buoys="stationNames"
-          :init-date-range="[startDate, endDate]"
-          :variables="variables"
-          :buoys="buoys"
-          :min-date="minDate"
-          :max-date="maxDate"
-          dataset="historical-buoy-data"
-          :coordinates="coordinates"
+  <LineChartDashboard
+    dataset="historical-buoy-data"
+    dataset-title="Historical"
+    :dataset-data="buoyData"
+    compare-dataset-title="OSOM"
+    :compare-dataset-data="modelData"
+    :coordinates="coordinates"
+    :dataset-id="datasetId"
+    :variables="variables"
+    :min-date="minDate"
+    :max-date="maxDate"
+    :loading="loading"
+  >
+    <template #summary-heatmap>
+      <div class="is-flex-column">
+        <div class="control-item control-item-first">
+          <label for="variable" class="label">Variable</label>
+          <multiselect
+            id="variable"
+            v-model="variable"
+            class="multiselect"
+            :options="variables"
+          ></multiselect>
+        </div>
+        <Heatmap
+          v-if="!(summary.length === 0)"
+          id="heatmap"
+          :dataset="summary"
+          :min-width="400"
+          :height="250"
+          x="date"
+          y="station_name"
+          :variable="variable"
+          :enable-darkmode="false"
         />
-      </template>
-    </ChartContainer>
-
-    <CompassLoading :manual-load="loading" />
-  </div>
+        <fa v-else icon="compass" spin class="compass-loading" />
+      </div>
+    </template>
+  </LineChartDashboard>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Multiselect from 'vue-multiselect';
 
-import ChartContainer from '@/components/base/ChartContainer.vue';
-import ExploreForm from '@/components/ExploreForm.vue';
-import CompassLoading from '@/components/loading.vue';
-import BuoyLocations from '@/components/buoy/Locations.vue';
-import BuoyLineChart from '@/components/buoy/LineChartCard.vue';
-import BuoyQueryDownload from '@/components/buoy/QueryDownload.vue';
+import LineChartDashboard from '@/components/buoy/LineChartDashboard.vue';
+import Heatmap from '@/components/charts/Heatmap.vue';
 
 export default {
   components: {
-    ChartContainer,
-    ExploreForm,
-    CompassLoading,
-    BuoyLocations,
-    BuoyLineChart,
-    BuoyQueryDownload
+    LineChartDashboard,
+    Heatmap,
+    Multiselect
   },
   async fetch() {
     try {
       this.loading = true;
       const payload = {
-        variable: this.$route.query.slug.split(',')[0],
-        start: this.$route.query.slug.split(',')[1],
-        end: this.$route.query.slug.split(',')[2],
+        variables: this.$route.query.variables,
+        start: this.$route.query.start,
+        end: this.$route.query.end,
         ids: this.$route.query.buoyIds
       };
       await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
@@ -88,7 +75,7 @@ export default {
   },
   data() {
     return {
-      sideHidden: false,
+      variable: 'WaterTempSurface',
       loading: false
     };
   },
@@ -100,35 +87,9 @@ export default {
       'variables',
       'minDate',
       'maxDate',
-      'colorMap'
+      'summary'
     ]),
-    ...mapState('model', ['modelData']),
-    buoys() {
-      return this.coordinates.map((val) => val.fullName);
-    },
-    variable() {
-      return this.$route.query.slug.split(',')[0];
-    },
-    startDate() {
-      const start = this.$route.query.slug.split(',')[1];
-      return start;
-    },
-    endDate() {
-      return this.$route.query.slug.split(',')[2];
-    },
-    buoyIds() {
-      return this.$route.query.buoyIds.split(',');
-    },
-    stationNames() {
-      return this.coordinates
-        .filter((r) => this.buoyIds.includes(r.buoyId))
-        .map((r) => r.fullName);
-    },
-    filterCoordinates() {
-      return this.coordinates.filter((o) => {
-        return this.buoyIds.includes(o.buoyId);
-      });
-    }
+    ...mapState('model', ['modelData'])
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line

@@ -12,25 +12,23 @@
       </template>
       <template #chart>
         <div class="is-flex-column">
-          <Heatmap
-            v-if="!(summary.length === 0)"
-            id="heatmap"
-            :dataset="heatmapSummary"
-            :min-width="400"
-            x="date"
-            y="variable"
-            y-title="Variable"
+          <VariableHeatmap
+            :summary="summary"
+            :variables="variables"
             x-title="Year"
             x-unit="year"
-            variable="count"
-            :enable-darkmode="false"
           />
-          <fa v-else icon="compass" spin class="compass-loading" />
+          <fa
+            v-if="summary.length === 0"
+            icon="compass"
+            spin
+            class="compass-loading"
+          />
         </div>
       </template>
     </ChartContainer>
 
-    <BuoyLocations :coordinates="coordinates" :color-map="colorMap" />
+    <BuoyLocations :coordinates="coordinates" />
 
     <ChartContainer width="half">
       <template #title>Explore</template>
@@ -65,8 +63,9 @@
               name: 'datasets-osom-data-dashboard',
               query: {
                 buoyIds: 'bid2,bid3',
-                slug:
-                  'WaterTempSurface,2006-01-01T04%3A00%3A00.000Z,2007-01-01T04%3A00%3A00.000Z'
+                variables: 'WaterTempSurface,WaterTempBottom',
+                start: '2006-01-01T04%3A00%3A00.000Z',
+                end: '2007-01-01T04%3A00%3A00.000Z'
               }
             }"
             >N. Prudence and Conimicut Pt, Water Temperature, 2006</nuxt-link
@@ -77,11 +76,12 @@
               name: 'datasets-osom-data-dashboard',
               query: {
                 buoyIds: 'bid15,bid17',
-                slug:
-                  'SalinitySurface,2018-01-01T04%3A00%3A00.000Z,2019-01-01T04%3A00%3A00.000Z'
+                variables: 'SalinitySurface',
+                start: '2018-01-01T04%3A00%3A00.000Z',
+                end: '2019-01-01T04%3A00%3A00.000Z'
               }
             }"
-            >Greenwich Bay and GSO Dock, Salinity, 2018</nuxt-link
+            >Greenwich Bay and GSO Dock, Surface Salinity, 2018</nuxt-link
           >
         </div>
       </template>
@@ -125,9 +125,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import * as aq from 'arquero';
 
-import Heatmap from '@/components/charts/Heatmap.vue';
+import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
@@ -135,7 +134,7 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 
 export default {
   components: {
-    Heatmap,
+    VariableHeatmap,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -154,17 +153,10 @@ export default {
       'summary',
       'datasetId',
       'minDate',
-      'maxDate',
-      'colorMap'
+      'maxDate'
     ]),
     buoys() {
       return this.coordinates.map((val) => val.fullName);
-    },
-    heatmapSummary() {
-      return aq
-        .from(this.summary)
-        .fold(this.variables, { as: ['variable', 'count'] })
-        .objects();
     }
   }
 };

@@ -1,8 +1,8 @@
 <template>
-  <ChartContainer width="half" :height="1">
+  <ChartContainer width="one-third" :height="3">
     <template #title>Download Selected Data</template>
     <template #subtitle
-      >Selected data includes {{ variable }} from
+      >Selected data includes {{ variables.join(', ') }} from
       {{ startDtStr.slice(0, 10) }} to {{ endDtStr.slice(0, 10) }}</template
     >
     <template #chart>
@@ -46,8 +46,8 @@ export default {
     Multiselect
   },
   props: {
-    variable: {
-      type: String,
+    variables: {
+      type: Array,
       required: true
     },
     buoyIds: {
@@ -77,9 +77,11 @@ export default {
   },
   methods: {
     downloadUrl() {
-      return `${this.baseUrl}/tabledap/${this.datasetId}.${this.fileFormat}?${
-        this.variable
-      },station_name,time,latitude,longitude&time>=${this.startDtStr}&time<=${
+      return `${this.baseUrl}/tabledap/${this.datasetId}.${
+        this.fileFormat
+      }?${this.variables.join(
+        ','
+      )},station_name,time,latitude,longitude&time>=${this.startDtStr}&time<=${
         this.endDtStr
       }&station_name=~"(${this.buoyIds.join('|')})"`;
     }

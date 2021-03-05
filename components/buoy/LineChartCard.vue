@@ -1,8 +1,8 @@
 <template>
-  <ChartContainer width="two-thirds" :height="3">
-    <template #title>{{ variable }}</template>
+  <ChartContainer width="two-thirds" :height="5">
+    <template #title>Visualize Data</template>
     <template #subtitle
-      >This plot shows {{ variable }} over the period between
+      >This plot shows {{ variables.join(', ') }} over the period between
       {{ startDtStr }} and {{ endDtStr }}. You can hover over the lines to see
       more specific data.</template
     >
@@ -36,7 +36,7 @@
         :compare-dataset="compare ? compareDataset : []"
         :compare-name="compareName"
         :compare-line-width="compareLineWidth"
-        :variable="variable"
+        :variables="variables"
         :color-domain="colorDomain"
         :color-range="colorRange"
         x="time"
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import * as aq from 'arquero';
 
 import LineChart from '@/components/charts/LineChart.vue';
@@ -59,12 +60,8 @@ export default {
     ChartContainer
   },
   props: {
-    variable: {
-      type: String,
-      required: true
-    },
-    colorMap: {
-      type: Object,
+    variables: {
+      type: Array,
       required: true
     },
     startDtStr: {
@@ -97,13 +94,11 @@ export default {
     },
     compareLineWidth: {
       type: Number,
-      required: false,
-      default: 0.8
+      required: true
     },
     datasetLineWidth: {
       type: Number,
-      required: false,
-      default: 2.2
+      required: true
     },
     loading: {
       type: Boolean,
@@ -118,13 +113,18 @@ export default {
     };
   },
   computed: {
+    ...mapState(['colorMap']),
     colorDomain() {
-      const stations = aq
-        .from(this.dataset)
-        .groupby('station_name')
-        .count()
-        .objects();
-      return stations.map((v) => v.station_name);
+      if (this.dataset.length > 0) {
+        const stations = aq
+          .from(this.dataset)
+          .groupby('station_name')
+          .count()
+          .objects();
+        return stations.map((v) => v.station_name);
+      } else {
+        return [];
+      }
     },
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);

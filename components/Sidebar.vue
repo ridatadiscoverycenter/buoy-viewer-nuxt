@@ -148,9 +148,9 @@ export default {
           available: true
         },
         {
-          name: 'Phytoplankton TS',
-          route: 'datasets-phytoplankton-timeseries',
-          available: false
+          name: 'Plankton Time Series',
+          route: 'datasets-plankton',
+          available: true
         }
       ]
     };

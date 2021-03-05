@@ -1,7 +1,7 @@
 import { baseMutations, initState, baseActions } from '@/utils/store_actions';
 
-const route = 'model';
-const datasetId = 'model_data_77bb_15c2_6ab3';
+const route = 'plankton';
+const datasetId = 'plankton_time_series_7615_c513_ef8e';
 
 export const state = () => ({
   ...initState(route, datasetId)

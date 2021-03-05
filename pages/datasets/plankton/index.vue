@@ -3,37 +3,25 @@
     <ChartContainer width="two-thirds">
       <template #title>Available Data</template>
       <template #subtitle>
-        This dataset spans from 2003 to 2012. The heatmap below summarizes the
-        number of observations collected for each month for different variables.
-        Use this heatmap to help you decide what data you want to visualize or
-        download. When you have an idea, go ahead and select the buoys,
-        variables and dates to explore. Or download the data in the most
-        appropriate format for your analyses! To begin, select a variable to see
-        what data is available.</template
+        Narragansett Bay Long-Term Plankton Time Series is one of the world’s
+        longest-running plankton surveys. Beginning in 1957, weekly samples have
+        been collected to assess the phytoplankton community and characterize
+        the physical parameters of Narragansett Bay. The heatmap below
+        summarizes the number of observations collected for each month for
+        different variables. Use this heatmap to help you decide what data you
+        want to visualize or download. When you have an idea, go ahead and
+        select the variables and dates to explore. Or download the data in the
+        most appropriate format for your analyses!</template
       >
       <template #chart>
         <div class="is-flex-column">
-          <div class="control-item control-item-first">
-            <label for="variable" class="label">Variable</label>
-            <multiselect
-              id="variable"
-              v-model="variable"
-              class="multiselect"
-              :options="variables"
-            ></multiselect>
-          </div>
-          <Heatmap
-            v-if="!(summary.length === 0)"
-            id="heatmap"
-            :dataset="summary"
-            :min-width="400"
-            :height="250"
-            x="date"
-            y="station_name"
-            :variable="variable"
-            :enable-darkmode="false"
+          <VariableHeatmap :summary="summary" :variables="variables" />
+          <fa
+            v-if="summary.length === 0"
+            icon="compass"
+            spin
+            class="compass-loading"
           />
-          <fa v-else icon="compass" spin class="compass-loading" />
         </div>
       </template>
     </ChartContainer>
@@ -51,9 +39,10 @@
         <ExploreForm
           :variables="variables"
           :buoys="buoys"
+          :init-buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
-          dataset="historical-buoy-data"
+          dataset="plankton"
           :coordinates="coordinates"
         />
       </template>
@@ -70,35 +59,34 @@
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-historical-buoy-data-dashboard',
+              name: 'datasets-plankton-dashboard',
               query: {
-                buoyIds: 'bid2,bid3',
+                buoyIds: 'bid21',
                 variables: 'WaterTempSurface,WaterTempBottom',
-                start: '2010-05-01T04%3A00%3A00.000Z',
-                end: '2011-10-31T04%3A00%3A00.000Z'
+                start: '2017-01-01T04%3A00%3A00.000Z',
+                end: '2018-12-31T04%3A00%3A00.000Z'
               }
             }"
-            >N. Prudence and Conimicut Pt, Water Temperature,
-            2010-2011</nuxt-link
+            >Water Temperature, 2017-2018</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-historical-buoy-data-dashboard',
+              name: 'datasets-plankton-dashboard',
               query: {
-                buoyIds: 'bid15,bid17',
-                variables: 'depth',
-                start: '2008-05-01T04%3A00%3A00.000Z',
-                end: '2009-10-31T04%3A00%3A00.000Z'
+                buoyIds: 'bid21',
+                variables: 'SilicaBottom,SilicaSurface',
+                start: '2003-01-01T04%3A00%3A00.000Z',
+                end: '2009-12-31T04%3A00%3A00.000Z'
               }
             }"
-            >Greenwich Bay and GSO Dock, Depth, 2008-2009</nuxt-link
+            >Silica, 2003-2009</nuxt-link
           >
         </div>
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half">
+    <ChartContainer width="half" :height="2">
       <template #title>Download</template>
       <template #subtitle
         >If you prefer, we provide the raw data for you to download in various
@@ -108,21 +96,33 @@
         <DownloadForm
           :variables="variables"
           :buoys="buoys"
+          :init-buoys="buoys"
           :dataset-id="datasetId"
           :coordinates="coordinates"
         />
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half" :height="1">
+    <ChartContainer width="half" :height="3">
       <template #title>Learn More</template>
       <template #subtitle
-        >The historical data available on this site has been compiled from the
-        <a
-          href="http://www.dem.ri.gov/programs/emergencyresponse/bart/stations.php"
-          >Narragansett Bay Fixed-Site Monitoring Network</a
-        >. See <a href="nbfsmn_disclaimer.pdf">the disclaimer</a> for more
-        information on the data as well as how to cite it.</template
+        ><p>
+          The historical data available on this site has been compiled from the
+          <a href="https://web.uri.edu/plankton/"
+            >Narragansett Bay Time Series</a
+          >
+          and <a href="http://www.nabats.org/">NABATS.org</a>.
+        </p>
+        <p>
+          <strong>To cite this data</strong>:
+          <a href="https://web.uri.edu/gso/research/plankton/data/"
+            >Plankton Time Data Page</a
+          >, and for data prior to 1999: please honor the contributions of Prof.
+          Smayda by properly citing the 1959 to 1997 NABATS data as: "Smayda,
+          T.J. &amp; the Bunker C community (1959-1997). Narragansett Bay
+          Plankton Time Series. Graduate School of Oceanography, URI. Data
+          available at: <a href="http://www.nabats.org/">NABATS.org</a>"
+        </p></template
       >
     </ChartContainer>
   </div>
@@ -130,9 +130,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import Multiselect from 'vue-multiselect';
 
-import Heatmap from '@/components/charts/Heatmap.vue';
+import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
@@ -140,8 +139,7 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 
 export default {
   components: {
-    Heatmap,
-    Multiselect,
+    VariableHeatmap,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -154,7 +152,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', [
+    ...mapState('plankton', [
       'variables',
       'coordinates',
       'summary',

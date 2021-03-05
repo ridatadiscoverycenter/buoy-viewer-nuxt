@@ -1,12 +1,10 @@
 <template>
   <LineChartDashboard
-    dataset="osom-data"
-    dataset-title="OSOM"
-    :dataset-data="modelData"
-    :dataset-line-width="0.8"
-    compare-dataset-title="Historical"
-    :compare-dataset-data="buoyData"
-    :compare-line-width="1.8"
+    dataset="plankton"
+    dataset-title="Plankton"
+    :dataset-data="planktonData"
+    compare-dataset-title="OSOM"
+    :compare-dataset-data="modelData"
     :coordinates="coordinates"
     :dataset-id="datasetId"
     :variables="variables"
@@ -15,12 +13,7 @@
     :loading="loading"
   >
     <template #summary-heatmap>
-      <VariableHeatmap
-        :summary="summary"
-        :variables="variables"
-        x-title="Year"
-        x-unit="year"
-      />
+      <VariableHeatmap :summary="summary" :variables="variables" />
     </template>
   </LineChartDashboard>
 </template>
@@ -45,8 +38,8 @@ export default {
         end: this.$route.query.end,
         ids: this.$route.query.buoyIds
       };
+      await this.$store.dispatch('plankton/fetchDataGeoJson', payload);
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
-      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
       this.loading = false;
     } catch (e) {
       this.loading = false;
@@ -62,16 +55,16 @@ export default {
     };
   },
   computed: {
-    ...mapState('model', [
+    ...mapState('plankton', [
       'coordinates',
-      'modelData',
+      'planktonData',
       'datasetId',
       'variables',
       'minDate',
       'maxDate',
       'summary'
     ]),
-    ...mapState('buoy', ['buoyData'])
+    ...mapState('model', ['modelData'])
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line
