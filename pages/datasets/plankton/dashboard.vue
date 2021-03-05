@@ -1,81 +1,32 @@
 <template>
-  <div>
-    <BuoyLineChart
-      :dataset="planktonData"
-      :variables="queryVariables"
-      :start-dt-str="startDate.slice(0, 10)"
-      :end-dt-str="endDate.slice(0, 10)"
-      :compare-dataset="modelData"
-      compare-name="OSOM"
-      dataset-name="Plankton"
-      :loading="loading"
-    />
-
-    <BuoyLocations :coordinates="filterCoordinates" :height="4" />
-
-    <ChartContainer width="one-third" :height="4">
-      <template #title>Keep Exploring</template>
-      <template #subtitle>
-        Try different variables, buoys, or changing the date range!
-      </template>
-      <template #chart>
-        <ExploreForm
-          :init-variables="queryVariables"
-          :init-buoys="stationNames"
-          :init-date-range="[startDate, endDate]"
-          :variables="variables"
-          :buoys="buoys"
-          :min-date="minDate"
-          :max-date="maxDate"
-          dataset="plankton"
-          :coordinates="coordinates"
-        />
-      </template>
-    </ChartContainer>
-
-    <ChartContainer width="two-thirds" :height="4">
-      <template #title>Available Data</template>
-      <template #subtitle
-        >Use this heatmap to help you decide what data you want to visualize or
-        download. When you have an idea, go ahead and select the variables and
-        dates to explore.</template
-      >
-      <template #chart>
-        <VariableHeatmap :summary="summary" :variables="variables" />
-      </template>
-    </ChartContainer>
-
-    <BuoyQueryDownload
-      :variables="queryVariables"
-      :buoy-ids="buoyIds"
-      :start-dt-str="startDate"
-      :end-dt-str="endDate"
-      :dataset-id="datasetId"
-    />
-
-    <CompassLoading :manual-load="loading" />
-  </div>
+  <LineChartDashboard
+    dataset="plankton"
+    dataset-title="Plankton"
+    :dataset-data="planktonData"
+    compare-dataset-title="OSOM"
+    :compare-dataset-data="modelData"
+    :coordinates="coordinates"
+    :dataset-id="datasetId"
+    :variables="variables"
+    :min-date="minDate"
+    :max-date="maxDate"
+    :loading="loading"
+  >
+    <template #summary-heatmap>
+      <VariableHeatmap :summary="summary" :variables="variables" />
+    </template>
+  </LineChartDashboard>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 
-import ChartContainer from '@/components/base/ChartContainer.vue';
-import ExploreForm from '@/components/ExploreForm.vue';
-import CompassLoading from '@/components/loading.vue';
-import BuoyLocations from '@/components/buoy/Locations.vue';
-import BuoyLineChart from '@/components/buoy/LineChartCard.vue';
-import BuoyQueryDownload from '@/components/buoy/QueryDownload.vue';
+import LineChartDashboard from '@/components/buoy/LineChartDashboard.vue';
 import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
 
 export default {
   components: {
-    ChartContainer,
-    ExploreForm,
-    CompassLoading,
-    BuoyLocations,
-    BuoyLineChart,
-    BuoyQueryDownload,
+    LineChartDashboard,
     VariableHeatmap
   },
   async fetch() {
@@ -100,7 +51,6 @@ export default {
   },
   data() {
     return {
-      sideHidden: false,
       loading: false
     };
   },
@@ -114,32 +64,7 @@ export default {
       'maxDate',
       'summary'
     ]),
-    ...mapState('model', ['modelData']),
-    buoys() {
-      return this.coordinates.map((val) => val.fullName);
-    },
-    queryVariables() {
-      return this.$route.query.variables.split(',');
-    },
-    startDate() {
-      return this.$route.query.start;
-    },
-    endDate() {
-      return this.$route.query.end;
-    },
-    buoyIds() {
-      return this.$route.query.buoyIds.split(',');
-    },
-    stationNames() {
-      return this.coordinates
-        .filter((r) => this.buoyIds.includes(r.buoyId))
-        .map((r) => r.fullName);
-    },
-    filterCoordinates() {
-      return this.coordinates.filter((o) => {
-        return this.buoyIds.includes(o.buoyId);
-      });
-    }
+    ...mapState('model', ['modelData'])
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line

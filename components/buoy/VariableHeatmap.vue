@@ -5,6 +5,8 @@
     :dataset="heatmapSummary"
     :min-width="400"
     x="date"
+    :x-title="xTitle"
+    :x-unit="xUnit"
     y="variable"
     y-title="Variable"
     variable="count"
@@ -29,6 +31,16 @@ export default {
     variables: {
       type: Array,
       required: true
+    },
+    xTitle: {
+      type: String,
+      required: false,
+      default: 'Month/Year'
+    },
+    xUnit: {
+      type: String,
+      required: false,
+      default: 'month'
     }
   },
   computed: {

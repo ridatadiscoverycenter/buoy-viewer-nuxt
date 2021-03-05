@@ -27,6 +27,7 @@
             id="heatmap"
             :dataset="summary"
             :min-width="400"
+            :height="250"
             x="date"
             y="station_name"
             :variable="variable"

@@ -12,20 +12,18 @@
       </template>
       <template #chart>
         <div class="is-flex-column">
-          <Heatmap
-            v-if="!(summary.length === 0)"
-            id="heatmap"
-            :dataset="heatmapSummary"
-            :min-width="400"
-            x="date"
-            y="variable"
-            y-title="Variable"
+          <VariableHeatmap
+            :summary="summary"
+            :variables="variables"
             x-title="Year"
             x-unit="year"
-            variable="count"
-            :enable-darkmode="false"
           />
-          <fa v-else icon="compass" spin class="compass-loading" />
+          <fa
+            v-if="summary.length === 0"
+            icon="compass"
+            spin
+            class="compass-loading"
+          />
         </div>
       </template>
     </ChartContainer>
@@ -127,9 +125,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import * as aq from 'arquero';
 
-import Heatmap from '@/components/charts/Heatmap.vue';
+import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
@@ -137,7 +134,7 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 
 export default {
   components: {
-    Heatmap,
+    VariableHeatmap,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -160,12 +157,6 @@ export default {
     ]),
     buoys() {
       return this.coordinates.map((val) => val.fullName);
-    },
-    heatmapSummary() {
-      return aq
-        .from(this.summary)
-        .fold(this.variables, { as: ['variable', 'count'] })
-        .objects();
     }
   }
 };
