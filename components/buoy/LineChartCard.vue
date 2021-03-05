@@ -1,6 +1,6 @@
 <template>
   <ChartContainer width="two-thirds" :height="5">
-    <template #title>{{ variables.join(', ') }}</template>
+    <template #title>Visualize Data</template>
     <template #subtitle
       >This plot shows {{ variables.join(', ') }} over the period between
       {{ startDtStr }} and {{ endDtStr }}. You can hover over the lines to see
@@ -94,13 +94,11 @@ export default {
     },
     compareLineWidth: {
       type: Number,
-      required: false,
-      default: 0.8
+      required: true
     },
     datasetLineWidth: {
       type: Number,
-      required: false,
-      default: 1.8
+      required: true
     },
     loading: {
       type: Boolean,

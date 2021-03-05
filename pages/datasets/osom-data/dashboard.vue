@@ -3,8 +3,10 @@
     dataset="osom-data"
     dataset-title="OSOM"
     :dataset-data="modelData"
+    :dataset-line-width="0.8"
     compare-dataset-title="Historical"
     :compare-dataset-data="buoyData"
+    :compare-line-width="1.8"
     :coordinates="coordinates"
     :dataset-id="datasetId"
     :variables="variables"
@@ -43,8 +45,8 @@ export default {
         end: this.$route.query.end,
         ids: this.$route.query.buoyIds
       };
-      await this.$store.dispatch('plankton/fetchDataGeoJson', payload);
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
+      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
       this.loading = false;
     } catch (e) {
       this.loading = false;

@@ -62,12 +62,12 @@
               name: 'datasets-plankton-dashboard',
               query: {
                 buoyIds: 'bid21',
-                variables: 'WaterTempSurface',
-                start: '1959-01-01T04%3A00%3A00.000Z',
+                variables: 'WaterTempSurface,WaterTempBottom',
+                start: '2017-01-01T04%3A00%3A00.000Z',
                 end: '2018-12-31T04%3A00%3A00.000Z'
               }
             }"
-            >Surface Water Temperature, 1959-2018</nuxt-link
+            >Water Temperature, 2017-2018</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
@@ -86,7 +86,7 @@
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half">
+    <ChartContainer width="half" :height="2">
       <template #title>Download</template>
       <template #subtitle
         >If you prefer, we provide the raw data for you to download in various
@@ -103,7 +103,7 @@
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half" :height="2">
+    <ChartContainer width="half" :height="3">
       <template #title>Learn More</template>
       <template #subtitle
         ><p>

@@ -2,11 +2,13 @@
   <div>
     <BuoyLineChart
       :dataset="datasetData"
+      :dataset-line-width="datasetLineWidth"
       :variables="queryVariables"
       :start-dt-str="startDate.slice(0, 10)"
       :end-dt-str="endDate.slice(0, 10)"
       :compare-dataset="compareDatasetData"
       :compare-name="compareDatasetTitle"
+      :compare-line-width="compareLineWidth"
       :dataset-name="datasetTitle"
       :loading="loading"
     />
@@ -36,9 +38,9 @@
     <ChartContainer width="two-thirds" :height="4">
       <template #title>Available Data</template>
       <template #subtitle
-        >Use this heatmap to help you decide what data you want to visualize or
-        download. When you have an idea, go ahead and select the variables and
-        dates to explore.</template
+        >Use this heatmap to help you decide what data you want to visualize.
+        When you have an idea, go ahead and select the variables and dates to
+        explore.</template
       >
       <template #chart>
         <slot name="summary-heatmap"></slot>
@@ -118,12 +120,17 @@ export default {
     loading: {
       type: Boolean,
       require: true
+    },
+    compareLineWidth: {
+      type: Number,
+      required: false,
+      default: 0.8
+    },
+    datasetLineWidth: {
+      type: Number,
+      required: false,
+      default: 1.8
     }
-  },
-  data() {
-    return {
-      sideHidden: false
-    };
   },
   computed: {
     buoys() {
