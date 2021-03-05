@@ -1,7 +1,5 @@
 <template>
   <div>
-    <BuoyLocations :coordinates="filterCoordinates" />
-
     <BuoyLineChart
       :dataset="buoyData"
       :variables="queryVariables"
@@ -13,13 +11,7 @@
       :loading="loading"
     />
 
-    <BuoyQueryDownload
-      :variables="queryVariables"
-      :buoy-ids="buoyIds"
-      :start-dt-str="startDate"
-      :end-dt-str="endDate"
-      :dataset-id="datasetId"
-    />
+    <BuoyLocations :coordinates="filterCoordinates" />
 
     <ChartContainer width="half">
       <template #title>Keep Exploring</template>
@@ -40,6 +32,14 @@
         />
       </template>
     </ChartContainer>
+
+    <BuoyQueryDownload
+      :variables="queryVariables"
+      :buoy-ids="buoyIds"
+      :start-dt-str="startDate"
+      :end-dt-str="endDate"
+      :dataset-id="datasetId"
+    />
 
     <CompassLoading :manual-load="loading" />
   </div>

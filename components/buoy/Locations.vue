@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer width="one-third">
+  <ChartContainer width="one-third" :height="height">
     <template #title>Buoy Locations</template>
     <template #subtitle
       >Hover over the circles to find out the buoy locations.</template
@@ -33,6 +33,11 @@ export default {
     coordinates: {
       type: Array,
       required: true
+    },
+    height: {
+      type: Number,
+      required: false,
+      default: 2
     }
   },
   computed: {

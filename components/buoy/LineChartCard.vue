@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer width="two-thirds" :height="3">
+  <ChartContainer width="two-thirds" :height="5">
     <template #title>{{ variables.join(', ') }}</template>
     <template #subtitle
       >This plot shows {{ variables.join(', ') }} over the period between
@@ -100,7 +100,7 @@ export default {
     datasetLineWidth: {
       type: Number,
       required: false,
-      default: 2.2
+      default: 1.8
     },
     loading: {
       type: Boolean,

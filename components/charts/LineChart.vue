@@ -53,8 +53,8 @@ export default {
       dashes: [
         [1, 0],
         [1, 1],
-        [2, 1],
-        [3, 2]
+        [3, 1],
+        [5, 2]
       ]
     };
   },
@@ -182,7 +182,14 @@ export default {
           },
           {
             name: 'union',
-            source: ['buoy', 'compare']
+            source: ['buoy', 'compare'],
+            transform: [
+              {
+                type: 'formula',
+                expr: 'toDate(datum.time)',
+                as: 'time'
+              }
+            ]
           }
         ],
 

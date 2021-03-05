@@ -80,4 +80,13 @@ export default {
 .is-height-3 {
   grid-row-start: span 3;
 }
+.is-height-4 {
+  grid-row-start: span 4;
+}
+.is-height-5 {
+  grid-row-start: span 5;
+}
+.is-height-6 {
+  grid-row-start: span 6;
+}
 </style>

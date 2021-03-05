@@ -1,7 +1,5 @@
 <template>
   <div>
-    <BuoyLocations :coordinates="filterCoordinates" />
-
     <BuoyLineChart
       :dataset="planktonData"
       :variables="queryVariables"
@@ -13,15 +11,9 @@
       :loading="loading"
     />
 
-    <BuoyQueryDownload
-      :variables="queryVariables"
-      :buoy-ids="buoyIds"
-      :start-dt-str="startDate"
-      :end-dt-str="endDate"
-      :dataset-id="datasetId"
-    />
+    <BuoyLocations :coordinates="filterCoordinates" :height="4" />
 
-    <ChartContainer width="half">
+    <ChartContainer width="one-third" :height="4">
       <template #title>Keep Exploring</template>
       <template #subtitle>
         Try different variables, buoys, or changing the date range!
@@ -41,6 +33,26 @@
       </template>
     </ChartContainer>
 
+    <ChartContainer width="two-thirds" :height="4">
+      <template #title>Available Data</template>
+      <template #subtitle
+        >Use this heatmap to help you decide what data you want to visualize or
+        download. When you have an idea, go ahead and select the variables and
+        dates to explore.</template
+      >
+      <template #chart>
+        <VariableHeatmap :summary="summary" :variables="variables" />
+      </template>
+    </ChartContainer>
+
+    <BuoyQueryDownload
+      :variables="queryVariables"
+      :buoy-ids="buoyIds"
+      :start-dt-str="startDate"
+      :end-dt-str="endDate"
+      :dataset-id="datasetId"
+    />
+
     <CompassLoading :manual-load="loading" />
   </div>
 </template>
@@ -54,6 +66,7 @@ import CompassLoading from '@/components/loading.vue';
 import BuoyLocations from '@/components/buoy/Locations.vue';
 import BuoyLineChart from '@/components/buoy/LineChartCard.vue';
 import BuoyQueryDownload from '@/components/buoy/QueryDownload.vue';
+import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
 
 export default {
   components: {
@@ -62,7 +75,8 @@ export default {
     CompassLoading,
     BuoyLocations,
     BuoyLineChart,
-    BuoyQueryDownload
+    BuoyQueryDownload,
+    VariableHeatmap
   },
   async fetch() {
     try {
@@ -97,7 +111,8 @@ export default {
       'datasetId',
       'variables',
       'minDate',
-      'maxDate'
+      'maxDate',
+      'summary'
     ]),
     ...mapState('model', ['modelData']),
     buoys() {

@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer width="half" :height="1">
+  <ChartContainer width="one-third" :height="3">
     <template #title>Download Selected Data</template>
     <template #subtitle
       >Selected data includes {{ variables.join(', ') }} from

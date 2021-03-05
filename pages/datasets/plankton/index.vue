@@ -15,18 +15,13 @@
       >
       <template #chart>
         <div class="is-flex-column">
-          <Heatmap
-            v-if="!(summary.length === 0)"
-            id="heatmap"
-            :dataset="heatmapSummary"
-            :min-width="400"
-            x="date"
-            y="variable"
-            y-title="Variable"
-            variable="count"
-            :enable-darkmode="false"
+          <VariableHeatmap :summary="summary" :variables="variables" />
+          <fa
+            v-if="summary.length === 0"
+            icon="compass"
+            spin
+            class="compass-loading"
           />
-          <fa v-else icon="compass" spin class="compass-loading" />
         </div>
       </template>
     </ChartContainer>
@@ -108,7 +103,7 @@
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half" :height="1">
+    <ChartContainer width="half" :height="2">
       <template #title>Learn More</template>
       <template #subtitle
         ><p>
@@ -116,7 +111,7 @@
           <a href="https://web.uri.edu/plankton/"
             >Narragansett Bay Time Series</a
           >
-          and <a href="http://www.nabats.org/">NABATS.org</a>
+          and <a href="http://www.nabats.org/">NABATS.org</a>.
         </p>
         <p>
           <strong>To cite this data</strong>:
@@ -135,9 +130,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import * as aq from 'arquero';
 
-import Heatmap from '@/components/charts/Heatmap.vue';
+import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
@@ -145,7 +139,7 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 
 export default {
   components: {
-    Heatmap,
+    VariableHeatmap,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -168,12 +162,6 @@ export default {
     ]),
     buoys() {
       return this.coordinates.map((val) => val.fullName);
-    },
-    heatmapSummary() {
-      return aq
-        .from(this.summary)
-        .fold(this.variables, { as: ['variable', 'count'] })
-        .objects();
     }
   }
 };

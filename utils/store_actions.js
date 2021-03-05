@@ -79,12 +79,7 @@ export const buoyData = (axios, route) => (
     .$get(
       `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}`
     )
-    .then((response) => {
-      const data = response.map((datum) => {
-        const date = new Date(datum.time);
-        datum.time = date;
-        return datum;
-      });
+    .then((data) => {
       commit('mutate', { property: `${route}Data`, with: data });
     });
 };

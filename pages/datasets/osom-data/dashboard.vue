@@ -7,20 +7,12 @@
       dataset-name="OSOM"
       :dataset-line-width="0.8"
       :variables="queryVariables"
-      :compare-line-width="2.2"
+      :compare-line-width="1.8"
       :start-dt-str="startDate.slice(0, 10)"
       :end-dt-str="endDate.slice(0, 10)"
       :compare-dataset="buoyData"
       compare-name="Historical"
       :loading="loading"
-    />
-
-    <BuoyQueryDownload
-      :variables="queryVariables"
-      :buoy-ids="buoyIds"
-      :start-dt-str="startDate"
-      :end-dt-str="endDate"
-      :dataset-id="datasetId"
     />
 
     <ChartContainer width="half">
@@ -42,6 +34,14 @@
         />
       </template>
     </ChartContainer>
+
+    <BuoyQueryDownload
+      :variables="queryVariables"
+      :buoy-ids="buoyIds"
+      :start-dt-str="startDate"
+      :end-dt-str="endDate"
+      :dataset-id="datasetId"
+    />
 
     <CompassLoading :manual-load="loading" />
   </div>
