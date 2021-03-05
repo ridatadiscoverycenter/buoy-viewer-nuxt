@@ -109,7 +109,7 @@ export default {
   },
 
   googleAnalytics: {
-    id: 'G-JZL5CV1TVF'
+    id: 'UA-191457907-1'
   },
 
   /*
