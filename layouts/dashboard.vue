@@ -8,7 +8,9 @@
       <aside class="sidebar">
         <Sidebar @toggle="toggle" />
       </aside>
-      <nuxt />
+      <main>
+        <nuxt />
+      </main>
     </div>
   </div>
 </template>
@@ -27,7 +29,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 @import 'bulma';
 .logo-container {
   @extend .is-flex;
@@ -45,39 +47,32 @@ export default {
   overflow: hidden;
   background-color: whitesmoke;
 }
+main {
+  grid-area: main;
+}
 .dashboard-grid {
   background-image: linear-gradient(to top left, whitesmoke, white);
   display: grid;
   grid-template-columns: 2fr 10fr;
-  grid-template-areas:
-    'sidebar main-header'
-    'sidebar main-nav'
-    'sidebar main-section';
+  grid-template-areas: 'sidebar main';
   @include mobile {
     grid-template-columns: 100vw;
     grid-template-areas:
       'sidebar'
-      'main-header'
-      'main-nav'
-      'main-section';
+      'main';
   }
 }
 .dashboard-grid-collapsed {
   background-image: linear-gradient(to top left, whitesmoke, white);
   display: grid;
   grid-template-columns: 8ch auto;
-  grid-template-areas:
-    'sidebar main-header'
-    'sidebar main-nav'
-    'sidebar main-section';
+  grid-template-areas: 'sidebar main';
   @include mobile {
     grid-template-columns: 100vw;
     grid-template-rows: 3.5rem auto auto auto;
     grid-template-areas:
       'sidebar'
-      'main-header'
-      'main-nav'
-      'main-section';
+      'main';
   }
 }
 </style>

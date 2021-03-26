@@ -28,11 +28,11 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['./node_modules/bulma-slider/dist/css/bulma-slider.min'],
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: [{ src: '~/plugins/mapbox', mode: 'client' }],
   /*
    ** Nuxt.js dev-modules
    */
