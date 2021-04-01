@@ -43,6 +43,9 @@
   grid-auto-flow: row;
   @include mobile {
     grid-template-columns: 100vw;
+    column-gap: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 </style>

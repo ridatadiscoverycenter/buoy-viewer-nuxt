@@ -4,12 +4,12 @@
     <input
       id="slider"
       v-model="value"
-      class="slider is-info has-output"
+      class="slider mb-2"
       step="1"
       min="0"
       :max="dateLength - 1"
       type="range"
-      @change="changeDate"
+      @input="changeDate"
     />
   </div>
 </template>
@@ -24,19 +24,22 @@ import { axisBottom } from 'd3-axis';
 export default {
   data() {
     return {
-      value: 0
+      value: 0,
+      timeout: null
     };
   },
   computed: {
     ...mapState('da', ['dates']),
-    ...mapGetters('da', ['dateLength']),
+    ...mapGetters('da', ['dateLength', 'startDate', 'endDate']),
     updatedDate() {
-      return this.dates[this.value];
+      const selectedDate = new Date(
+        this.startDate.valueOf() + this.value * 1000 * 60 * 60 * 24
+      );
+      // return first date in the dataset that is at least this date
+      return this.dates.find((d) => d >= selectedDate);
     },
     domainArray() {
-      const startDate = this.dates[0];
-      const endDate = this.dates.slice(-1)[0];
-      return [startDate, endDate];
+      return [this.startDate, this.endDate];
     }
   },
   watch: {
@@ -46,24 +49,42 @@ export default {
   },
   mounted() {
     this.generateAxis();
+
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    });
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
   },
   methods: {
     generateAxis() {
       if (this.dates.length === 0) return;
+      try {
+        // remove the old axis if it exists
+        select('.x-axis svg').remove();
+      } catch {}
       const svg = select('.x-axis')
         .append('svg')
         .attr('width', 'calc(100% - 40px)')
-        .attr('transform', 'translate(20, -100)');
+        .attr('transform', 'translate(20, 20)');
       const scale = scaleTime()
         .domain(this.domainArray)
         .range([0, svg.node().getBoundingClientRect().width]);
       const xAxis = axisBottom()
         .scale(scale)
-        .ticks(10);
+        .ticks(Math.round(svg.node().getBoundingClientRect().width / 100));
       svg.append('g').call(xAxis);
     },
     changeDate() {
       this.$store.dispatch('da/setSelectedDate', this.updatedDate);
+    },
+    onResize() {
+      // debounce re-drawing axis
+      if (this.timeout) clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.generateAxis();
+      }, 300);
     }
   }
 };
@@ -73,16 +94,34 @@ export default {
 .slider-container
   display: flex
   flex-direction: column
-  position: relative
+  position: absolute
+  background: rgba(355, 355, 355, 0.7)
+  z-index: 2
+  width: 95%
+  margin: auto
+  height: 70px
+  bottom: 30px
+  left: 2.5%
 
 .x-axis
   z-index: 1000
   height: 0
+  font-weight: 600
+  stroke-width: 1.5px
 
 .slider
   margin-left: 20px !important
-  bottom: 1rem
+  bottom: 0px
   position: absolute
   z-index: 1000
   width: calc(100% - 40px) !important
+
+input[type="range"]::-webkit-slider-runnable-track
+  background: rgb(89, 81, 139) !important
+
+input[type="range"]::-moz-range-track
+  background: rgb(89, 81, 139) !important
+
+input[type="range"]::-ms-track
+  background: rgb(89, 81, 139) !important
 </style>

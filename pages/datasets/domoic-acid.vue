@@ -5,8 +5,7 @@
     </template>
     <template #main-header
       ><span class="title"
-        ><fa icon="chart-area" class="mr-2" />Domoic Acid - Exploration
-        App</span
+        ><fa icon="chart-area" class="mr-2" />Domoic Acid</span
       >
     </template>
     <template #main-section>

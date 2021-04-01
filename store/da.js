@@ -1,5 +1,5 @@
-import { scaleSqrt, scaleSequential } from 'd3-scale';
-import { interpolateYlOrRd } from 'd3-scale-chromatic';
+import { scaleSqrt, scaleDiverging } from 'd3-scale';
+import { interpolateTurbo } from 'd3-scale-chromatic';
 import { baseMutations } from '@/utils/store_actions';
 
 const route = 'da';
@@ -46,21 +46,37 @@ export const getters = {
     const match = state.coordinates.find((c) => c.station_name === site);
     return [match.longitude, match.latitude];
   },
+  activeCoordinates: (state) => {
+    const activeSites = state.samples.map((s) => s.station_name);
+    return state.coordinates.filter((c) =>
+      activeSites.includes(c.station_name)
+    );
+  },
   selectedSamples: (state, getters) => {
     const daySamples = state.samples.filter(
       (sample) => sample.date - state.selectedDate === 0
     );
+
     const domain = [0, getters.maxDA];
-    const range = [10, 50];
     const sqrtScale = scaleSqrt()
       .domain(domain)
-      .range(range);
+      .range([10, 50]);
 
-    const colorScale = scaleSequential()
-      .domain(domain)
-      .interpolator(interpolateYlOrRd)
+    const colorScale = scaleDiverging()
+      .domain([-100, -0.4, 1])
+      .interpolator(interpolateTurbo)
       .clamp(true);
 
+    const getColor = (val) => {
+      return val <= 0 ? 'rgb(67, 163, 65)' : colorScale(val);
+    };
+
+    return daySamples.map((row) => {
+      return { ...row, color: getColor(row.normDA), size: sqrtScale(row.pDA) };
+    });
+  },
+  selectedSamplesGeoJSON: (state, getters) => {
+    const daySamples = getters.selectedSamples;
     const rows = daySamples.map((row) => {
       return {
         type: 'Feature',
@@ -69,8 +85,8 @@ export const getters = {
           site: row.station_name,
           da: row.pDA,
           norm_da: row.normDA,
-          color: colorScale(row.pDA),
-          size: sqrtScale(row.pDA)
+          color: row.color,
+          size: row.size
         },
         geometry: {
           type: 'Point',
@@ -87,7 +103,13 @@ export const getters = {
       }
     };
   },
-  dateLength: (state) => {
-    return state.dates.length;
+  startDate: (state) => {
+    return state.dates[0];
+  },
+  endDate: (state) => {
+    return state.dates.slice(-1)[0];
+  },
+  dateLength: (state, getters) => {
+    return (getters.endDate - getters.startDate) / 1000 / 60 / 60 / 24;
   }
 };

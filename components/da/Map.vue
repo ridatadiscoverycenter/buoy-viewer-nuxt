@@ -1,6 +1,9 @@
 <template>
   <div class="mapboxgl-map-container">
-    <div class="date">
+    <div class="date is-hidden-touch">
+      <span>{{ formattedDate }}</span>
+    </div>
+    <div class="date-mobile is-hidden-desktop">
       <span>{{ formattedDate }}</span>
     </div>
     <MglMap
@@ -10,7 +13,7 @@
       :zoom="9"
       :scroll-zoom="false"
     >
-      <div v-for="(point, index) in coordinates" :key="index">
+      <div v-for="(point, index) in activeCoordinates" :key="index">
         <MglMarker :coordinates="[point.longitude, point.latitude]">
           <BuoyMarker slot="marker" />
           <MglPopup> {{ point.station_name }}</MglPopup>
@@ -20,7 +23,7 @@
         :layer="geoJsonlayer"
         :layer-id="geoJsonlayer.id"
         source-id="buoy"
-        :source="selectedSamples"
+        :source="selectedSamplesGeoJSON"
       />
     </MglMap>
   </div>
@@ -38,7 +41,7 @@ export default {
   },
   data() {
     return {
-      mapCenter: [-71.374022, 41.577553],
+      mapCenter: [-71.46, 41.5],
       accessToken: process.env.VUE_APP_MAPBOX_ACCESS_TOKEN, // access token. Needed if you using Mapbox maps
       geoJsonlayer: {
         id: 'data',
@@ -49,12 +52,12 @@ export default {
           'circle-opacity': 0.8
         }
       },
-      mapStyle: process.env.VUE_APP_MAP_STYLE_LIGHT
+      mapStyle: 'mapbox://styles/ccv-bot/ckmxra8oi0rsw17mzcbqrktzi'
     };
   },
   computed: {
-    ...mapState('da', ['selectedDate', 'coordinates']),
-    ...mapGetters('da', ['selectedSamples']),
+    ...mapState('da', ['selectedDate']),
+    ...mapGetters('da', ['selectedSamplesGeoJSON', 'activeCoordinates']),
     formattedDate() {
       return moment(this.selectedDate).format('DD MMMM YYYY');
     }
@@ -80,6 +83,16 @@ export default {
   font-size: 2.5rem
   font-weight: bold
   padding: 2rem
+  position: absolute
+  text-align: right
+  width: 100%
+  z-index: 10
+  box-sizing: border-box
+
+.date-mobile
+  font-size: 1.25rem
+  font-weight: bold
+  padding: 1rem
   position: absolute
   text-align: right
   width: 100%
