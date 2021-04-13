@@ -149,9 +149,14 @@ export default {
         {
           name: 'Domoic Acid',
           route: 'datasets-domoic-acid',
-          available: true,
+          available: true
         },
-      ],
+        {
+          name: 'Fish Trawl Survey',
+          route: 'datasets-fish',
+          available: true
+        }
+      ]
     };
   },
   computed: {

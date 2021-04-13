@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 # [Narragansett Bay Data Explorer](https://data-explorer.riddc.brown.edu)
 
 [![DOI](https://zenodo.org/badge/271652303.svg)](https://zenodo.org/badge/latestdoi/271652303)
 
 > Explore data from the [RI Data Discovery Center](https://ridatadiscovery.org) about the Narragansett Bay.
+=======
+# Narragansett Bay Data Explorer
+
+A web app to explore data about the Narragansett bay.  Built using Nuxt (vue).  Uses the buoy-api as a backend.
+>>>>>>> feat: stub out fish trawl
 
 ## Build Setup
 
@@ -18,7 +24,12 @@ Node version: 14
 $ yarn install
 
 # serve with hot reload at localhost:3000
-$ yarn dev
+$ yarn dev # connect to production api
+$ yarn dev:local # connect to locally running api
+
+# linting
+$ yarn lint # report linting errors
+$ yarn lint:fix # fix linting errors if possible
 
 # build for production and launch server
 $ yarn build
