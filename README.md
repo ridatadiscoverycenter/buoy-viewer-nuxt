@@ -1,6 +1,8 @@
-# buoy-viewer
+# [Narragansett Bay Data Explorer](https://data-explorer.riddc.brown.edu)
 
-> 
+[![DOI](https://zenodo.org/badge/271652303.svg)](https://zenodo.org/badge/latestdoi/271652303)
+
+> Explore data from the [RI Data Discovery Center](https://ridatadiscovery.org) about the Narragansett Bay.
 
 ## Build Setup
 
