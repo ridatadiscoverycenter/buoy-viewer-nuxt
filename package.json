@@ -10,7 +10,7 @@
     "lint:fix": "eslint --ext .js,.vue --ignore-path .gitignore --fix .",
     "commit": "git-cz",
     "dev": "nuxt",
-    "dev:local": "RIDDC_API_BASEURL=http://localhost:8080/erddap nuxt",
+    "dev:local": "RIDDC_API_BASEURL=http://localhost:8088/erddap nuxt",
     "generate": "nuxt generate",
     "start": "nuxt start",
     "test": "jest",
