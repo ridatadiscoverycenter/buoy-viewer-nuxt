@@ -3,9 +3,10 @@
     <ChartContainer width="two-thirds">
       <template #title>Available Data</template>
       <template #subtitle>
-        This dataset spans from 2003 to 2012. The heatmap below summarizes the
-        number of observations collected for each month for different variables.
-        Use this heatmap to help you decide what data you want to visualize or
+        This dataset spans from {{ minDate.getUTCFullYear() }} to
+        {{ maxDate.getUTCFullYear() }}. The heatmap below summarizes the number
+        of observations collected for each month for different variables. Use
+        this heatmap to help you decide what data you want to visualize or
         download. When you have an idea, go ahead and select the buoys,
         variables and dates to explore. Or download the data in the most
         appropriate format for your analyses! To begin, select a variable to see
