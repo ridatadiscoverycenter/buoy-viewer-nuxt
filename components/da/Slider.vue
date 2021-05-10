@@ -66,15 +66,17 @@ export default {
       } catch {}
       const svg = select('.x-axis')
         .append('svg')
-        .attr('width', 'calc(100% - 40px)')
-        .attr('transform', 'translate(20, 20)');
+        .attr('width', 'calc(100%)');
       const scale = scaleTime()
         .domain(this.domainArray)
-        .range([0, svg.node().getBoundingClientRect().width]);
+        .range([0, svg.node().getBoundingClientRect().width - 40]);
       const xAxis = axisBottom()
         .scale(scale)
         .ticks(Math.round(svg.node().getBoundingClientRect().width / 100));
-      svg.append('g').call(xAxis);
+      svg
+        .append('g')
+        .attr('transform', 'translate(20, 20)')
+        .call(xAxis);
     },
     changeDate() {
       this.$store.dispatch('da/setSelectedDate', this.updatedDate);
