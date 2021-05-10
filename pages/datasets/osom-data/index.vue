@@ -168,41 +168,6 @@ export default {
   @extend .is-flex;
   flex-direction: column;
 }
-.container-center {
-  display: grid;
-  grid-template-columns: 4fr 10fr 4fr;
-  grid-template-rows: auto;
-  grid-template-areas:
-    '. main-first .'
-    '. main-second .'
-    '. main-third .'
-    '. main-fourth .';
-}
-.control-item {
-  @extend .py-2;
-  @extend .px-2;
-  flex-grow: 1;
-  min-width: 250px;
-}
-.container-main-first {
-  @extend .my-6;
-  grid-area: main-first;
-}
-.container-main-second {
-  @extend .my-6;
-  grid-area: main-second;
-}
-.container-main-third {
-  @extend .my-6;
-  grid-area: main-third;
-}
-.container-main-fourth {
-  @extend .my-6;
-  grid-area: main-fourth;
-}
-.plot {
-  margin-top: 3rem;
-}
 
 .compass-loading {
   @extend .mt-6;

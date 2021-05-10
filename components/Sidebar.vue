@@ -151,6 +151,11 @@ export default {
           name: 'Plankton Time Series',
           route: 'datasets-plankton',
           available: true
+        },
+        {
+          name: 'Domoic Acid',
+          route: 'datasets-domoic-acid',
+          available: true
         }
       ]
     };

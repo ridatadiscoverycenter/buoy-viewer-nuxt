@@ -1,6 +1,6 @@
 <template>
-  <main>
-    <nav class="main-header">
+  <div>
+    <nav class="main-nav">
       <slot name="main-nav"></slot>
     </nav>
     <header class="main-header">
@@ -9,7 +9,7 @@
     <section class="main-section">
       <slot name="main-section"></slot>
     </section>
-  </main>
+  </div>
 </template>
 
 <style lang="scss">
@@ -43,6 +43,9 @@
   grid-auto-flow: row;
   @include mobile {
     grid-template-columns: 100vw;
+    column-gap: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 </style>

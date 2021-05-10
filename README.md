@@ -6,6 +6,20 @@
 
 ## Build Setup
 
+For the map in the domoic acid page to work, you'll need a .env file with the following keys:
+```
+VUE_APP_MAPBOX_ACCESS_TOKEN=
+```
+
+A .npmrc file is also needed with credentials for @brown-ccv and @fortawesome.
+
+```
+@fortawesome:registry=https://npm.fontawesome.com/
+//npm.fontawesome.com/:_authToken=<your token>
+@brown-ccv:registry=https://npm.pkg.github.com/
+//npm.pkg.github.com/:_authToken=<your token>
+```
+
 ```bash
 # install dependencies
 $ yarn install
