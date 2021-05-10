@@ -131,7 +131,7 @@
           <a
             href="https://pricaimcit.services.brown.edu/erddap/tabledap/da_4566_36f0_124a.html"
             >ERDDAP</a
-          >.
+          >. If using this data, please cite the ERDDAP dataset.
         </p>
       </template>
     </ChartContainer>
