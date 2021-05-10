@@ -6,26 +6,28 @@
     <div class="date-mobile is-hidden-desktop">
       <span>{{ formattedDate }}</span>
     </div>
-    <MglMap
-      :access-token="accessToken"
-      :map-style="mapStyle"
-      :center.sync="mapCenter"
-      :zoom="9"
-      :scroll-zoom="false"
-    >
-      <div v-for="(point, index) in activeCoordinates" :key="index">
-        <MglMarker :coordinates="[point.longitude, point.latitude]">
-          <BuoyMarker slot="marker" />
-          <MglPopup> {{ point.station_name }}</MglPopup>
-        </MglMarker>
-      </div>
-      <MglGeojsonLayer
-        :layer="geoJsonlayer"
-        :layer-id="geoJsonlayer.id"
-        source-id="buoy"
-        :source="selectedSamplesGeoJSON"
-      />
-    </MglMap>
+    <client-only>
+      <MglMap
+        :access-token="accessToken"
+        :map-style="mapStyle"
+        :center.sync="mapCenter"
+        :zoom="9"
+        :scroll-zoom="false"
+      >
+        <div v-for="(point, index) in activeCoordinates" :key="index">
+          <MglMarker :coordinates="[point.longitude, point.latitude]">
+            <BuoyMarker slot="marker" />
+            <MglPopup> {{ point.station_name }}</MglPopup>
+          </MglMarker>
+        </div>
+        <MglGeojsonLayer
+          :layer="geoJsonlayer"
+          :layer-id="geoJsonlayer.id"
+          source-id="buoy"
+          :source="selectedSamplesGeoJSON"
+        />
+      </MglMap>
+    </client-only>
   </div>
 </template>
 

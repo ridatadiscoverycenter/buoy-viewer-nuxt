@@ -44,7 +44,11 @@ export const getters = {
   },
   siteCoordinates: (state) => (site) => {
     const match = state.coordinates.find((c) => c.station_name === site);
-    return [match.longitude, match.latitude];
+    if (match) {
+      return [match.longitude, match.latitude];
+    } else {
+      return [0, 0];
+    }
   },
   activeCoordinates: (state) => {
     const activeSites = state.samples.map((s) => s.station_name);
