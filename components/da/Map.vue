@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       mapCenter: [-71.46, 41.5],
-      accessToken: process.env.VUE_APP_MAPBOX_ACCESS_TOKEN, // access token. Needed if you using Mapbox maps
+      accessToken: process.env.VUE_APP_MAPBOX_ACCESS_TOKEN, // access token. Needed if using Mapbox maps
       geoJsonlayer: {
         id: 'data',
         type: 'circle',

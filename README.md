@@ -6,6 +6,11 @@
 
 ## Build Setup
 
+For the map in the domoic acid page to work, you'll need a .env file with the following keys:
+```
+VUE_APP_MAPBOX_ACCESS_TOKEN=
+```
+
 ```bash
 # install dependencies
 $ yarn install

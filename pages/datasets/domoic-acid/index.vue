@@ -123,15 +123,15 @@
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half" height="1">
+    <ChartContainer width="half" :height="1">
       <template #title>Learn More</template>
       <template #chart>
         <p>
           The full dataset used to power this app is available on
           <a
-            href="https://pricaimcit.services.brown.edu/erddap/griddap/da_4566_36f0_124a.html"
+            href="https://pricaimcit.services.brown.edu/erddap/tabledap/da_4566_36f0_124a.html"
             >ERDDAP</a
-          >. See our paper on the topic on <a>link to journal article</a>.
+          >.
         </p>
       </template>
     </ChartContainer>
