@@ -1,5 +1,5 @@
 export default {
-  ssr: true,
+  target: 'server',
   components: true,
   router: {
     base: '/'
