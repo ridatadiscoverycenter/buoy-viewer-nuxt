@@ -4,7 +4,6 @@ FROM node:14.15.5-buster-slim as builder
 WORKDIR /app
 
 COPY package.json ./
-COPY .npmrc ./
 RUN yarn --frozen-lockfile --non-interactive
 COPY . ./
 

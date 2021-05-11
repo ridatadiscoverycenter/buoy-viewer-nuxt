@@ -1,5 +1,6 @@
 export default {
   target: 'server',
+  ssr: false,
   components: true,
   router: {
     base: '/',
@@ -28,7 +29,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['./node_modules/bulma-slider/dist/css/bulma-slider.min'],
+  css: ['./node_modules/bulma-slider/dist/css/bulma-slider.min', 'bulma'],
   /*
    ** Plugins to load before mounting the App
    */
@@ -69,7 +70,6 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
-    '@nuxtjs/bulma',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module

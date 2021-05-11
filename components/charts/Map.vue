@@ -1,5 +1,5 @@
 <script>
-import { vegaBaseMixin } from '@brown-ccv/disco-vue-components';
+import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 
 import topojson from '@/static/ri.json';
 
