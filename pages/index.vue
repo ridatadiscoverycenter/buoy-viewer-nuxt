@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import * as aq from 'arquero';
 import { mapState } from 'vuex';
 
 import Map from '@/components/charts/Map.vue';
@@ -56,16 +55,7 @@ export default {
     ...mapState('buoy', ['coordinates']),
     ...mapState(['colorMap']),
     colorDomain() {
-      if (this.coordinates.length > 0) {
-        const stations = aq
-          .from(this.coordinates)
-          .groupby('station_name')
-          .count()
-          .objects();
-        return stations.map((v) => v.station_name);
-      } else {
-        return [];
-      }
+      return this.coordinates.map((v) => v.station_name);
     },
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);
