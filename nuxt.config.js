@@ -2,7 +2,7 @@ export default {
   target: 'server',
   components: true,
   router: {
-    base: '/'
+    base: '/',
   },
   /*
    ** Headers of the page
@@ -16,10 +16,10 @@ export default {
         hid: 'description',
         name: 'description',
         content:
-          'Explore historical and real-time data about water quality, temperature, and more from the Narragansett Bay.'
-      }
+          'Explore historical and real-time data about water quality, temperature, and more from the Narragansett Bay.',
+      },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }],
   },
   /*
    ** Customize the progress-bar color
@@ -49,37 +49,21 @@ export default {
         component: 'fa',
         icons: {
           solid: [
-            'faAngleLeft',
-            'faMapMarkerAlt',
-            'faCalendarAlt',
-            'faSpinner',
-            'faPlayCircle',
-            'faCompass',
-            'faChartArea',
-            'faDownload',
             'faArrowLeft',
-            'faHome',
             'faBars',
-            'faInfoCircle'
-          ]
-        },
-        proIcons: {
-          regular: [
+            'faChartArea',
+            'faCompass',
+            'faDatabase',
             'faHome',
             'faInfoCircle',
-            'faDatabase',
-            'faToolbox',
+            'faLifeRing',
             'faPoll',
-            'faArrowLeft',
-            'faArrowRight',
-            'faCircle',
             'faTimes',
-            'faBars'
+            'faWater',
           ],
-          duotone: ['faLifeRing']
-        }
-      }
-    ]
+        },
+      },
+    ],
   ],
   /*
    ** Nuxt.js modules
@@ -91,7 +75,7 @@ export default {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
     // SVG Loader
-    'nuxt-svg-loader'
+    'nuxt-svg-loader',
   ],
   /*
    ** Axios module configuration
@@ -103,13 +87,13 @@ export default {
     headers: {
       common: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }
+        'Content-Type': 'application/json',
+      },
+    },
   },
 
   googleAnalytics: {
-    id: 'UA-191457907-1'
+    id: 'UA-191457907-1',
   },
 
   /*
@@ -119,13 +103,13 @@ export default {
     postcss: {
       preset: {
         features: {
-          customProperties: false
-        }
-      }
+          customProperties: false,
+        },
+      },
     },
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
-  }
+    extend(config, ctx) {},
+  },
 };

@@ -43,37 +43,37 @@ export default {
   components: {
     ChartContainer,
     BaseForm,
-    Multiselect
+    Multiselect,
   },
   props: {
     variables: {
       type: Array,
-      required: true
+      required: true,
     },
     buoyIds: {
       type: Array,
-      required: true
+      required: true,
     },
     startDtStr: {
       type: String,
-      required: true
+      required: true,
     },
     endDtStr: {
       type: String,
-      required: true
+      required: true,
     },
     datasetId: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      fileFormat: 'json'
+      fileFormat: 'json',
     };
   },
   computed: {
-    ...mapState('variables', ['baseUrl', 'fileFormats'])
+    ...mapState('variables', ['baseUrl', 'fileFormats']),
   },
   methods: {
     downloadUrl() {
@@ -84,7 +84,7 @@ export default {
       )},station_name,time,latitude,longitude&time>=${this.startDtStr}&time<=${
         this.endDtStr
       }&station_name=~"(${this.buoyIds.join('|')})"`;
-    }
-  }
+    },
+  },
 };
 </script>

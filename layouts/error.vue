@@ -2,14 +2,11 @@
   <main class="error-container">
     <div class="error-content">
       <fa
-        :icon="['fad', 'life-ring']"
+        :icon="['fas', 'life-ring']"
         size="5x"
         class="mr-2 life-ring has-text-danger"
       />
       <p>{{ error.message }}</p>
-      <p v-if="error.statusCode >= 500">
-        Make sure you selected a data range for which we have data.
-      </p>
     </div>
     <a @click="goBack">
       <fa :icon="['fas', 'arrow-left']" class="mr-2" />
@@ -29,8 +26,8 @@ export default {
   methods: {
     goBack() {
       this.$router.back();
-    }
-  }
+    },
+  },
 };
 </script>
 

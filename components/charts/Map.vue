@@ -8,24 +8,24 @@ export default {
   props: {
     legend: {
       type: Boolean,
-      default: true
+      default: true,
     },
     height: {
       type: Number,
-      default: 720
+      default: 720,
     },
     background: {
       type: String,
-      default: 'transparent'
+      default: 'transparent',
     },
     colorDomain: {
       type: Array,
-      required: true
+      required: true,
     },
     colorRange: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -38,10 +38,10 @@ export default {
             type: 'symbol',
             symbolType: 'circle',
             fill: 'color',
-            columns: 2
-          }
-        ]
-      }
+            columns: 2,
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -54,7 +54,7 @@ export default {
           {
             name: 'outlines',
             values: this.topo,
-            format: { type: 'topojson', mesh: 'ri' }
+            format: { type: 'topojson', mesh: 'ri' },
           },
           {
             name: 'points',
@@ -64,26 +64,26 @@ export default {
               {
                 type: 'geopoint',
                 projection: 'projection',
-                fields: ['longitude', 'latitude']
-              }
-            ]
-          }
+                fields: ['longitude', 'latitude'],
+              },
+            ],
+          },
         ],
         projections: [
           {
             name: 'projection',
             type: 'mercator',
             size: { signal: '[width, height]' },
-            fit: { signal: 'data("outlines")' }
-          }
+            fit: { signal: 'data("outlines")' },
+          },
         ],
         scales: [
           {
             name: 'color',
             type: 'ordinal',
             range: this.colorRange,
-            domain: this.colorDomain
-          }
+            domain: this.colorDomain,
+          },
         ],
         marks: [
           {
@@ -93,10 +93,10 @@ export default {
               enter: {
                 strokeWidth: { value: 1 },
                 stroke: { value: '#d3d3d3' },
-                fill: { value: 'whitesmoke' }
-              }
+                fill: { value: 'whitesmoke' },
+              },
             },
-            transform: [{ type: 'geoshape', projection: 'projection' }]
+            transform: [{ type: 'geoshape', projection: 'projection' }],
           },
           {
             type: 'symbol',
@@ -108,23 +108,23 @@ export default {
                 fill: { scale: 'color', field: 'station_name' },
                 tooltip: {
                   signal:
-                    '{"Buoy ID": datum.buoyId, "Station Name": datum.station_name, "Latitude": datum.latitude, "Longitude": datum.longitude}'
-                }
+                    '{"Buoy ID": datum.buoyId, "Station Name": datum.station_name, "Latitude": datum.latitude, "Longitude": datum.longitude}',
+                },
               },
               update: {
                 x: { field: 'x' },
-                y: { field: 'y' }
-              }
-            }
-          }
-        ]
+                y: { field: 'y' },
+              },
+            },
+          },
+        ],
       };
     },
     baseSpec() {
       return this.legend
         ? { ...this.basicSpec, ...this.legendSpec }
         : this.basicSpec;
-    }
-  }
+    },
+  },
 };
 </script>

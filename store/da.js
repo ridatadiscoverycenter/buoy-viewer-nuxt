@@ -8,7 +8,7 @@ export const state = () => ({
   coordinates: [],
   samples: [],
   dates: [],
-  selectedDate: new Date()
+  selectedDate: new Date(),
 });
 
 export const mutations = { ...baseMutations };
@@ -33,9 +33,9 @@ export const actions = {
   setSelectedDate({ commit }, payload) {
     commit('mutate', {
       property: 'selectedDate',
-      with: payload
+      with: payload,
     });
-  }
+  },
 };
 
 export const getters = {
@@ -62,9 +62,7 @@ export const getters = {
     );
 
     const domain = [0, getters.maxDA];
-    const sqrtScale = scaleSqrt()
-      .domain(domain)
-      .range([10, 50]);
+    const sqrtScale = scaleSqrt().domain(domain).range([10, 50]);
 
     const colorScale = scaleDiverging()
       .domain([-100, -0.4, 1])
@@ -90,12 +88,12 @@ export const getters = {
           da: row.pDA,
           norm_da: row.normDA,
           color: row.color,
-          size: row.size
+          size: row.size,
         },
         geometry: {
           type: 'Point',
-          coordinates: getters.siteCoordinates(row.station_name)
-        }
+          coordinates: getters.siteCoordinates(row.station_name),
+        },
       };
     });
     return {
@@ -103,8 +101,8 @@ export const getters = {
       data: {
         id: 'buoy',
         type: 'FeatureCollection',
-        features: rows
-      }
+        features: rows,
+      },
     };
   },
   startDate: (state) => {
@@ -115,5 +113,5 @@ export const getters = {
   },
   dateLength: (state, getters) => {
     return (getters.endDate - getters.startDate) / 1000 / 60 / 60 / 24;
-  }
+  },
 };

@@ -46,8 +46,8 @@
           query: {
             buoyIds: selectedBuoysString,
             variables: selectedVariablesString,
-            ...selectedDates
-          }
+            ...selectedDates,
+          },
         }"
         >Visualize</nuxt-link
       >
@@ -65,7 +65,7 @@ export default {
   components: {
     Multiselect,
     DatePicker,
-    BaseForm
+    BaseForm,
   },
   props: {
     initVariables: {
@@ -73,52 +73,52 @@ export default {
       required: false,
       default() {
         return [];
-      }
+      },
     },
     initBuoys: {
       type: Array,
       required: false,
       default() {
         return [];
-      }
+      },
     },
     initDateRange: {
       type: Array,
       required: false,
       default() {
         return [];
-      }
+      },
     },
     variables: {
       type: Array,
-      required: true
+      required: true,
     },
     buoys: {
       type: Array,
-      required: true
+      required: true,
     },
     minDate: {
       type: Date,
       required: false,
       default() {
         return new Date(0);
-      }
+      },
     },
     maxDate: {
       type: Date,
       required: false,
       default() {
         return new Date();
-      }
+      },
     },
     dataset: {
       type: String,
-      required: true
+      required: true,
     },
     coordinates: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -131,7 +131,7 @@ export default {
           .split('-')
           .map((val) => parseInt(val));
         return new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-      })
+      }),
     };
   },
   computed: {
@@ -162,7 +162,7 @@ export default {
     },
     datasetName() {
       return `datasets-${this.dataset}-dashboard`;
-    }
+    },
   },
   methods: {
     disabledDate(date) {
@@ -170,7 +170,7 @@ export default {
         `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
       );
       return utcDate < this.minDate || utcDate > this.maxDate;
-    }
-  }
+    },
+  },
 };
 </script>

@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       value: 0,
-      timeout: null
+      timeout: null,
     };
   },
   computed: {
@@ -40,12 +40,12 @@ export default {
     },
     domainArray() {
       return [this.startDate, this.endDate];
-    }
+    },
   },
   watch: {
     dates() {
       this.generateAxis();
-    }
+    },
   },
   mounted() {
     this.generateAxis();
@@ -64,19 +64,14 @@ export default {
         // remove the old axis if it exists
         select('.x-axis svg').remove();
       } catch {}
-      const svg = select('.x-axis')
-        .append('svg')
-        .attr('width', 'calc(100%)');
+      const svg = select('.x-axis').append('svg').attr('width', 'calc(100%)');
       const scale = scaleTime()
         .domain(this.domainArray)
         .range([0, svg.node().getBoundingClientRect().width - 40]);
       const xAxis = axisBottom()
         .scale(scale)
         .ticks(Math.round(svg.node().getBoundingClientRect().width / 100));
-      svg
-        .append('g')
-        .attr('transform', 'translate(20, 20)')
-        .call(xAxis);
+      svg.append('g').attr('transform', 'translate(20, 20)').call(xAxis);
     },
     changeDate() {
       this.$store.dispatch('da/setSelectedDate', this.updatedDate);
@@ -87,8 +82,8 @@ export default {
       this.timeout = setTimeout(() => {
         this.generateAxis();
       }, 300);
-    }
-  }
+    },
+  },
 };
 </script>
 

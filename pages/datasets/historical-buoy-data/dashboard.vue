@@ -51,7 +51,13 @@ export default {
   components: {
     LineChartDashboard,
     Heatmap,
-    Multiselect
+    Multiselect,
+  },
+  data() {
+    return {
+      variable: 'WaterTempSurface',
+      loading: false,
+    };
   },
   async fetch() {
     try {
@@ -60,7 +66,7 @@ export default {
         variables: this.$route.query.variables,
         start: this.$route.query.start,
         end: this.$route.query.end,
-        ids: this.$route.query.buoyIds
+        ids: this.$route.query.buoyIds,
       };
       await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
@@ -69,15 +75,9 @@ export default {
       this.loading = false;
       this.$nuxt.context.error({
         statusCode: 503,
-        message: 'Unable to fetch data at this time. Try again later.'
+        message: 'Unable to fetch data at this time. Try again later.',
       });
     }
-  },
-  data() {
-    return {
-      variable: 'WaterTempSurface',
-      loading: false
-    };
   },
   computed: {
     ...mapState('buoy', [
@@ -87,14 +87,14 @@ export default {
       'variables',
       'minDate',
       'maxDate',
-      'summary'
+      'summary',
     ]),
-    ...mapState('model', ['modelData'])
+    ...mapState('model', ['modelData']),
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line
       this.$fetch();
-    }
-  }
+    },
+  },
 };
 </script>

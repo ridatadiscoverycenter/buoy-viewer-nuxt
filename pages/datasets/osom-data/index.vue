@@ -65,8 +65,8 @@
                 buoyIds: 'bid2,bid3',
                 variables: 'WaterTempSurface,WaterTempBottom',
                 start: '2006-01-01T04%3A00%3A00.000Z',
-                end: '2007-01-01T04%3A00%3A00.000Z'
-              }
+                end: '2007-01-01T04%3A00%3A00.000Z',
+              },
             }"
             >N. Prudence and Conimicut Pt, Water Temperature, 2006</nuxt-link
           >
@@ -78,8 +78,8 @@
                 buoyIds: 'bid15,bid17',
                 variables: 'SalinitySurface',
                 start: '2018-01-01T04%3A00%3A00.000Z',
-                end: '2019-01-01T04%3A00%3A00.000Z'
-              }
+                end: '2019-01-01T04%3A00%3A00.000Z',
+              },
             }"
             >Greenwich Bay and GSO Dock, Surface Salinity, 2018</nuxt-link
           >
@@ -138,12 +138,12 @@ export default {
     ChartContainer,
     ExploreForm,
     DownloadForm,
-    BuoyLocations
+    BuoyLocations,
   },
   data() {
     return {
       variable: 'WaterTempSurface',
-      dateRange: null
+      dateRange: null,
     };
   },
   computed: {
@@ -153,12 +153,12 @@ export default {
       'summary',
       'datasetId',
       'minDate',
-      'maxDate'
+      'maxDate',
     ]),
     buoys() {
       return this.coordinates.map((val) => val.fullName);
-    }
-  }
+    },
+  },
 };
 </script>
 

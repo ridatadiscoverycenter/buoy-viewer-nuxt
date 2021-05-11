@@ -39,7 +39,7 @@ import BuoyMarker from '@/assets/illustrations/buoy-marker.svg';
 
 export default {
   components: {
-    BuoyMarker
+    BuoyMarker,
   },
   data() {
     return {
@@ -51,10 +51,10 @@ export default {
         paint: {
           'circle-radius': ['get', 'size'],
           'circle-color': ['get', 'color'],
-          'circle-opacity': 0.8
-        }
+          'circle-opacity': 0.8,
+        },
       },
-      mapStyle: 'mapbox://styles/ccv-bot/ckmxra8oi0rsw17mzcbqrktzi'
+      mapStyle: 'mapbox://styles/ccv-bot/ckmxra8oi0rsw17mzcbqrktzi',
     };
   },
   computed: {
@@ -62,8 +62,8 @@ export default {
     ...mapGetters('da', ['selectedSamplesGeoJSON', 'activeCoordinates']),
     formattedDate() {
       return moment(this.selectedDate).format('DD MMMM YYYY');
-    }
-  }
+    },
+  },
 };
 </script>
 

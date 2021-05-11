@@ -21,27 +21,27 @@ import Heatmap from '@/components/charts/Heatmap.vue';
 
 export default {
   components: {
-    Heatmap
+    Heatmap,
   },
   props: {
     summary: {
       type: Array,
-      required: true
+      required: true,
     },
     variables: {
       type: Array,
-      required: true
+      required: true,
     },
     xTitle: {
       type: String,
       required: false,
-      default: 'Month/Year'
+      default: 'Month/Year',
     },
     xUnit: {
       type: String,
       required: false,
-      default: 'month'
-    }
+      default: 'month',
+    },
   },
   computed: {
     heatmapSummary() {
@@ -49,7 +49,7 @@ export default {
         .from(this.summary)
         .fold(this.variables, { as: ['variable', 'count'] })
         .objects();
-    }
-  }
+    },
+  },
 };
 </script>

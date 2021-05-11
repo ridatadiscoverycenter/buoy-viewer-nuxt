@@ -9,9 +9,10 @@
 </template>
 <script>
 import BaseLogo from '@/components/base/BaseLogo';
+
 export default {
   components: {
-    BaseLogo
-  }
+    BaseLogo,
+  },
 };
 </script>

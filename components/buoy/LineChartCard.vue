@@ -57,59 +57,59 @@ import ChartContainer from '@/components/base/ChartContainer.vue';
 export default {
   components: {
     LineChart,
-    ChartContainer
+    ChartContainer,
   },
   props: {
     variables: {
       type: Array,
-      required: true
+      required: true,
     },
     startDtStr: {
       type: String,
-      required: true
+      required: true,
     },
     endDtStr: {
       type: String,
-      required: true
+      required: true,
     },
     dataset: {
       type: Array,
-      required: true
+      required: true,
     },
     datasetName: {
       type: String,
-      required: true
+      required: true,
     },
     compareDataset: {
       type: Array,
       required: false,
       default() {
         return [];
-      }
+      },
     },
     compareName: {
       type: String,
       required: false,
-      default: 'Other'
+      default: 'Other',
     },
     compareLineWidth: {
       type: Number,
-      required: true
+      required: true,
     },
     datasetLineWidth: {
       type: Number,
-      required: true
+      required: true,
     },
     loading: {
       type: Boolean,
       rquired: false,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       compare: false,
-      compareText: 'Add To Plot'
+      compareText: 'Add To Plot',
     };
   },
   computed: {
@@ -128,7 +128,7 @@ export default {
     },
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);
-    }
+    },
   },
   methods: {
     toggleCompare() {
@@ -138,7 +138,7 @@ export default {
       } else {
         this.compareText = 'Add To Plot';
       }
-    }
-  }
+    },
+  },
 };
 </script>

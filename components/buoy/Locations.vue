@@ -27,18 +27,18 @@ import Map from '@/components/charts/Map.vue';
 export default {
   components: {
     ChartContainer,
-    Map
+    Map,
   },
   props: {
     coordinates: {
       type: Array,
-      required: true
+      required: true,
     },
     height: {
       type: Number,
       required: false,
-      default: 2
-    }
+      default: 2,
+    },
   },
   computed: {
     ...mapState(['colorMap']),
@@ -56,7 +56,7 @@ export default {
     },
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);
-    }
-  }
+    },
+  },
 };
 </script>

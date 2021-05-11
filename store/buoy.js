@@ -4,7 +4,7 @@ const route = 'buoy';
 const datasetId = 'combined_e784_bee5_492e';
 
 export const state = () => ({
-  ...initState(route, datasetId)
+  ...initState(route, datasetId),
 });
 
 export const mutations = { ...baseMutations };

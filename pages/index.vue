@@ -11,7 +11,7 @@
           <nuxt-link
             class="button is-large cfa-button is-link"
             :to="{
-              name: 'datasets-historical-buoy-data'
+              name: 'datasets-historical-buoy-data',
             }"
           >
             <span class="action-button">Start Exploring</span>
@@ -37,7 +37,7 @@
         class="waves"
         src="@/assets/illustrations/waves-small.png"
         alt="Waves Art"
-        style="width:100%"
+        style="width: 100%"
       />
     </figure>
   </div>
@@ -50,7 +50,7 @@ import { mapState } from 'vuex';
 import Map from '@/components/charts/Map.vue';
 export default {
   components: {
-    Map
+    Map,
   },
   computed: {
     ...mapState('buoy', ['coordinates']),
@@ -69,13 +69,13 @@ export default {
     },
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);
-    }
+    },
   },
   created() {
     if (this.coordinates.length === 0) {
       this.$store.dispatch('buoy/fetchBuoyCoordinates');
     }
-  }
+  },
 };
 </script>
 

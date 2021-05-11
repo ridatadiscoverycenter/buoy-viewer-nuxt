@@ -6,7 +6,7 @@
 import Logo from '@/assets/illustrations/ricaim-logo.svg';
 
 export default {
-  components: { Logo }
+  components: { Logo },
 };
 </script>
 

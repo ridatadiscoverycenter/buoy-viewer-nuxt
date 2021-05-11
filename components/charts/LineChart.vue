@@ -6,47 +6,47 @@ export default {
   props: {
     variables: {
       type: Array,
-      required: true
+      required: true,
     },
     x: {
       type: String,
-      required: true
+      required: true,
     },
     y: {
       type: String,
-      required: true
+      required: true,
     },
     compareDataset: {
       type: Array,
       required: false,
       default() {
         return [];
-      }
+      },
     },
     compareLineWidth: {
       type: Number,
-      required: true
+      required: true,
     },
     compareName: {
       type: String,
-      required: true
+      required: true,
     },
     datasetName: {
       type: String,
-      required: true
+      required: true,
     },
     datasetLineWidth: {
       type: Number,
-      required: true
+      required: true,
     },
     colorDomain: {
       type: Array,
-      required: true
+      required: true,
     },
     colorRange: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -54,8 +54,8 @@ export default {
         [1, 0],
         [1, 1],
         [3, 1],
-        [5, 2]
-      ]
+        [5, 2],
+      ],
     };
   },
   computed: {
@@ -80,15 +80,15 @@ export default {
                 opacity: [
                   {
                     test: '!selected || selected === datum.value',
-                    value: 1
+                    value: 1,
                   },
-                  { value: 0.15 }
+                  { value: 0.15 },
                 ],
-                size: { value: 64 }
+                size: { value: 64 },
               },
               hover: {
-                cursor: { value: 'pointer' }
-              }
+                cursor: { value: 'pointer' },
+              },
             },
             labels: {
               name: 'legendLabel',
@@ -97,26 +97,26 @@ export default {
                 opacity: [
                   {
                     test: '!selected || selected === datum.value',
-                    value: 1
+                    value: 1,
                   },
-                  { value: 0.25 }
+                  { value: 0.25 },
                 ],
-                fontWeight: { value: 'normal' }
+                fontWeight: { value: 'normal' },
               },
               hover: {
                 fontWeight: { value: 'bold' },
-                cursor: { value: 'pointer' }
-              }
-            }
-          }
-        }
+                cursor: { value: 'pointer' },
+              },
+            },
+          },
+        },
       ];
       if (this.compareDataset.length > 0) {
         leg.push({
           title: 'Datasets',
           strokeWidth: 'lineWidth',
           orient: 'bottom-right',
-          symbolType: 'stroke'
+          symbolType: 'stroke',
         });
       }
       if (this.variables.length > 1) {
@@ -124,7 +124,7 @@ export default {
           title: 'Variables',
           strokeDash: 'lineDash',
           orient: 'bottom-right',
-          symbolType: 'stroke'
+          symbolType: 'stroke',
         });
       }
 
@@ -146,23 +146,23 @@ export default {
               {
                 events: '@legendSymbol:click, @legendLabel:click',
                 update: 'selected === datum.value ? null : datum.value',
-                force: true
+                force: true,
               },
               {
                 events: 'mouseup[!event.item]',
                 update: 'null',
-                force: true
-              }
-            ]
+                force: true,
+              },
+            ],
           },
           {
             name: 'hovered',
             value: null,
             on: [
               { events: '@voronoi:mouseover', update: 'datum' },
-              { events: 'mouseout', update: 'null' }
-            ]
-          }
+              { events: 'mouseout', update: 'null' },
+            ],
+          },
         ],
 
         data: [
@@ -170,15 +170,15 @@ export default {
             name: 'buoy',
             values: this.dataset,
             transform: [
-              { type: 'formula', as: 'dataset', expr: `'${this.datasetName}'` }
-            ]
+              { type: 'formula', as: 'dataset', expr: `'${this.datasetName}'` },
+            ],
           },
           {
             name: 'compare',
             values: this.compareDataset,
             transform: [
-              { type: 'formula', as: 'dataset', expr: `'${this.compareName}'` }
-            ]
+              { type: 'formula', as: 'dataset', expr: `'${this.compareName}'` },
+            ],
           },
           {
             name: 'union',
@@ -187,10 +187,10 @@ export default {
               {
                 type: 'formula',
                 expr: 'toDate(datum.time)',
-                as: 'time'
-              }
-            ]
-          }
+                as: 'time',
+              },
+            ],
+          },
         ],
 
         scales: [
@@ -198,45 +198,45 @@ export default {
             name: 'xscale',
             type: 'time',
             domain: {
-              fields: [{ data: 'union', field: this.x }]
+              fields: [{ data: 'union', field: this.x }],
             },
             range: 'width',
             padding: 0.05,
-            round: true
+            round: true,
           },
           {
             name: 'yscale',
             type: 'linear',
             domain: {
-              fields: [{ data: 'union', field: 'value' }]
+              fields: [{ data: 'union', field: 'value' }],
             },
             nice: true,
             zero: false,
-            range: 'height'
+            range: 'height',
           },
           {
             name: 'color',
             type: 'ordinal',
             range: this.colorRange,
-            domain: this.colorDomain
+            domain: this.colorDomain,
           },
           {
             name: 'lineWidth',
             type: 'ordinal',
             range: [this.datasetLineWidth, this.compareLineWidth],
-            domain: [this.datasetName, this.compareName]
+            domain: [this.datasetName, this.compareName],
           },
           {
             name: 'lineDash',
             type: 'ordinal',
             range: this.lineDashes,
-            domain: this.variables
-          }
+            domain: this.variables,
+          },
         ],
 
         axes: [
           { orient: 'bottom', scale: 'xscale', labelAngle: 15, title: 'Time' },
-          { orient: 'left', scale: 'yscale', title: this.yTitle }
+          { orient: 'left', scale: 'yscale', title: this.yTitle },
         ],
 
         legends: this.legends,
@@ -247,17 +247,17 @@ export default {
             zindex: 1,
             encode: {
               enter: {
-                size: { value: 20 }
+                size: { value: 20 },
               },
               update: {
                 fill: [
                   { test: '!hovered', value: 'transparent' },
-                  { value: 'black' }
+                  { value: 'black' },
                 ],
                 x: { signal: 'hovered && hovered.x' },
-                y: { signal: 'hovered && hovered.y' }
-              }
-            }
+                y: { signal: 'hovered && hovered.y' },
+              },
+            },
           },
 
           {
@@ -268,9 +268,9 @@ export default {
               enter: {
                 fill: { value: 'transparent' },
                 x: { scale: 'xscale', field: this.x },
-                y: { scale: 'yscale', field: 'value' }
-              }
-            }
+                y: { scale: 'yscale', field: 'value' },
+              },
+            },
           },
 
           {
@@ -282,18 +282,18 @@ export default {
                 stroke: { value: 'transparent' },
                 fill: { value: 'transparent' },
                 tooltip: {
-                  signal: `{ 'Variable': datum.datum.variable, 'Value': datum.datum.value, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y}, 'Dataset': datum.datum.dataset }`
-                }
-              }
+                  signal: `{ 'Variable': datum.datum.variable, 'Value': datum.datum.value, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y}, 'Dataset': datum.datum.dataset }`,
+                },
+              },
             },
             transform: [
               {
                 type: 'voronoi',
                 x: 'datum.x',
                 y: 'datum.y',
-                size: [{ signal: 'width' }, { signal: 'height' }]
-              }
-            ]
+                size: [{ signal: 'width' }, { signal: 'height' }],
+              },
+            ],
           },
 
           {
@@ -302,8 +302,8 @@ export default {
               facet: {
                 name: 'series',
                 data: 'union',
-                groupby: ['station_name', 'variable', 'dataset']
-              }
+                groupby: ['station_name', 'variable', 'dataset'],
+              },
             },
             marks: [
               {
@@ -317,24 +317,24 @@ export default {
                     stroke: { scale: 'color', field: this.y },
                     strokeWidth: { scale: 'lineWidth', field: 'dataset' },
                     strokeDash: { scale: 'lineDash', field: 'variable' },
-                    interactive: false
+                    interactive: false,
                   },
                   update: {
                     strokeOpacity: [
                       {
                         test: `!selected || selected === datum.station_name`,
-                        value: 0.85
+                        value: 0.85,
                       },
-                      { value: 0.15 }
-                    ]
-                  }
-                }
-              }
-            ]
-          }
-        ]
+                      { value: 0.15 },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        ],
       };
-    }
-  }
+    },
+  },
 };
 </script>

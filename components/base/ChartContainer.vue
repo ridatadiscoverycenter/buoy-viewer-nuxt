@@ -15,13 +15,13 @@ export default {
   props: {
     width: {
       type: String,
-      default: 'full'
+      default: 'full',
     },
     height: {
       type: Number,
-      default: 2
-    }
-  }
+      default: 2,
+    },
+  },
 };
 </script>
 

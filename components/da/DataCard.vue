@@ -27,7 +27,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters('da', ['selectedSamples', 'activeCoordinates'])
+    ...mapGetters('da', ['selectedSamples', 'activeCoordinates']),
   },
   methods: {
     sampleText(site) {
@@ -55,8 +55,8 @@ export default {
       } else {
         return -1;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
