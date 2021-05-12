@@ -4,7 +4,7 @@ const route = 'plankton';
 const datasetId = 'plankton_time_series_7615_c513_ef8e';
 
 export const state = () => ({
-  ...initState(route, datasetId)
+  ...initState(route, datasetId),
 });
 
 export const mutations = { ...baseMutations };

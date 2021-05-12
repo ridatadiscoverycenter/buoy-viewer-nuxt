@@ -74,63 +74,63 @@ export default {
     CompassLoading,
     BuoyLocations,
     BuoyLineChart,
-    BuoyQueryDownload
+    BuoyQueryDownload,
   },
   props: {
     dataset: {
       type: String,
-      required: true
+      required: true,
     },
     datasetTitle: {
       type: String,
-      required: true
+      required: true,
     },
     datasetData: {
       type: Array,
-      required: true
+      required: true,
     },
     compareDatasetTitle: {
       type: String,
-      required: true
+      required: true,
     },
     compareDatasetData: {
       type: Array,
-      required: true
+      required: true,
     },
     coordinates: {
       type: Array,
-      required: true
+      required: true,
     },
     variables: {
       type: Array,
-      required: true
+      required: true,
     },
     minDate: {
       type: Date,
-      required: true
+      required: true,
     },
     maxDate: {
       type: Date,
-      required: true
+      required: true,
     },
     datasetId: {
       type: String,
-      required: true
+      required: true,
     },
     loading: {
       type: Boolean,
-      require: true
+      require: true,
     },
     compareLineWidth: {
       type: Number,
       required: false,
-      default: 0.8
+      default: 0.8,
     },
     datasetLineWidth: {
       type: Number,
       required: false,
-      default: 1.8
-    }
+      default: 1.8,
+    },
   },
   computed: {
     buoys() {
@@ -157,7 +157,7 @@ export default {
       return this.coordinates.filter((o) => {
         return this.buoyIds.includes(o.buoyId);
       });
-    }
-  }
+    },
+  },
 };
 </script>

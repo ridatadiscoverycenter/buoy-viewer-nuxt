@@ -7,12 +7,12 @@ export const state = () => ({
     menu: {
       home: 'Home',
       resources: 'Resources',
-      about: 'About'
+      about: 'About',
     },
     titles: {
       highlights: 'Highlights',
-      collaborators: 'Collaborators'
-    }
+      collaborators: 'Collaborators',
+    },
   },
   fileFormats: [
     'htmlTable',
@@ -25,7 +25,7 @@ export const state = () => ({
     'graph',
     'tsv',
     'html',
-    'dataTable'
+    'dataTable',
   ],
-  baseUrl: 'https://pricaimcit.services.brown.edu/erddap'
+  baseUrl: 'https://pricaimcit.services.brown.edu/erddap',
 });

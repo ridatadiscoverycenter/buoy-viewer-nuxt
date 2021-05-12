@@ -2,14 +2,12 @@
   <div>
     <div class="has-text-right">
       <button type="button" class="button bars" @click="toggle">
-        <fa v-if="!collapsed" :icon="['far', 'times']" />
-        <fa v-else :icon="['far', 'bars']" />
+        <fa v-if="!collapsed" :icon="['fas', 'times']" />
+        <fa v-else :icon="['fas', 'bars']" />
       </button>
     </div>
     <div class="sidebar-body">
-      <p v-if="!collapsed" class="menu-label">
-        Narragansett Bay Data Explorer
-      </p>
+      <p v-if="!collapsed" class="menu-label">Narragansett Bay Data Explorer</p>
       <p v-else class="menu-label">
         <abbr title="Narragansett Bay Data Explorer">NBDE</abbr>
       </p>
@@ -17,27 +15,25 @@
         <li>
           <nuxt-link
             :to="{
-              name: 'index'
+              name: 'index',
             }"
           >
-            <fa :icon="['far', 'home']" />
+            <fa :icon="['fas', 'home']" />
             <span v-if="!collapsed">Home</span>
           </nuxt-link>
         </li>
         <li>
           <nuxt-link
             :to="{
-              name: 'about'
+              name: 'about',
             }"
           >
-            <fa :icon="['far', 'info-circle']" />
+            <fa :icon="['fas', 'info-circle']" />
             <span v-if="!collapsed">About</span></nuxt-link
           >
         </li>
       </ul>
-      <p v-if="!collapsed" class="menu-label">
-        Exploration Datasets
-      </p>
+      <p v-if="!collapsed" class="menu-label">Exploration Datasets</p>
       <p v-else class="menu-label">
         <abbr title="Exploration Datasets">DATA</abbr>
       </p>
@@ -48,13 +44,13 @@
             :class="{ 'is-active': route === item.route }"
             :aria-disabled="!item.available"
             :to="{
-              name: item.route
+              name: item.route,
             }"
           >
             <span v-if="!collapsed">{{ item.name }}</span>
             <span v-else
               ><abbr :title="item.name" class="collapsed-flex-item">
-                <fa :icon="['far', 'poll']" class="mr-1" />
+                <fa :icon="['fas', 'poll']" class="mr-1" />
                 <span>{{ item.name | initials }}</span>
               </abbr></span
             >
@@ -68,7 +64,7 @@
             <span v-if="!collapsed">{{ item.name }}</span>
             <span v-else
               ><abbr :title="item.name" class="collapsed-flex-item">
-                <fa :icon="['far', 'poll']" class="mr-1" />
+                <fa :icon="['fas', 'poll']" class="mr-1" />
                 <span>{{ item.name | initials }}</span>
               </abbr></span
             >
@@ -78,9 +74,7 @@
           >
         </li>
       </ul>
-      <p v-if="!collapsed" class="menu-label">
-        Resources
-      </p>
+      <p v-if="!collapsed" class="menu-label">Resources</p>
       <p v-else class="menu-label">
         <abbr title="Resources">Src</abbr>
       </p>
@@ -88,12 +82,12 @@
         <li>
           <a href="https://pricaimcit.services.brown.edu/erddap/index.html">
             <span v-if="!collapsed">
-              <fa :icon="['far', 'database']" class="mr-1" />
+              <fa :icon="['fas', 'database']" class="mr-1" />
               ERDDAP Server</span
             >
             <span v-else>
               <abbr title="ERDDAP Server" class="collapsed-flex-item">
-                <fa :icon="['far', 'database']" class="mr-1" />
+                <fa :icon="['fas', 'database']" class="mr-1" />
                 <span> {{ 'ERDDAP Server' | initials }}</span>
               </abbr></span
             >
@@ -103,7 +97,7 @@
           <a href="https://ridatadiscovery.org">
             <span v-if="!collapsed"
               ><abbr title="Rhode Island Data Discovery Center"
-                ><fa :icon="['far', 'circle']" class="mr-1" />RIDDC</abbr
+                ><fa :icon="['fas', 'water']" class="mr-1" />RIDDC</abbr
               >
               Home</span
             >
@@ -112,7 +106,7 @@
                 title="Rhode Island Data Discovery Center Home"
                 class="collapsed-flex-item"
               >
-                <fa :icon="['far', 'circle']" class="mr-1" />
+                <fa :icon="['fas', 'water']" class="mr-1" />
                 <span> {{ 'RIDDC Home' | initials }}</span>
               </abbr></span
             ></a
@@ -131,7 +125,7 @@ export default {
         .split(' ')
         .map((s) => s[0].toUpperCase())
         .join('');
-    }
+    },
   },
   data() {
     return {
@@ -140,37 +134,37 @@ export default {
         {
           name: 'Historical Buoy Data',
           route: 'datasets-historical-buoy-data',
-          available: true
+          available: true,
         },
         {
           name: 'Ocean State Ocean Model',
           route: 'datasets-osom-data',
-          available: true
+          available: true,
         },
         {
           name: 'Plankton Time Series',
           route: 'datasets-plankton',
-          available: true
+          available: true,
         },
         {
           name: 'Domoic Acid',
           route: 'datasets-domoic-acid',
-          available: true
-        }
-      ]
+          available: true,
+        },
+      ],
     };
   },
   computed: {
     route() {
       return this.$route.name.replace('-dashboard', '');
-    }
+    },
   },
   methods: {
     toggle() {
       this.collapsed = !this.collapsed;
       return this.$emit('toggle', this.collapsed);
-    }
-  }
+    },
+  },
 };
 </script>
 

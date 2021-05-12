@@ -20,13 +20,13 @@ import Dashboard from '@/components/base/BaseDashboard.vue';
 import Breadcrumb from '@/components/base/Breadcrumb.vue';
 
 export default {
-  layout: 'dashboard',
   components: {
     Dashboard,
-    Breadcrumb
+    Breadcrumb,
   },
+  layout: 'dashboard',
   computed: {
-    ...mapState('da', ['coordinates', 'samples'])
+    ...mapState('da', ['coordinates', 'samples']),
   },
   created() {
     if (this.coordinates.length === 0) {
@@ -35,6 +35,6 @@ export default {
     if (this.samples.length === 0) {
       this.$store.dispatch('da/fetchSamples');
     }
-  }
+  },
 };
 </script>

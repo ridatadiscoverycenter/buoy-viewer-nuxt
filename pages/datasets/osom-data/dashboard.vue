@@ -34,7 +34,12 @@ import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
 export default {
   components: {
     LineChartDashboard,
-    VariableHeatmap
+    VariableHeatmap,
+  },
+  data() {
+    return {
+      loading: false,
+    };
   },
   async fetch() {
     try {
@@ -43,7 +48,7 @@ export default {
         variables: this.$route.query.variables,
         start: this.$route.query.start,
         end: this.$route.query.end,
-        ids: this.$route.query.buoyIds
+        ids: this.$route.query.buoyIds,
       };
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
       await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
@@ -52,14 +57,9 @@ export default {
       this.loading = false;
       this.$nuxt.context.error({
         statusCode: 503,
-        message: 'Unable to fetch data at this time. Try again later.'
+        message: 'Unable to fetch data at this time. Try again later.',
       });
     }
-  },
-  data() {
-    return {
-      loading: false
-    };
   },
   computed: {
     ...mapState('model', [
@@ -69,14 +69,14 @@ export default {
       'variables',
       'minDate',
       'maxDate',
-      'summary'
+      'summary',
     ]),
-    ...mapState('buoy', ['buoyData'])
+    ...mapState('buoy', ['buoyData']),
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line
       this.$fetch();
-    }
-  }
+    },
+  },
 };
 </script>

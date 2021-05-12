@@ -64,8 +64,8 @@
                 buoyIds: 'bid21',
                 variables: 'WaterTempSurface,WaterTempBottom',
                 start: '2017-01-01T04%3A00%3A00.000Z',
-                end: '2018-12-31T04%3A00%3A00.000Z'
-              }
+                end: '2018-12-31T04%3A00%3A00.000Z',
+              },
             }"
             >Water Temperature, 2017-2018</nuxt-link
           >
@@ -77,8 +77,8 @@
                 buoyIds: 'bid21',
                 variables: 'SilicaBottom,SilicaSurface',
                 start: '2003-01-01T04%3A00%3A00.000Z',
-                end: '2009-12-31T04%3A00%3A00.000Z'
-              }
+                end: '2009-12-31T04%3A00%3A00.000Z',
+              },
             }"
             >Silica, 2003-2009</nuxt-link
           >
@@ -143,12 +143,12 @@ export default {
     ChartContainer,
     ExploreForm,
     DownloadForm,
-    BuoyLocations
+    BuoyLocations,
   },
   data() {
     return {
       variable: 'WaterTempSurface',
-      dateRange: null
+      dateRange: null,
     };
   },
   computed: {
@@ -158,12 +158,12 @@ export default {
       'summary',
       'datasetId',
       'minDate',
-      'maxDate'
+      'maxDate',
     ]),
     buoys() {
       return this.coordinates.map((val) => val.fullName);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -151,11 +151,11 @@ export default {
     ChartContainer,
     DataCard,
     Slider,
-    Map
+    Map,
   },
   computed: {
-    ...mapState('da', ['samples', 'dates'])
-  }
+    ...mapState('da', ['samples', 'dates']),
+  },
 };
 </script>
 

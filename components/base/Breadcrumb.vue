@@ -5,7 +5,7 @@
         <nuxt-link
           class="plot-nav is-size-5"
           :to="{
-            name: link.target
+            name: link.target,
           }"
         >
           <span>{{ link.name }}</span></nuxt-link
@@ -22,8 +22,8 @@ export default {
   props: {
     path: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     links() {
@@ -32,7 +32,7 @@ export default {
       if (pathParts.length === 3) {
         links.push({
           name: 'Summary',
-          target: pathParts.slice(0, 2).join('-')
+          target: pathParts.slice(0, 2).join('-'),
         });
         links.push({ name: 'Explore' });
       } else {
@@ -40,7 +40,7 @@ export default {
       }
 
       return links;
-    }
-  }
+    },
+  },
 };
 </script>

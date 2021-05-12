@@ -54,31 +54,31 @@ import BaseForm from '@/components/base/BaseForm.vue';
 export default {
   components: {
     Multiselect,
-    BaseForm
+    BaseForm,
   },
   props: {
     variables: {
       type: Array,
-      required: true
+      required: true,
     },
     buoys: {
       type: Array,
-      required: true
+      required: true,
     },
     datasetId: {
       type: String,
-      required: true
+      required: true,
     },
     coordinates: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       fileFormat: 'json',
       downloadBuoys: [],
-      downloadVariables: []
+      downloadVariables: [],
     };
   },
   computed: {
@@ -95,7 +95,7 @@ export default {
       )},time,latitude,longitude,station_name&station_name=~"(${bids.join(
         '|'
       )})"`;
-    }
-  }
+    },
+  },
 };
 </script>

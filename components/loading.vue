@@ -9,11 +9,11 @@ export default {
     manualLoad: {
       type: Boolean,
       required: false,
-      default: false
-    }
+      default: false,
+    },
   },
   data: () => ({
-    loading: false
+    loading: false,
   }),
   methods: {
     start() {
@@ -21,8 +21,8 @@ export default {
     },
     finish() {
       this.loading = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

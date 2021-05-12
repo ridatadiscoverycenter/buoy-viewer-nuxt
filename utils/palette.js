@@ -18,7 +18,7 @@ const colors = [
   '#ca50d3',
   '#1d2150',
   '#7212ff',
-  '#6a7d54'
+  '#6a7d54',
 ];
 
 export const constructColorMap = (curMap, vals) => {

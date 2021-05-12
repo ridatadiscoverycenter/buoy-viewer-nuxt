@@ -18,15 +18,15 @@
 export default {
   data() {
     return {
-      collapsed: false
+      collapsed: false,
     };
   },
   methods: {
     toggle(e) {
       this.collapsed = e;
       return e;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

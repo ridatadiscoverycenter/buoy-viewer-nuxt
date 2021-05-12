@@ -31,23 +31,23 @@ const getPageName = (path) => {
 };
 
 export default {
-  layout: 'dashboard',
   components: {
     Dashboard,
-    Breadcrumb
+    Breadcrumb,
   },
+  layout: 'dashboard',
   data() {
     return {
-      pageName: getPageName(this.$route.path)
+      pageName: getPageName(this.$route.path),
     };
   },
   computed: {
-    ...mapState('model', ['variables', 'coordinates', 'summary'])
+    ...mapState('model', ['variables', 'coordinates', 'summary']),
   },
   watch: {
     $route(val) {
       this.pageName = getPageName(val.path);
-    }
+    },
   },
   created() {
     if (this.coordinates.length === 0) {
@@ -59,6 +59,6 @@ export default {
     if (this.variables.length === 0) {
       this.$store.dispatch('model/fetchBuoyVariables');
     }
-  }
+  },
 };
 </script>

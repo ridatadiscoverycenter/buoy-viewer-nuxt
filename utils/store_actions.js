@@ -1,7 +1,7 @@
 export const baseMutations = {
   mutate(state, payload) {
     state[payload.property] = payload.with;
-  }
+  },
 };
 
 export const initState = (route, datasetId) => {
@@ -11,7 +11,7 @@ export const initState = (route, datasetId) => {
     variables: [],
     datasetId,
     minDate: new Date(0),
-    maxDate: new Date()
+    maxDate: new Date(),
   };
   baseState[`${route}Data`] = [];
   return baseState;
@@ -43,43 +43,44 @@ export function baseActions(route) {
       return this.$axios.$get(`/${route}/variables`).then((response) => {
         commit('mutate', { property: 'variables', with: response });
       });
-    }
+    },
   };
 }
 
 // =========== UTILITIES ============
 
-export const summaryData = (axios, route) => ({ commit }) => {
-  return axios.$get(`/${route}/summary`).then((response) => {
-    let minDate = new Date();
-    let maxDate = new Date(0);
-    const dateParsed = response.map((d) => {
-      d.date = new Date(d.time);
-      if (d.date < minDate) {
-        minDate = d.date;
-      }
-      if (d.date > maxDate) {
-        maxDate = d.date;
-      }
-      return d;
+export const summaryData =
+  (axios, route) =>
+  ({ commit }) => {
+    return axios.$get(`/${route}/summary`).then((response) => {
+      let minDate = new Date();
+      let maxDate = new Date(0);
+      const dateParsed = response.map((d) => {
+        d.date = new Date(d.time);
+        if (d.date < minDate) {
+          minDate = d.date;
+        }
+        if (d.date > maxDate) {
+          maxDate = d.date;
+        }
+        return d;
+      });
+      commit('mutate', { property: 'summary', with: dateParsed });
+      commit('mutate', { property: 'minDate', with: minDate });
+      commit('mutate', { property: 'maxDate', with: maxDate });
     });
-    commit('mutate', { property: 'summary', with: dateParsed });
-    commit('mutate', { property: 'minDate', with: minDate });
-    commit('mutate', { property: 'maxDate', with: maxDate });
-  });
-};
+  };
 
-export const buoyData = (axios, route) => (
-  { commit, state },
-  { ids, variables, start, end }
-) => {
-  const startDate = start || state.minDate;
-  const endDate = end || state.maxDate;
-  return axios
-    .$get(
-      `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}`
-    )
-    .then((data) => {
-      commit('mutate', { property: `${route}Data`, with: data });
-    });
-};
+export const buoyData =
+  (axios, route) =>
+  ({ commit, state }, { ids, variables, start, end }) => {
+    const startDate = start || state.minDate;
+    const endDate = end || state.maxDate;
+    return axios
+      .$get(
+        `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}`
+      )
+      .then((data) => {
+        commit('mutate', { property: `${route}Data`, with: data });
+      });
+  };

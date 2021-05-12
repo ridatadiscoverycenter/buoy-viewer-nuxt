@@ -1,41 +1,41 @@
 <script>
-import { vegaBaseMixin } from '@brown-ccv/disco-vue-components';
+import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 
 export default {
   mixins: [vegaBaseMixin],
   props: {
     variable: {
       type: String,
-      required: true
+      required: true,
     },
     x: {
       type: String,
-      required: true
+      required: true,
     },
     xTitle: {
       type: String,
       required: false,
-      default: 'Month/Year'
+      default: 'Month/Year',
     },
     xUnit: {
       type: String,
       required: false,
-      default: 'month'
+      default: 'month',
     },
     y: {
       type: String,
-      required: true
+      required: true,
     },
     yTitle: {
       type: String,
       required: false,
-      default: 'Buoy'
+      default: 'Buoy',
     },
     height: {
       type: Number,
       required: false,
-      default: 300
-    }
+      default: 300,
+    },
   },
   computed: {
     baseSpec() {
@@ -45,27 +45,27 @@ export default {
         data: [
           {
             name: 'rawData',
-            values: this.dataset
+            values: this.dataset,
           },
           {
             name: 'data',
             source: 'rawData',
-            transform: [{ type: 'filter', expr: `datum.${this.variable} > 1` }]
-          }
+            transform: [{ type: 'filter', expr: `datum.${this.variable} > 1` }],
+          },
         ],
         scales: [
           {
             name: 'x',
             type: 'utc',
             domain: { data: 'rawData', field: this.x },
-            range: 'width'
+            range: 'width',
           },
           {
             name: 'y',
             type: 'band',
             domain: { data: 'data', field: this.y },
             range: 'height',
-            padding: 0.02
+            padding: 0.02,
           },
           {
             name: 'color',
@@ -74,8 +74,8 @@ export default {
             domain: { data: 'rawData', field: this.variable },
             reverse: false,
             zero: false,
-            nice: true
-          }
+            nice: true,
+          },
         ],
         axes: [
           {
@@ -83,22 +83,22 @@ export default {
             scale: 'x',
             domain: false,
             title: this.xTitle,
-            labelOverlap: 'parity'
+            labelOverlap: 'parity',
           },
           {
             orient: 'left',
             scale: 'y',
             domain: false,
-            title: this.yTitle
-          }
+            title: this.yTitle,
+          },
         ],
         legends: [
           {
             title: ['Number of', 'Observations'],
             fill: 'color',
             type: 'gradient',
-            gradientLength: { signal: 'height' }
-          }
+            gradientLength: { signal: 'height' },
+          },
         ],
         marks: [
           {
@@ -110,21 +110,21 @@ export default {
                 y: { scale: 'y', field: this.y },
                 height: { scale: 'y', band: 1 },
                 width: {
-                  signal: `scale('x', timeOffset('${this.xUnit}', now())) - scale('x', now())`
+                  signal: `scale('x', timeOffset('${this.xUnit}', now())) - scale('x', now())`,
                 },
                 tooltip: {
-                  signal: `{'Date': utcFormat(datum.${this.x}, '%B %Y'), '${this.yTitle}': datum.${this.y}, 'Count': datum.${this.variable}}`
-                }
+                  signal: `{'Date': utcFormat(datum.${this.x}, '%B %Y'), '${this.yTitle}': datum.${this.y}, 'Count': datum.${this.variable}}`,
+                },
               },
               update: {
-                fill: { scale: 'color', field: this.variable }
-              }
-            }
-          }
-        ]
+                fill: { scale: 'color', field: this.variable },
+              },
+            },
+          },
+        ],
       };
-    }
-  }
+    },
+  },
 };
 </script>
 

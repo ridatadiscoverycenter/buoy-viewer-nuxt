@@ -5,7 +5,7 @@
         <nuxt-link
           class="plot-nav is-size-5 py-5"
           :to="{
-            name: 'index'
+            name: 'index',
           }"
           ><span>Home</span></nuxt-link
         ></template
@@ -100,10 +100,10 @@
 import Dashboard from '@/components/base/BaseDashboard.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 export default {
-  layout: 'dashboard',
   components: {
     Dashboard,
-    ChartContainer
-  }
+    ChartContainer,
+  },
+  layout: 'dashboard',
 };
 </script>
