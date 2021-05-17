@@ -31,32 +31,38 @@ const getPageName = (path) => {
 };
 
 export default {
-  layout: 'dashboard',
   components: {
     Dashboard,
-    Breadcrumb
+    Breadcrumb,
   },
+  layout: 'dashboard',
   data() {
     return {
-      pageName: getPageName(this.$route.path)
+      pageName: getPageName(this.$route.path),
     };
   },
   computed: {
-    ...mapState('fish', ['coordinates', 'samples'])
+    ...mapState('fish', ['coordinates', 'samples', 'temps', 'metrics']),
   },
   watch: {
     $route(val) {
       this.pageName = getPageName(val.path);
-    }
+    },
   },
   created() {
     // TODO: review if these are the right/all data that should be loaded on navigation to any fish trawl page
     if (this.coordinates.length === 0) {
       this.$store.dispatch('fish/fetchCoordinates');
     }
-    if (this.summary.length === 0) {
+    if (this.samples.length === 0) {
       this.$store.dispatch('fish/fetchSamples');
     }
-  }
+    if (this.temps.length === 0) {
+      this.$store.dispatch('fish/fetchTemps');
+    }
+    if (this.metrics.length === 0) {
+      this.$store.dispatch('fish/fetchMetrics');
+    }
+  },
 };
 </script>

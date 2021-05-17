@@ -7,6 +7,17 @@
         <div>
           A heatmap of fish goes here, use the components/charts/Heatmap.vue as
           a starting point to copy from
+          <!-- <Heatmap
+            v-if="!(samples.length === 0)"
+            id="heatmap"
+            :dataset="samples"
+            :min-width="400"
+            :height="250"
+            x="date"
+            y="station_name"
+            :variable="variable"
+            :enable-darkmode="false"
+          /> -->
         </div>
       </template>
     </ChartContainer>
