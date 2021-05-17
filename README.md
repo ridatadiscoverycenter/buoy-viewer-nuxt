@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # [Narragansett Bay Data Explorer](https://data-explorer.riddc.brown.edu)
 
 [![DOI](https://zenodo.org/badge/271652303.svg)](https://zenodo.org/badge/latestdoi/271652303)
@@ -9,6 +10,11 @@
 
 A web app to explore data about the Narragansett bay.  Built using Nuxt (vue).  Uses the buoy-api as a backend.
 >>>>>>> feat: stub out fish trawl
+=======
+# Narragansett Bay Data Explorer
+
+A web app to explore data about the Narragansett bay.  Built using Nuxt (vue).  Uses the buoy-api as a backend.
+>>>>>>> 86ce104aa065d2883d91a4e5ce566cb6ed2b3862
 
 ## Build Setup
 
