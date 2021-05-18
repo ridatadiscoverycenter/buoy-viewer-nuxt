@@ -4,20 +4,32 @@
       <template #title>Fish Trawl Heatmap</template>
       <template #subtitle> A heatmap with fish!</template>
       <template #chart>
-        <div>
-          A heatmap of fish goes here, use the components/charts/Heatmap.vue as
-          a starting point to copy from
-          <!-- <Heatmap
+        <div class="is-flex-column">
+          <div class="control-item control-item-first">
+            <label for="station" class="label">Station</label>
+            <multiselect
+              id="variable"
+              v-model="station"
+              class="multiselect"
+              :options="stations"
+            ></multiselect>
+          </div>
+          <FishHeatmap
             v-if="!(samples.length === 0)"
             id="heatmap"
             :dataset="samples"
             :min-width="400"
-            :height="250"
+            :height="300"
             x="date"
-            y="station_name"
+            x-unit="year"
+            xTitle="year"
+            y="species"
+            yTitle="Abundance"
             :variable="variable"
+            :station="station"
             :enable-darkmode="false"
-          /> -->
+          />
+          <fa v-else icon="compass" spin class="compass-loading" />
         </div>
       </template>
     </ChartContainer>
@@ -64,15 +76,32 @@ import { mapState } from 'vuex';
 
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import BuoyLocations from '@/components/buoy/Locations.vue';
+import FishHeatmap from '@/components/fish/FishHeatmap.vue';
+import Multiselect from 'vue-multiselect';
 
 export default {
   components: {
     ChartContainer,
-    BuoyLocations
+    BuoyLocations,
+    FishHeatmap,
+    Multiselect,
+  },
+  data() {
+    return {
+      station: 'Fox Island',
+      variable: 'abun',
+      dateRange: null,
+    };
   },
   computed: {
-    ...mapState('fish', ['coordinates', 'fishData'])
-  }
+    ...mapState('fish', [
+      'coordinates',
+      'samples',
+      'temps',
+      'metrics',
+      'stations',
+    ]),
+  },
 };
 </script>
 

@@ -1,3 +1,4 @@
+/* eslint-disable */ 
 import { baseMutations } from '@/utils/store_actions';
 
 const route = 'fish';
@@ -7,6 +8,7 @@ export const state = () => ({
   samples: [],
   temps: [],
   metrics: [],
+  stations: [],
 });
 
 export const mutations = { ...baseMutations };
@@ -15,6 +17,9 @@ export const actions = {
   async fetchCoordinates({ commit, dispatch }) {
     const coords = await this.$axios.$get(`/${route}/coordinates`);
     console.log(coords);
+    const stations = coords.map(({ station_name }) => station_name);
+    console.log(stations);
+    commit('mutate', { property: 'stations', with: stations });
     commit('mutate', { property: 'coordinates', with: coords });
     dispatch(
       'updateColorMap',
@@ -23,10 +28,13 @@ export const actions = {
     );
   },
   async fetchSamples({ commit }) {
-    const samples = await this.$axios.$get(`/${route}/samples`);
-    console.log(samples);
-    console.log(samples['Fox Island']);
-    commit('mutate', { property: 'samples', with: samples });
+    const samples = await this.$axios.$get(`/${route}/species`);
+    const dateParsed = samples.map((d) => {
+      d.date = new Date(d.date);
+      return d;
+    });
+    console.log(dateParsed);
+    commit('mutate', { property: 'samples', with: dateParsed });
   },
   async fetchTemps({ commit, dispatch }) {
     const temps = await this.$axios.$get(`/${route}/temps`);
