@@ -52,3 +52,5 @@ export const getters = {
     return Math.max(...state.samples.map((s) => s.fishNum));
   },
 };
+
+

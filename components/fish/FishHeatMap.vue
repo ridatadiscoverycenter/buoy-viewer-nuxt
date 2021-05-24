@@ -56,6 +56,8 @@ export default {
             source: 'rawData',
             transform: [
               { type: 'filter', expr: `datum.station == "${this.station}"` },
+              { type: 'filter', expr: 'datum.abun != 0' },
+              { type: 'formula', as: 'loga', expr: 'log(datum.abun) / LN10' },
             ],
           },
         ],
@@ -75,9 +77,9 @@ export default {
           },
           {
             name: 'color',
-            type: 'linear',
+            type: 'log',
             range: { scheme: 'tealblues' },
-            domain: { data: 'rawData', field: this.variable },
+            domain: { data: 'data', field: this.variable },
             reverse: false,
             zero: false,
             nice: true,
@@ -100,7 +102,7 @@ export default {
         ],
         legends: [
           {
-            title: ['Number of', 'Observations'],
+            title: ['Abundance of', 'Fish (log)'],
             fill: 'color',
             type: 'gradient',
             gradientLength: { signal: 'height' },
