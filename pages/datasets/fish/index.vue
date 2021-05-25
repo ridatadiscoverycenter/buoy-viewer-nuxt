@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ChartContainer width="two-thirds">
+    <ChartContainer width="full">
       <template #title>Fish Trawl Heatmap</template>
       <template #subtitle> A heatmap with fish!</template>
       <template #chart>
@@ -18,8 +18,8 @@
             v-if="!(samples.length === 0)"
             id="heatmap"
             :dataset="samples"
-            :min-width="600"
-            :height="600"
+            :min-width="1000"
+            :height="750"
             x="date"
             x-unit="year"
             xTitle="year"

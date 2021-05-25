@@ -31,6 +31,7 @@ export const actions = {
     const samples = await this.$axios.$get(`/${route}/species`);
     const dateParsed = samples.map((d) => {
       d.date = new Date(d.date);
+      d.animal = 'fish';
       return d;
     });
     console.log(dateParsed);
