@@ -18,7 +18,6 @@ export const actions = {
     const coords = await this.$axios.$get(`/${route}/coordinates`);
     console.log(coords);
     const stations = coords.map(({ station_name }) => station_name);
-    console.log(stations);
     commit('mutate', { property: 'stations', with: stations });
     commit('mutate', { property: 'coordinates', with: coords });
     dispatch(
@@ -29,9 +28,23 @@ export const actions = {
   },
   async fetchSamples({ commit }) {
     const samples = await this.$axios.$get(`/${route}/species`);
-    const dateParsed = samples.map((d) => {
+    const dateParsed = samples.map(function(d) {
+      if (d.species.includes('crab')){
+        d.animal = 'crab';
+      } 
+      else if (d.species.toLowerCase().includes('lobster')){
+        d.animal = 'lobster';
+      }
+      else if (d.species.toLowerCase().includes('squid')){
+        d.animal = 'squid';
+      }
+      else if (d.species.toLowerCase().includes('sea_star')){
+        d.animal = 'starfish';
+      }
+      else {
+        d.animal = 'fish';
+      }
       d.date = new Date(d.date);
-      d.animal = 'fish';
       return d;
     });
     console.log(dateParsed);
