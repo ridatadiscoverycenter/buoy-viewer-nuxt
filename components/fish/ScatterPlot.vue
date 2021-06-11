@@ -62,16 +62,16 @@ export default {
         ],
         mark: 'circle',
         encoding: {
-            x: {
-                bin: {maxbins: 20},
-                field: this.x,
-            },
-            y: {
-                bin: {maxbins: 10},
-                field: this.y,
-            },
-            size: {field: 'abun'},
-        }
+          x: {
+            bin: { maxbins: 20 },
+            field: this.x,
+          },
+          y: {
+            bin: { maxbins: 10 },
+            field: this.y,
+          },
+          size: { field: 'abun' },
+        },
       };
     },
   },

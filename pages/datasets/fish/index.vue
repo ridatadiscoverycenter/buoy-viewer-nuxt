@@ -8,24 +8,17 @@
           <div class="control-item control-item-first">
             <label for="station" class="label">Station</label>
             <multiselect
-              id="variable"
+              id="station"
               v-model="station"
               class="multiselect"
               :options="stations"
             ></multiselect>
           </div>
-          <FishHeatmap
+          <FishHeatMap
             v-if="!(samples.length === 0)"
             id="heatmap"
             :dataset="samples"
-            :min-width="1000"
-            :height="750"
-            x="date"
-            x-unit="year"
-            xTitle="year"
-            y="species"
-            yTitle="Species"
-            :variable="variable"
+            :min-width="800"
             :station="station"
             :enable-darkmode="false"
           />
@@ -35,17 +28,17 @@
     </ChartContainer>
 
     <!-- TODO: does this map work/make sense here -->
-    <BuoyLocations :coordinates="coordinates" />
+    <BuoyLocations :coordinates="coordinates" location-type="Survey" />
 
-    <ChartContainer width="half">
+    <ChartContainer width="two-thirds" :height="1">
       <template #title>Explore</template>
-      <template #subtitle>Pick a fish!</template>
+      <template #subtitle>Pick a species to learn more about!</template>
       <template #chart>
-        fish form, probably needs something smaller, but similar to ExploreForm
+        <FishExploreForm />
       </template>
     </ChartContainer>
 
-    <ChartContainer width="half" :height="3">
+    <ChartContainer width="two-thirds" :height="1">
       <template #title>Learn More</template>
       <template #subtitle
         ><p>
@@ -73,34 +66,28 @@
 
 <script>
 import { mapState } from 'vuex';
+import Multiselect from 'vue-multiselect';
 
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import BuoyLocations from '@/components/buoy/Locations.vue';
-import FishHeatmap from '@/components/fish/FishHeatmap.vue';
-import Multiselect from 'vue-multiselect';
+import FishHeatMap from '@/components/fish/FishHeatMap.vue';
+import FishExploreForm from '@/components/fish/FishExploreForm.vue';
 
 export default {
   components: {
     ChartContainer,
     BuoyLocations,
-    FishHeatmap,
+    FishHeatMap,
+    FishExploreForm,
     Multiselect,
   },
   data() {
     return {
       station: 'Fox Island',
-      variable: 'abun',
-      dateRange: null,
     };
   },
   computed: {
-    ...mapState('fish', [
-      'coordinates',
-      'samples',
-      'temps',
-      'metrics',
-      'stations',
-    ]),
+    ...mapState('fish', ['coordinates', 'samples', 'stations']),
   },
 };
 </script>

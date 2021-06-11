@@ -11,8 +11,8 @@ export const mutations = {
 };
 
 export const actions = {
-  updateColorMap({ state, commit }, payload) {
-    const colorMap = constructColorMap(state.colorMap, payload);
+  updateColorMap({ state, commit }, { ids, unique }) {
+    const colorMap = constructColorMap(state.colorMap, ids, unique);
     commit('mutate', { property: 'colorMap', with: colorMap });
   },
 };

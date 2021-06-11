@@ -1,48 +1,59 @@
 <template>
   <div>
-    line charts and fish photos, oh my! (could also incorporate this into the
-    summary page if its not too much)
+    <ChartContainer width="two-thirds" :height="3">
+      <template #title>{{ species }}</template>
+      <template #subtitle>Details about this fish.</template>
+      <template #chart>
+        <FishLineChart
+          id="line-chart"
+          :dataset="fishData"
+          :enable-darkmode="false"
+        />
+      </template>
+    </ChartContainer>
+
+    <BuoyLocations :coordinates="coordinates" location-type="Survey" />
+
+    <ChartContainer width="one-third" :height="2">
+      <template #title>Keep Exploring</template>
+      <template #subtitle>Pick another species to learn more about!</template>
+      <template #chart>
+        <FishExploreForm />
+      </template>
+    </ChartContainer>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 
+import ChartContainer from '@/components/base/ChartContainer.vue';
+import BuoyLocations from '@/components/buoy/Locations.vue';
+import FishExploreForm from '@/components/fish/FishExploreForm.vue';
+import FishLineChart from '@/components/fish/FishLineChart.vue';
+
 export default {
-  // async fetch() {
-  //   try {
-  //     this.loading = true;
-  //     const payload = {
-  //       fish: this.$route.query.fish
-  //     };
-  //     await this.$store.dispatch('fish/fetchFishData', payload);
-  //     this.loading = false;
-  //   } catch (e) {
-  //     this.loading = false;
-  //     this.$nuxt.context.error({
-  //       statusCode: 503,
-  //       message: 'Unable to fetch data at this time. Try again later.'
-  //     });
-  //   }
-  // },
+  components: {
+    ChartContainer,
+    BuoyLocations,
+    FishExploreForm,
+    FishLineChart,
+  },
   data() {
     return {
       loading: false,
-      fish: ''
+      species: '',
     };
   },
-  computed: {
-    ...mapState('fish', ['coordinates', 'samples']),
-    fishData() {
-      // TODO: given this.fish, get the subset of data cared about (or use fetch to get data from store/api)
-      return [];
-    }
+  fetch() {
+    this.species = this.$route.query.species;
   },
-  watch: {
-    '$route.query': function(newQuery, oldQuery) { // eslint-disable-line
-      this.fish = newQuery.fish;
-      // this.$fetch();
-    }
-  }
+  computed: {
+    ...mapState('fish', ['coordinates', 'samples', 'stations']),
+    fishData() {
+      return this.samples.filter((s) => s.title === this.species);
+    },
+  },
+  watchQuery: ['species'],
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <ChartContainer width="one-third" :height="height">
-    <template #title>Buoy Locations</template>
+    <template #title>{{ locationType }} Locations</template>
     <template #subtitle
       >Hover over the circles to find out the buoy locations.</template
     >
@@ -38,6 +38,10 @@ export default {
       type: Number,
       required: false,
       default: 2,
+    },
+    locationType: {
+      type: String,
+      default: 'Buoy',
     },
   },
   computed: {
