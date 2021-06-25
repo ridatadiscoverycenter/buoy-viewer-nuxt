@@ -81,6 +81,8 @@ export default {
             title: 'Year',
             labelOverlap: 'parity',
             ticks: false,
+            bandPosition: 0.5,
+            labelAlign: 'center',
           },
           {
             orient: 'left',
@@ -106,7 +108,7 @@ export default {
               enter: {
                 tooltip: {
                   signal:
-                    "{'Year': datum.year, 'Species': datum.title, 'Abundance': format(datum.datum.abun, ',.3f')}",
+                    "{'Year': datum.year, 'Species': datum.title, 'Abundance': format(datum.abun, ',.3f')}",
                 },
               },
               update: {

@@ -5,9 +5,15 @@ import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 
 export default {
   mixins: [vegaBaseMixin],
+  props: {
+    temps: {
+      type: Array,
+      required: true,
+    },
+  },
   computed: {
     ...mapState(['colorMap']),
-    ...mapState('fish', ['stations', 'temps']),
+    ...mapState('fish', ['stations']),
     colorRange() {
       return this.stations.map((v) => this.colorMap[v]);
     },
@@ -16,17 +22,13 @@ export default {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         description:
           'Fish trawl survey line chart, with value labels shown upon mouse hover.',
-        height: 500,
+        height: 700,
         padding: 5,
 
         signals: [
           {
-            name: 'hovered',
-            value: null,
-            on: [
-              { events: '@voronoi:mouseover', update: 'datum' },
-              { events: 'mouseout', update: 'null' },
-            ],
+            name: 'chartHeight',
+            update: 'height / 2 - 20',
           },
         ],
 
@@ -35,7 +37,7 @@ export default {
             name: 'fish',
             values: this.dataset,
             transform: [
-              { type: 'formula', as: 'time', expr: 'utc(datum.year, 6)' },
+              { type: 'formula', as: 'time', expr: 'utc(datum.year, 0)' },
             ],
           },
           {
@@ -45,7 +47,7 @@ export default {
               {
                 type: 'formula',
                 as: 'utc_time',
-                expr: "utcParse(datum.time, '%Y-%m-%dT%H:%M:%SZ')",
+                expr: "utcParse(datum.year_month, '%Y-%m-%dT%H:%M:%S.%LZ')",
               },
             ],
           },
@@ -61,24 +63,20 @@ export default {
             round: true,
           },
           {
-            name: 'yscale',
+            name: 'yfish',
             type: 'linear',
             domain: { data: 'fish', field: 'abun' },
             nice: true,
             zero: true,
-            range: 'height',
+            range: [{ signal: 'chartHeight' }, 0],
           },
           {
-            name: 'tempscale',
+            name: 'ytemps',
             type: 'linear',
-            domain: {
-              fields: [
-                { data: 'temps', field: 'Bottom_Temperature' },
-                { data: 'temps', field: 'Surface_Temperature' },
-              ],
-            },
+            domain: { data: 'temps', field: 'delta' },
             nice: true,
-            range: 'height',
+            zero: true,
+            range: [{ signal: 'chartHeight / 2' }, 0],
           },
           {
             name: 'color',
@@ -88,15 +86,168 @@ export default {
           },
         ],
 
+        marks: [
+          {
+            type: 'group',
+            desctiption: 'Fish Abundance',
+            name: 'fishplot',
+
+            encode: {
+              enter: {
+                y: { value: 0 },
+                width: { signal: 'width' },
+                height: { signal: 'chartHeight' },
+              },
+            },
+
+            signals: [
+              {
+                name: 'hovered',
+                value: null,
+                on: [
+                  { events: '@voronoi:mouseover', update: 'datum' },
+                  { events: 'mouseout', update: 'null' },
+                ],
+              },
+            ],
+
+            axes: [
+              { orient: 'bottom', scale: 'xscale', title: 'Year' },
+              {
+                orient: 'left',
+                scale: 'yfish',
+                title: 'Abundance',
+                grid: false,
+              },
+            ],
+
+            marks: [
+              {
+                type: 'symbol',
+                zindex: 1,
+                encode: {
+                  enter: {
+                    size: { value: 20 },
+                  },
+                  update: {
+                    fill: [
+                      { test: '!hovered', value: 'transparent' },
+                      { value: 'black' },
+                    ],
+                    x: { signal: 'hovered && hovered.x' },
+                    y: { signal: 'hovered && hovered.y' },
+                  },
+                },
+              },
+
+              {
+                type: 'symbol',
+                name: 'secret_symbols',
+                from: { data: 'fish' },
+                encode: {
+                  enter: {
+                    fill: { value: 'transparent' },
+                    x: { scale: 'xscale', field: 'time' },
+                    y: { scale: 'yfish', field: 'abun' },
+                  },
+                },
+              },
+
+              {
+                type: 'path',
+                name: 'voronoi',
+                from: { data: 'secret_symbols' },
+                encode: {
+                  enter: {
+                    stroke: { value: 'transparent' },
+                    fill: { value: 'transparent' },
+                    tooltip: {
+                      signal: `{ 'Abundance': format(datum.datum.abun, ',.3f'), 'Year': datum.datum.year, 'Station': datum.datum.station }`,
+                    },
+                  },
+                },
+                transform: [
+                  {
+                    type: 'voronoi',
+                    x: 'datum.x',
+                    y: 'datum.y',
+                    size: [{ signal: 'width' }, { signal: 'chartHeight' }],
+                  },
+                ],
+              },
+
+              {
+                type: 'group',
+                from: {
+                  facet: {
+                    name: 'series',
+                    data: 'fish',
+                    groupby: ['station'],
+                  },
+                },
+                marks: [
+                  {
+                    type: 'line',
+                    from: { data: 'series' },
+                    encode: {
+                      enter: {
+                        x: { scale: 'xscale', field: 'time' },
+                        y: { scale: 'yfish', field: 'abun' },
+                        stroke: { scale: 'color', field: 'station' },
+                        interactive: false,
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+          this.locationSpec('Whale Rock', 'height / 2'),
+          this.locationSpec('Fox Island', 'height * 3 / 4'),
+        ],
+      };
+    },
+  },
+  methods: {
+    locationSpec(location, ySpec) {
+      return {
+        type: 'group',
+        desctiption: `${location} Water Temperature`,
+        name: location.replace(' ', '_'),
+
+        encode: {
+          enter: {
+            y: { signal: ySpec },
+            width: { signal: 'width' },
+            height: { signal: 'chartHeight / 2' },
+          },
+        },
+
+        data: [
+          {
+            name: 'loc_temps',
+            source: 'temps',
+            transform: [
+              { type: 'filter', expr: `datum.Station === "${location}"` },
+              { type: 'filter', expr: 'datum.level === "Surface"' },
+            ],
+          },
+        ],
+
+        signals: [
+          {
+            name: 'hovered',
+            value: null,
+            on: [
+              { events: '@voronoi:mouseover', update: 'datum' },
+              { events: 'mouseout', update: 'null' },
+            ],
+          },
+        ],
+
         axes: [
           { orient: 'bottom', scale: 'xscale', title: 'Year' },
-          { orient: 'left', scale: 'yscale', title: 'Abundance', grid: false },
-          {
-            orient: 'right',
-            scale: 'tempscale',
-            title: 'Water Temperature (C)',
-            grid: false,
-          },
+          { orient: 'left', scale: 'ytemps', title: location, grid: false },
         ],
 
         marks: [
@@ -121,12 +272,12 @@ export default {
           {
             type: 'symbol',
             name: 'secret_symbols',
-            from: { data: 'fish' },
+            from: { data: 'loc_temps' },
             encode: {
               enter: {
                 fill: { value: 'transparent' },
-                x: { scale: 'xscale', field: 'time' },
-                y: { scale: 'yscale', field: 'abun' },
+                x: { scale: 'xscale', field: 'utc_time' },
+                y: { scale: 'ytemps', field: 'delta' },
               },
             },
           },
@@ -140,7 +291,7 @@ export default {
                 stroke: { value: 'transparent' },
                 fill: { value: 'transparent' },
                 tooltip: {
-                  signal: `{ 'Abundance': format(datum.datum.abun, ',.3f'), 'Year': datum.datum.year, 'Station': datum.datum.station }`,
+                  signal: `{ 'Water Temperature': format(datum.datum.delta, ',.3f'), 'Level': datum.datum.level, 'Year': datum.datum.utc_time, 'Station': datum.datum.Station }`,
                 },
               },
             },
@@ -149,7 +300,7 @@ export default {
                 type: 'voronoi',
                 x: 'datum.x',
                 y: 'datum.y',
-                size: [{ signal: 'width' }, { signal: 'height' }],
+                size: [{ signal: 'width' }, { signal: 'chartHeight / 2' }],
               },
             ],
           },
@@ -159,8 +310,8 @@ export default {
             from: {
               facet: {
                 name: 'series',
-                data: 'fish',
-                groupby: ['station'],
+                data: 'loc_temps',
+                groupby: ['key'],
               },
             },
             marks: [
@@ -169,38 +320,11 @@ export default {
                 from: { data: 'series' },
                 encode: {
                   enter: {
-                    x: { scale: 'xscale', field: 'time' },
-                    y: { scale: 'yscale', field: 'abun' },
-                    stroke: { scale: 'color', field: 'station' },
-                    interactive: false,
-                  },
-                },
-              },
-            ],
-          },
-
-          {
-            type: 'group',
-            from: {
-              facet: {
-                name: 'temp_data',
-                data: 'temps',
-                groupby: ['Station'],
-              },
-            },
-            marks: [
-              {
-                type: 'line',
-                from: { data: 'temp_data' },
-                encode: {
-                  enter: {
                     x: { scale: 'xscale', field: 'utc_time' },
-                    y: { scale: 'tempscale', field: 'Surface_Temperature' },
-                    stroke: { scale: 'color', field: 'Station' },
+                    y: { scale: 'ytemps', field: 'delta' },
+                    stroke: { signal: `scale("color", "${location}")` },
                     interactive: false,
-                    strokeWidth: { value: 1 },
-                    opacity: { value: 0.5 },
-                    defined: { signal: 'datum.Surface_Temperature != null' },
+                    defined: { signal: 'datum.delta != null' },
                   },
                 },
               },

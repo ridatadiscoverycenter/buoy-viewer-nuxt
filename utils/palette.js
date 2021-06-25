@@ -1,5 +1,5 @@
 const colors = [
-  { code: '#5a3100', assigned: false },
+  { code: '#2e0d93', assigned: false },
   { code: '#fd5925', assigned: false },
   { code: '#3f6f94', assigned: false },
   { code: '#daa4f9', assigned: false },
@@ -12,7 +12,7 @@ const colors = [
   { code: '#456fe7', assigned: false },
   { code: '#9f6c3b', assigned: false },
   { code: '#87c4c1', assigned: false },
-  { code: '#2e0d93', assigned: false },
+  { code: '#5a3100', assigned: false },
   { code: '#972b2d', assigned: false },
   { code: '#1fa562', assigned: false },
   { code: '#ca50d3', assigned: false },

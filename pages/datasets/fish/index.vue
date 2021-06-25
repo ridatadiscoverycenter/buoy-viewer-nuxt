@@ -15,7 +15,7 @@
             ></multiselect>
           </div>
           <FishHeatMap
-            v-if="!(samples.length === 0)"
+            v-if="samples.length > 0"
             id="heatmap"
             :dataset="samples"
             :min-width="800"

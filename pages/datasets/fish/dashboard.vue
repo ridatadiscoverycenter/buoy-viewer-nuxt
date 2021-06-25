@@ -5,8 +5,10 @@
       <template #subtitle>Details about this fish.</template>
       <template #chart>
         <FishLineChart
+          v-if="fishData.length > 0 && temps.length > 0"
           id="line-chart"
           :dataset="fishData"
+          :temps="temps"
           :enable-darkmode="false"
         />
       </template>
@@ -21,6 +23,8 @@
         <FishExploreForm />
       </template>
     </ChartContainer>
+
+    <CompassLoading :manual-load="loading" />
   </div>
 </template>
 
@@ -31,6 +35,7 @@ import ChartContainer from '@/components/base/ChartContainer.vue';
 import BuoyLocations from '@/components/buoy/Locations.vue';
 import FishExploreForm from '@/components/fish/FishExploreForm.vue';
 import FishLineChart from '@/components/fish/FishLineChart.vue';
+import CompassLoading from '@/components/loading.vue';
 
 export default {
   components: {
@@ -38,22 +43,31 @@ export default {
     BuoyLocations,
     FishExploreForm,
     FishLineChart,
+    CompassLoading,
   },
   data() {
     return {
-      loading: false,
       species: '',
+      loading: true,
     };
   },
   fetch() {
+    this.loading = true;
     this.species = this.$route.query.species;
   },
   computed: {
-    ...mapState('fish', ['coordinates', 'samples', 'stations']),
+    ...mapState('fish', ['coordinates', 'samples', 'stations', 'temps']),
     fishData() {
       return this.samples.filter((s) => s.title === this.species);
     },
   },
-  watchQuery: ['species'],
+  watch: {
+    '$route.query': '$fetch',
+    fishData(newData, oldData) {
+      if (newData.length > 0 && newData[0].title === this.species) {
+        this.loading = false;
+      }
+    },
+  },
 };
 </script>

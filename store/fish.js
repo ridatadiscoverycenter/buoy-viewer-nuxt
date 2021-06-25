@@ -17,7 +17,7 @@ export const mutations = { ...baseMutations };
 export const actions = {
   async fetchCoordinates({ commit, dispatch }) {
     const coords = await this.$axios.$get(`/${route}/coordinates`);
-    const stations = coords.map(({ station_name }) => station_name);
+    const stations = coords.map(({ station_name }) => station_name).sort();
     commit('mutate', { property: 'stations', with: stations });
     commit('mutate', { property: 'coordinates', with: coords });
     dispatch(
