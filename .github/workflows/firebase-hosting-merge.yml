@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn && yarn generate
+      - run: yarn
+      - run: yarn generate
         env:
           VUE_APP_MAPBOX_ACCESS_TOKEN: '${{ secrets.VUE_APP_MAPBOX_ACCESS_TOKEN }}'
       - uses: FirebaseExtended/action-hosting-deploy@v0
