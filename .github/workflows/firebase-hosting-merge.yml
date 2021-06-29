@@ -9,11 +9,8 @@ name: Deploy to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    env:
-      VUE_APP_MAPBOX_ACCESS_TOKEN: 'FAKE_VUE_APP_MAPBOX_ACCESS_TOKEN_VALUE'
     steps:
       - uses: actions/checkout@v2
-      - run: echo "Hello? ${{ env.VUE_APP_MAPBOX_ACCESS_TOKEN }}"
       - run: yarn install --frozen-lockfile && yarn generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
