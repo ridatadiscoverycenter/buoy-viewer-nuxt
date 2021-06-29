@@ -116,15 +116,6 @@ export default {
    ** Generate configuration
    */
   generate: {
-    ignore: [
-      '.nuxt', // buildDir
-      'static', // dir.static
-      'dist', // generate.dir
-      'node_modules',
-      '.**/*',
-      '.*',
-      'README.md',
-    ],
     exclude: ['/'],
   },
 };
