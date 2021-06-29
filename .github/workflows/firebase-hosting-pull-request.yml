@@ -9,10 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn
-      - run: yarn generate
-        env:
+      - name: Make env file
+        uses: SpicyPizza/create-envfile@v1
+        with:
           VUE_APP_MAPBOX_ACCESS_TOKEN: '${{ secrets.VUE_APP_MAPBOX_ACCESS_TOKEN }}'
+      - run: yarn && yarn generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
