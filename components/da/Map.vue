@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       mapCenter: [-71.46, 41.5],
-      accessToken: process.env.NUXT_ENV_VUE_APP_MAPBOX_ACCESS_TOKEN, // access token. Needed if using Mapbox maps
+      accessToken: process.env.NUXT_ENV_MAPBOX_ACCESS_TOKEN, // access token. Needed if using Mapbox maps
       geoJsonlayer: {
         id: 'data',
         type: 'circle',
