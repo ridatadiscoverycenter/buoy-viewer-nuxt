@@ -1,5 +1,5 @@
 export default {
-  target: 'static',
+  target: 'server',
   ssr: false,
   components: true,
   router: {
@@ -111,5 +111,20 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {},
+  },
+  /*
+   ** Generate configuration
+   */
+  generate: {
+    ignore: [
+      '.nuxt', // buildDir
+      'static', // dir.static
+      'dist', // generate.dir
+      'node_modules',
+      '.**/*',
+      '.*',
+      'README.md',
+    ],
+    exclude: ['/'],
   },
 };
