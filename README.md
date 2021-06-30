@@ -32,7 +32,7 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 
 ## Generating Static Files and its Dynamic API Call implications
-`yarn generate` configures our web application as a static web application. During this process, it generates every route as an HTML file and exports it to the `dist/` directory. This process raises a concern whether our dynamic content gets baked. 
+`yarn generate` configures our web application as a static web application. During this process, it generates every route as an HTML file and exports it to the `dist/` directory. This process raises a concern whether our dynamic content gets baked in/cached within the built site. 
 
 The theory for why the dynamic contect for this project continue to work is that we generally make our API calls in the store actions and retrieve data from the store. Nuxt isn't able to bake the results of these calls and keeps them as javascript. 
 
