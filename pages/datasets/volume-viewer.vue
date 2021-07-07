@@ -10,12 +10,18 @@
       ></template
     >
     <template #main-header><h1 class="title">Volume Viewer</h1></template>
-    <template #main-section></template>
+    <template #main-section>
+      <iframe
+        src="./unity-volume-viewer-web-app/index.html"
+        width="1000"
+        height="800"
+      ></iframe>
+    </template>
   </Dashboard>
 </template>
 
 <script>
-import Dashboard from '@/components/base/BaseDashboard.vue';
+import Dashboard from '~/components/base/BaseDashboard.vue';
 
 export default {
   components: {
