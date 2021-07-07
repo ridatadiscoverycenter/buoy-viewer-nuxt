@@ -151,6 +151,11 @@ export default {
           route: 'datasets-domoic-acid',
           available: true,
         },
+        {
+          name: 'Volume Viewer',
+          route: 'datasets-volume-viewer',
+          available: true,
+        },
       ],
     };
   },
