@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ChartContainer width="two-thirds" :height="3">
+    <ChartContainer width="two-thirds" :height="5">
       <template #title>{{ species }}</template>
       <template #subtitle>Details about this fish.</template>
       <template #chart>
