@@ -10,6 +10,7 @@ export const state = () => ({
   metrics: [],
   stations: [],
   species: [],
+  info: {}
 });
 
 export const mutations = { ...baseMutations };
@@ -51,14 +52,18 @@ export const actions = {
     });
     commit('mutate', { property: 'samples', with: dataParsed });
   },
-  async fetchTemps({ commit, dispatch }) {
+  async fetchTemps({ commit }) {
     const temps = await this.$axios.$get(`/${route}/temps`);
     commit('mutate', { property: 'temps', with: temps });
   },
-  async fetchMetrics({ commit, dispatch }) {
+  async fetchMetrics({ commit }) {
     const metrics = await this.$axios.$get(`/${route}/metrics`);
     commit('mutate', { property: 'metrics', with: metrics });
   },
+  async fetchInfo({ commit }, species) {
+    const info = await this.$axios.$get(`/${route}/info/${species}`);
+    commit('mutate', { property: 'info', with: info });
+  }
 };
 
 export const getters = {

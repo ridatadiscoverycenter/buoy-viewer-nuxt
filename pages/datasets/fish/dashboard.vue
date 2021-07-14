@@ -2,8 +2,33 @@
   <div>
     <ChartContainer width="two-thirds" :height="5">
       <template #title>{{ species }}</template>
-      <template #subtitle>Details about this fish.</template>
       <template #chart>
+        <div v-if="info.sciName" class="message is-info is-light mx-4">
+          <div class="message-header">
+            <p>Species Info</p>
+            <a
+              v-if="info.href"
+              :href="info.href"
+              class="is-size-7 has-text-weight-light"
+              >Source: FishBase</a
+            >
+          </div>
+          <div class="message-body">
+            <figure v-if="info.photoUrl" class="image is-128x128 fish-image">
+              <img :src="info.photoUrl" :alt="'Photo of ' + species" />
+            </figure>
+            <div>
+              <p><strong>Scientific Name:</strong> {{ info.sciName }}</p>
+              <p v-if="info.sectionData">
+                <strong>IUCN Status:</strong> {{ info.sectionData.IUCN }}
+              </p>
+              <p v-if="info.sectionData">
+                <strong>Classification:</strong>
+                {{ info.sectionData.Classification.Classification }}
+              </p>
+            </div>
+          </div>
+        </div>
         <FishLineChart
           v-if="fishData.length > 0 && temps.length > 0"
           id="line-chart"
@@ -51,12 +76,19 @@ export default {
       loading: true,
     };
   },
-  fetch() {
+  async fetch() {
     this.loading = true;
     this.species = this.$route.query.species;
+    await this.$store.dispatch('fish/fetchInfo', this.species);
   },
   computed: {
-    ...mapState('fish', ['coordinates', 'samples', 'stations', 'temps']),
+    ...mapState('fish', [
+      'coordinates',
+      'samples',
+      'stations',
+      'temps',
+      'info',
+    ]),
     fishData() {
       return this.samples.filter((s) => s.title === this.species);
     },
@@ -71,3 +103,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.fish-image {
+  float: right;
+}
+</style>
