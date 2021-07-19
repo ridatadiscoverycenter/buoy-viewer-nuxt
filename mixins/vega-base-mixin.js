@@ -45,7 +45,7 @@ const vegaBaseMixin = {
   },
   computed: {
     actionsWidth() {
-      return this.includeActions ? 28 : 0;
+      return this.includeActions ? 38 : 0;
     },
     spec() {
       return _.merge({}, this.baseSpec, this.specOverride);
