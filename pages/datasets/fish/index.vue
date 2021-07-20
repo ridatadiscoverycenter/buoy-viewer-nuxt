@@ -1,8 +1,27 @@
 <template>
   <div>
     <ChartContainer width="full">
-      <template #title>Fish Trawl Heatmap</template>
-      <template #subtitle> A heatmap with fish!</template>
+      <template #title>Fish Trawl Survey</template>
+      <template #subtitle
+        ><p>
+          The University of Rhode Island Graduate School of Oceanography Fish
+          Trawl Survey is a state funded survey of the bottom fish and
+          invertebrate community in Narragansett Bay, Rhode Island. The survey
+          was initiated in 1959 by Charles J. Fish, founder and director of the
+          Narragansett Marine Laboratory, the precursor to the Graduate School
+          of Oceanography. The Fish Trawl Survey was developed to quantify the
+          seasonal occurrences of migratory fish populations, whereas scientists
+          had previously relied on anecdotal information.
+        </p>
+        <br />
+        <p>
+          The heatmap below shows the abundance by year of the most commonly
+          found fish in the University of Rhode Island Graduate School of
+          Oceanography Fish Trawl Survey. The icons are sized and colored by
+          abundance. To learn more about a species, select one from the
+          "Explore" panel.
+        </p></template
+      >
       <template #chart>
         <div class="is-flex-column">
           <div class="control-item control-item-first">
@@ -27,7 +46,6 @@
       </template>
     </ChartContainer>
 
-    <!-- TODO: does this map work/make sense here -->
     <BuoyLocations :coordinates="coordinates" location-type="Survey" />
 
     <ChartContainer width="two-thirds" :height="1">
@@ -42,24 +60,25 @@
       <template #title>Learn More</template>
       <template #subtitle
         ><p>
-          UPDATE THIS: The historical data available on this site has been
-          compiled from the
-          <a href="https://web.uri.edu/plankton/"
-            >Narragansett Bay Time Series</a
-          >
-          and <a href="http://www.nabats.org/">NABATS.org</a>.
+          The data available on this site has been compiled from the
+          <a href="https://web.uri.edu/fishtrawl/"
+            >University of Rhode Island Graduate School of Oceanography Fish
+            Trawl Survey</a
+          >.
         </p>
         <p>
           <strong>To cite this data</strong>:
-          <a href="https://web.uri.edu/gso/research/plankton/data/"
-            >Plankton Time Data Page</a
-          >, and for data prior to 1999: please honor the contributions of Prof.
-          Smayda by properly citing the 1959 to 1997 NABATS data as: "Smayda,
-          T.J. &amp; the Bunker C community (1959-1997). Narragansett Bay
-          Plankton Time Series. Graduate School of Oceanography, URI. Data
-          available at: <a href="http://www.nabats.org/">NABATS.org</a>"
-        </p></template
-      >
+          <a href="https://web.uri.edu/fishtrawl/data/">Fish Trawl Data Page</a>
+        </p>
+        <br />
+        <p>
+          The data has also been made available on
+          <a
+            href="https://pricaimcit.services.brown.edu/erddap/search/index.html?page=1&itemsPerPage=1000&searchFor=Fish+Trawl"
+            >ERDDAP</a
+          >.
+        </p>
+      </template>
     </ChartContainer>
   </div>
 </template>

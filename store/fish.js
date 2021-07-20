@@ -7,7 +7,6 @@ export const state = () => ({
   coordinates: [],
   samples: [],
   temps: [],
-  metrics: [],
   stations: [],
   species: [],
   info: {}
@@ -29,7 +28,7 @@ export const actions = {
   },
   async fetchSamples({ commit }) {
     const samples = await this.$axios.$get(`/${route}/species`);
-    let species = samples.map(({title}) => title)
+    let species = samples.map(({title}) => title).sort()
     species = species.filter((v, i, a) => a.indexOf(v) === i);
     commit('mutate', { property: 'species', with: species })
     const dataParsed = samples.map(d => {
@@ -55,10 +54,6 @@ export const actions = {
   async fetchTemps({ commit }) {
     const temps = await this.$axios.$get(`/${route}/temps`);
     commit('mutate', { property: 'temps', with: temps });
-  },
-  async fetchMetrics({ commit }) {
-    const metrics = await this.$axios.$get(`/${route}/metrics`);
-    commit('mutate', { property: 'metrics', with: metrics });
   },
   async fetchInfo({ commit }, species) {
     const info = await this.$axios.$get(`/${route}/info/${species}`);

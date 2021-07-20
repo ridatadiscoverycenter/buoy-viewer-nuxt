@@ -152,6 +152,7 @@ const vegaBaseMixin = {
           this.view = res.view;
         })
         .catch((err) => {
+          // eslint-disable-next-line no-console
           console.log(err);
         });
     },

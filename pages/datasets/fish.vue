@@ -42,7 +42,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('fish', ['coordinates', 'samples', 'temps', 'metrics']),
+    ...mapState('fish', ['coordinates', 'samples', 'temps']),
   },
   watch: {
     $route(val) {
@@ -59,9 +59,6 @@ export default {
     }
     if (this.temps.length === 0) {
       this.$store.dispatch('fish/fetchTemps');
-    }
-    if (this.metrics.length === 0) {
-      this.$store.dispatch('fish/fetchMetrics');
     }
   },
 };

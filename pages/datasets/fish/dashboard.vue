@@ -36,6 +36,12 @@
           :temps="temps"
           :enable-darkmode="false"
         />
+        <FishTempsCharts
+          v-if="fishData.length > 0 && temps.length > 0"
+          id="temps-charts"
+          :dataset="temps"
+          :enable-darkmode="false"
+        />
       </template>
     </ChartContainer>
 
@@ -60,6 +66,7 @@ import ChartContainer from '@/components/base/ChartContainer.vue';
 import BuoyLocations from '@/components/buoy/Locations.vue';
 import FishExploreForm from '@/components/fish/FishExploreForm.vue';
 import FishLineChart from '@/components/fish/FishLineChart.vue';
+import FishTempsCharts from '@/components/fish/FishTempsCharts.vue';
 import CompassLoading from '@/components/loading.vue';
 
 export default {
@@ -68,6 +75,7 @@ export default {
     BuoyLocations,
     FishExploreForm,
     FishLineChart,
+    FishTempsCharts,
     CompassLoading,
   },
   data() {
@@ -80,6 +88,7 @@ export default {
     this.loading = true;
     this.species = this.$route.query.species;
     await this.$store.dispatch('fish/fetchInfo', this.species);
+    this.loading = false;
   },
   computed: {
     ...mapState('fish', [
@@ -95,11 +104,6 @@ export default {
   },
   watch: {
     '$route.query': '$fetch',
-    fishData(newData, oldData) {
-      if (newData.length > 0 && newData[0].title === this.species) {
-        this.loading = false;
-      }
-    },
   },
 };
 </script>

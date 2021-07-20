@@ -5,12 +5,6 @@ import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 
 export default {
   mixins: [vegaBaseMixin],
-  props: {
-    temps: {
-      type: Array,
-      required: true,
-    },
-  },
   computed: {
     ...mapState(['colorMap']),
     ...mapState('fish', ['stations']),
@@ -22,15 +16,8 @@ export default {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         description:
           'Fish trawl survey line chart, with value labels shown upon mouse hover.',
-        height: 900,
+        height: 400,
         padding: 5,
-
-        signals: [
-          {
-            name: 'chartHeight',
-            update: 'height / 5 - 20',
-          },
-        ],
 
         data: [
           {
@@ -38,17 +25,6 @@ export default {
             values: this.dataset,
             transform: [
               { type: 'formula', as: 'time', expr: 'utc(datum.year, 0)' },
-            ],
-          },
-          {
-            name: 'temps',
-            values: this.temps,
-            transform: [
-              {
-                type: 'formula',
-                as: 'utc_time',
-                expr: "utcParse(datum.year_month, '%Y-%m-%dT%H:%M:%S.%LZ')",
-              },
             ],
           },
         ],
@@ -68,15 +44,7 @@ export default {
             domain: { data: 'fish', field: 'abun' },
             nice: true,
             zero: true,
-            range: [{ signal: 'chartHeight * 2' }, 0],
-          },
-          {
-            name: 'ytemps',
-            type: 'linear',
-            domain: { data: 'temps', field: 'delta' },
-            nice: true,
-            zero: true,
-            range: [{ signal: 'chartHeight' }, 0],
+            range: [{ signal: 'height' }, 0],
           },
           {
             name: 'color',
@@ -108,7 +76,7 @@ export default {
               enter: {
                 y: { value: 0 },
                 width: { signal: 'width' },
-                height: { signal: 'chartHeight * 2' },
+                height: { signal: 'height' },
               },
             },
 
@@ -185,7 +153,7 @@ export default {
                     type: 'voronoi',
                     x: 'datum.x',
                     y: 'datum.y',
-                    size: [{ signal: 'width' }, { signal: 'chartHeight * 2' }],
+                    size: [{ signal: 'width' }, { signal: 'height' }],
                   },
                 ],
               },
@@ -214,291 +182,6 @@ export default {
                     },
                   },
                 ],
-              },
-            ],
-          },
-          this.locationSpec('Whale Rock', 'height * 2 / 5'),
-          this.locationSpec('Fox Island', 'height * 3 / 5'),
-          this.tempDiffSpec(),
-        ],
-      };
-    },
-  },
-  methods: {
-    locationSpec(location, ySpec) {
-      return {
-        type: 'group',
-        desctiption: `${location} Water Temperature`,
-        name: location.replace(' ', '_'),
-
-        encode: {
-          enter: {
-            y: { signal: ySpec },
-            width: { signal: 'width' },
-            height: { signal: 'chartHeight' },
-          },
-        },
-
-        data: [
-          {
-            name: 'loc_temps',
-            source: 'temps',
-            transform: [
-              { type: 'filter', expr: `datum.Station === "${location}"` },
-              { type: 'filter', expr: 'datum.level === "Surface"' },
-            ],
-          },
-        ],
-
-        signals: [
-          {
-            name: 'hovered',
-            value: null,
-            on: [
-              { events: '@voronoi:mouseover', update: 'datum' },
-              { events: 'mouseout', update: 'null' },
-            ],
-          },
-        ],
-
-        axes: [
-          { orient: 'bottom', scale: 'xscale' },
-          {
-            orient: 'left',
-            scale: 'ytemps',
-            title: `Water Temp. Δ °C (${location})`,
-            grid: false,
-          },
-        ],
-
-        marks: [
-          {
-            type: 'symbol',
-            zindex: 1,
-            encode: {
-              enter: {
-                size: { value: 20 },
-              },
-              update: {
-                fill: [
-                  { test: '!hovered', value: 'transparent' },
-                  { value: 'black' },
-                ],
-                x: { signal: 'hovered && hovered.x' },
-                y: { signal: 'hovered && hovered.y' },
-              },
-            },
-          },
-
-          {
-            type: 'symbol',
-            name: 'secret_symbols',
-            from: { data: 'loc_temps' },
-            encode: {
-              enter: {
-                fill: { value: 'transparent' },
-                x: { scale: 'xscale', field: 'utc_time' },
-                y: { scale: 'ytemps', field: 'delta' },
-              },
-            },
-          },
-
-          {
-            type: 'path',
-            name: 'voronoi',
-            from: { data: 'secret_symbols' },
-            encode: {
-              enter: {
-                stroke: { value: 'transparent' },
-                fill: { value: 'transparent' },
-                tooltip: {
-                  signal: `{ 'Water Temp. Δ from Seasonally Adjusted Mean': format(datum.datum.delta, ',.3f') + ' °C', 'Level': datum.datum.level, 'Month/Year': monthFormat(utcmonth(datum.datum.utc_time)) + ' ' + utcyear(datum.datum.utc_time), 'Station': datum.datum.Station }`,
-                },
-              },
-            },
-            transform: [
-              {
-                type: 'voronoi',
-                x: 'datum.x',
-                y: 'datum.y',
-                size: [{ signal: 'width' }, { signal: 'chartHeight' }],
-              },
-            ],
-          },
-
-          {
-            type: 'group',
-            from: {
-              facet: {
-                name: 'series',
-                data: 'loc_temps',
-                groupby: ['key'],
-              },
-            },
-            marks: [
-              {
-                type: 'rect',
-                from: { data: 'series' },
-                encode: {
-                  enter: {
-                    x: { scale: 'xscale', field: 'utc_time' },
-                    y: { scale: 'ytemps', field: 'delta' },
-                    y2: { signal: 'scale("ytemps", 0)' },
-                    stroke: { signal: `scale("color", "${location}")` },
-                    interactive: false,
-                    defined: { signal: 'datum.delta != null' },
-                  },
-                },
-              },
-            ],
-          },
-        ],
-      };
-    },
-    tempDiffSpec() {
-      return {
-        type: 'group',
-        desctiption: `Difference Water Temperature Bottom/Surface`,
-        name: 'tempdiff',
-
-        encode: {
-          enter: {
-            y: { signal: 'height * 4 / 5' },
-            width: { signal: 'width' },
-            height: { signal: 'chartHeight' },
-          },
-        },
-
-        data: [
-          {
-            name: 'diff_temps',
-            source: 'temps',
-            transform: [
-              {
-                type: 'pivot',
-                groupby: ['Station', 'utc_time'],
-                field: 'level',
-                value: 'mean_temp',
-              },
-              {
-                type: 'formula',
-                as: 'diff',
-                expr: 'datum.Surface && datum.Bottom ? datum.Surface - datum.Bottom : null',
-              },
-            ],
-          },
-        ],
-
-        signals: [
-          {
-            name: 'hovered',
-            value: null,
-            on: [
-              { events: '@voronoi:mouseover', update: 'datum' },
-              { events: 'mouseout', update: 'null' },
-            ],
-          },
-        ],
-
-        scales: [
-          {
-            name: 'ydiffs',
-            type: 'linear',
-            domain: { data: 'diff_temps', field: 'diff' },
-            nice: true,
-            zero: true,
-            range: [{ signal: 'chartHeight' }, 0],
-          },
-        ],
-
-        axes: [
-          { orient: 'bottom', scale: 'xscale', title: 'Year' },
-          {
-            orient: 'left',
-            scale: 'ydiffs',
-            title: `Water Temp. Δ Suface - Bottom`,
-            grid: false,
-          },
-        ],
-
-        marks: [
-          {
-            type: 'symbol',
-            zindex: 1,
-            encode: {
-              enter: {
-                size: { value: 20 },
-              },
-              update: {
-                fill: [
-                  { test: '!hovered', value: 'transparent' },
-                  { value: 'black' },
-                ],
-                x: { signal: 'hovered && hovered.x' },
-                y: { signal: 'hovered && hovered.y' },
-              },
-            },
-          },
-
-          {
-            type: 'symbol',
-            name: 'secret_symbols',
-            from: { data: 'diff_temps' },
-            encode: {
-              enter: {
-                fill: { value: 'transparent' },
-                x: { scale: 'xscale', field: 'utc_time' },
-                y: { scale: 'ydiffs', field: 'diff' },
-              },
-            },
-          },
-
-          {
-            type: 'path',
-            name: 'voronoi',
-            from: { data: 'secret_symbols' },
-            encode: {
-              enter: {
-                stroke: { value: 'transparent' },
-                fill: { value: 'transparent' },
-                tooltip: {
-                  signal: `{ 'Water Temp. Δ Surface - Bottom': format(datum.datum.diff, ',.3f') + ' °C', 'Month/Year': monthFormat(utcmonth(datum.datum.utc_time)) + ' ' + utcyear(datum.datum.utc_time), 'Station': datum.datum.Station }`,
-                },
-              },
-            },
-            transform: [
-              {
-                type: 'voronoi',
-                x: 'datum.x',
-                y: 'datum.y',
-                size: [{ signal: 'width' }, { signal: 'chartHeight' }],
-              },
-            ],
-          },
-
-          {
-            type: 'group',
-            from: {
-              facet: {
-                name: 'series',
-                data: 'diff_temps',
-                groupby: ['Station'],
-              },
-            },
-            marks: [
-              {
-                type: 'line',
-                from: { data: 'series' },
-                encode: {
-                  enter: {
-                    x: { scale: 'xscale', field: 'utc_time' },
-                    y: { scale: 'ydiffs', field: 'diff' },
-                    stroke: { signal: 'scale("color", datum.Station)' },
-                    strokeWidth: 1,
-                    interactive: false,
-                    defined: { signal: 'datum.diff != null' },
-                  },
-                },
               },
             ],
           },
