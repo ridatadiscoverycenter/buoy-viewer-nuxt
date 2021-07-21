@@ -26,10 +26,19 @@ export default {
               {
                 type: 'filter',
                 expr: `datum.station == "${this.station}"`,
-              },
-              { type: 'filter', expr: 'datum.abun > 0' },
+              }
             ],
           },
+          {
+            name: 'dataNoZeros',
+            source: 'data',
+            transform: [
+              {
+                type: 'filter',
+                expr: 'datum.abun > 0'
+              }
+            ]
+          }
         ],
         scales: [
           {
@@ -49,16 +58,18 @@ export default {
             name: 'color',
             type: 'log',
             range: { scheme: 'tealblues' },
-            domain: { data: 'data', field: 'abun' },
+            domain: { data: 'dataNoZeros', field: 'abun' },
             reverse: false,
             zero: false,
             nice: true,
+            clamp: true,
           },
           {
             name: 'size',
             type: 'log',
-            domain: { data: 'data', field: 'abun' },
+            domain: { data: 'dataNoZeros', field: 'abun' },
             range: [0.15, 1],
+            clamp: true
           },
           {
             name: 'shape',
@@ -94,7 +105,7 @@ export default {
         ],
         legends: [
           {
-            title: ['Abundance', 'of Fish'],
+            title: ['Abundance', 'of Species'],
             fill: 'color',
             type: 'gradient',
             gradientLength: { signal: 'height - 20' },
@@ -118,7 +129,15 @@ export default {
                 x: {
                   signal: "scale('x', datum.year) + bandwidth('x') / 2",
                 },
-                fill: { scale: 'color', field: 'abun' },
+                fill: [
+                  { test: 'datum.abun === 0', value: 'transparent' },
+                  { scale: 'color', field: 'abun' },
+                ],
+                stroke: { scale: 'color', field: 'abun' },
+                strokeWidth: [
+                  { test: 'datum.abun === 0', value: 0.3 },
+                  { value: 0 },
+                ],
                 shape: { scale: 'shape', field: 'animal' },
                 width: { signal: "bandwidth('x') * scale('size', datum.abun)" },
                 height: {
