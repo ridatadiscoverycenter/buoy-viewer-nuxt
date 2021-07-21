@@ -92,7 +92,12 @@ export default {
             ],
 
             axes: [
-              { orient: 'bottom', scale: 'xscale' },
+              {
+                orient: 'bottom',
+                scale: 'xscale',
+                labelOverlap: true,
+                title: 'Year',
+              },
               {
                 orient: 'left',
                 scale: 'yfish',

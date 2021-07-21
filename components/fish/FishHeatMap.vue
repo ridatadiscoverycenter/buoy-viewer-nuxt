@@ -26,7 +26,7 @@ export default {
               {
                 type: 'filter',
                 expr: `datum.station == "${this.station}"`,
-              }
+              },
             ],
           },
           {
@@ -35,10 +35,10 @@ export default {
             transform: [
               {
                 type: 'filter',
-                expr: 'datum.abun > 0'
-              }
-            ]
-          }
+                expr: 'datum.abun > 0',
+              },
+            ],
+          },
         ],
         scales: [
           {
@@ -69,7 +69,7 @@ export default {
             type: 'log',
             domain: { data: 'dataNoZeros', field: 'abun' },
             range: [0.15, 1],
-            clamp: true
+            clamp: true,
           },
           {
             name: 'shape',
@@ -156,5 +156,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

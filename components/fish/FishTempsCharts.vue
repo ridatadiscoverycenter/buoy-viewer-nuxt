@@ -14,6 +14,7 @@ export default {
     baseSpec() {
       return {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
+        title: 'Water Temperature Data',
         description:
           'Fish trawl survey temperature data charts, with value labels shown upon mouse hover.',
         height: 500,
@@ -111,11 +112,11 @@ export default {
         ],
 
         axes: [
-          { orient: 'bottom', scale: 'xscale' },
+          { orient: 'bottom', scale: 'xscale', labelOverlap: true },
           {
             orient: 'left',
             scale: 'ytemps',
-            title: `Water Temp. Δ °C (${location})`,
+            title: `Surface Δ °C from Mean`,
             grid: false,
           },
         ],
@@ -261,11 +262,16 @@ export default {
         ],
 
         axes: [
-          { orient: 'bottom', scale: 'xscale', title: 'Year' },
+          {
+            orient: 'bottom',
+            scale: 'xscale',
+            title: 'Month/Year',
+            labelOverlap: true,
+          },
           {
             orient: 'left',
             scale: 'ydiffs',
-            title: `Water Temp. Δ Suface - Bottom`,
+            title: `Δ °C Suface - Bottom`,
             grid: false,
           },
         ],

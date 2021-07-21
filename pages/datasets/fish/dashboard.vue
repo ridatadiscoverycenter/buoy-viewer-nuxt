@@ -30,18 +30,25 @@
           </div>
         </div>
         <FishLineChart
-          v-if="fishData.length > 0 && temps.length > 0"
+          v-if="fishData.length > 0"
           id="line-chart"
           :dataset="fishData"
-          :temps="temps"
           :enable-darkmode="false"
         />
         <FishTempsCharts
-          v-if="fishData.length > 0 && temps.length > 0"
+          v-if="temps.length > 0"
           id="temps-charts"
           :dataset="temps"
           :enable-darkmode="false"
         />
+        <p>
+          <small
+            ><strong>Surface Δ °C from Mean:</strong> The mean water surface
+            temperature of the given month (e.g. January 1970) minus the mean
+            water surface temperature for the month (e.g. January) in all years
+            in the dataset.</small
+          >
+        </p>
       </template>
     </ChartContainer>
 
