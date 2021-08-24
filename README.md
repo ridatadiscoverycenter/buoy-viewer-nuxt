@@ -5,7 +5,7 @@
 
 > Explore data from the [RI Data Discovery Center](https://ridatadiscovery.org) about the Narragansett Bay.
 
-A web app to explore data about the Narragansett bay.  Built using Nuxt (vue).  Uses the buoy-api as a backend.
+A web app to explore data about the Narragansett bay.  Built using Nuxt (Vue).  Uses the buoy-api as a backend.
 
 ## Build Setup
 
