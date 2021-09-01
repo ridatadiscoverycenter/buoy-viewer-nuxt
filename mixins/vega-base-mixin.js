@@ -4,7 +4,9 @@ import * as _ from 'lodash';
 // TODO: make background transparent by default
 const vegaBaseMixin = {
   render(h) {
-    return h('div', { attrs: { id: this.fullId } });
+    return h('div', {
+      attrs: { id: this.fullId, style: 'overflow: auto; display: block' },
+    });
   },
   props: {
     id: {
@@ -152,6 +154,7 @@ const vegaBaseMixin = {
           this.view = res.view;
         })
         .catch((err) => {
+          // eslint-disable-next-line no-console
           console.log(err);
         });
     },

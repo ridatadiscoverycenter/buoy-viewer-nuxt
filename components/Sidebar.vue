@@ -151,6 +151,11 @@ export default {
           route: 'datasets-domoic-acid',
           available: true,
         },
+        {
+          name: 'Fish Trawl Survey',
+          route: 'datasets-fish',
+          available: true,
+        },
       ],
     };
   },

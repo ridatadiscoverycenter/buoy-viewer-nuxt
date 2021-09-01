@@ -17,7 +17,6 @@ export const actions = {
   async fetchCoordinates({ commit, dispatch }) {
     const coords = await this.$axios.$get(`/${route}/coordinates`);
     commit('mutate', { property: 'coordinates', with: coords });
-    // dispatch('updateColorMap', coords.map((v) => v.station_name), { root: true })
   },
   async fetchSamples({ commit }) {
     const samples = await this.$axios.$get(`/${route}/samples`);
