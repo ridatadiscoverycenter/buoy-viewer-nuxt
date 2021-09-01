@@ -322,7 +322,7 @@ export default {
                   update: {
                     strokeOpacity: [
                       {
-                        test: `!selected || selected === datum.station_name`,
+                        test: '!selected || selected === datum.station_name',
                         value: 0.85,
                       },
                       { value: 0.15 },

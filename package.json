@@ -14,7 +14,8 @@
     "generate": "nuxt generate",
     "start": "nuxt start",
     "test": "jest",
-    "prod": "yarn build && yarn start"
+    "prod": "yarn build && yarn start",
+    "shp2topo": "scripts/shp2topo.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -57,10 +58,13 @@
     "husky": "^6.0.0",
     "jest": "^26.6.3",
     "lint-staged": "^11.0.0",
+    "ndjson-cli": "^0.3.1",
     "node-sass": "^6.0.0",
     "prettier": "^2.3.0",
     "sass-loader": "^10",
+    "shapefile": "^0.6.6",
     "stylelint": "^13.13.1",
+    "topojson": "^3.0.2",
     "vue-jest": "^4.0.1"
   },
   "lint-staged": {

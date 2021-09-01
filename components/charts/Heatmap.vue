@@ -46,6 +46,13 @@ export default {
           {
             name: 'rawData',
             values: this.dataset,
+            transform: [
+              {
+                type: 'formula',
+                as: 'upperX',
+                expr: `utcOffset("${this.xUnit}", datum.${this.x})`,
+              },
+            ],
           },
           {
             name: 'data',
@@ -57,8 +64,14 @@ export default {
           {
             name: 'x',
             type: 'utc',
-            domain: { data: 'rawData', field: this.x },
+            domain: {
+              fields: [
+                { data: 'rawData', field: this.x },
+                { data: 'rawData', field: 'upperX' },
+              ],
+            },
             range: 'width',
+            nice: 'month',
           },
           {
             name: 'y',

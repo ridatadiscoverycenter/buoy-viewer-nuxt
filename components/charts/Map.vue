@@ -1,7 +1,8 @@
 <script>
 import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 
-import topojson from '@/static/ri.json';
+import coastlines from '@/static/ri_coast.json';
+import ripoly from '@/static/ri.json';
 
 export default {
   mixins: [vegaBaseMixin],
@@ -29,7 +30,6 @@ export default {
   },
   data() {
     return {
-      topo: topojson,
       legendSpec: {
         legends: [
           {
@@ -53,7 +53,11 @@ export default {
         data: [
           {
             name: 'outlines',
-            values: this.topo,
+            values: coastlines,
+          },
+          {
+            name: 'ri',
+            values: ripoly,
             format: { type: 'topojson', mesh: 'ri' },
           },
           {
@@ -74,7 +78,7 @@ export default {
             name: 'projection',
             type: 'mercator',
             size: { signal: '[width, height]' },
-            fit: { signal: 'data("outlines")' },
+            fit: { signal: '[data("ri"), data("outlines")]' },
           },
         ],
         scales: [
@@ -89,6 +93,17 @@ export default {
           {
             type: 'shape',
             from: { data: 'outlines' },
+            encode: {
+              enter: {
+                strokeWidth: { value: 1 },
+                stroke: { value: '#d3d3d3' },
+              },
+            },
+            transform: [{ type: 'geoshape', projection: 'projection' }],
+          },
+          {
+            type: 'shape',
+            from: { data: 'ri' },
             encode: {
               enter: {
                 strokeWidth: { value: 1 },

@@ -54,7 +54,7 @@
           :buoys="buoys"
           :min-date="minDate"
           :max-date="maxDate"
-          dataset="historical-buoy-data"
+          dataset="ma-buoy-data"
           :coordinates="coordinates"
         />
       </template>
@@ -71,29 +71,28 @@
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-historical-buoy-data-dashboard',
+              name: 'datasets-ma-buoy-data-dashboard',
               query: {
-                buoyIds: 'bid2,bid3',
+                buoyIds: 'bid101,bid102',
                 variables: 'WaterTempSurface,WaterTempBottom',
-                start: '2010-05-01T04%3A00%3A00.000Z',
-                end: '2011-10-31T04%3A00%3A00.000Z',
+                start: '2017-05-01T04%3A00%3A00.000Z',
+                end: '2017-11-30T04%3A00%3A00.000Z',
               },
             }"
-            >N. Prudence and Conimicut Pt, Water Temperature,
-            2010-2011</nuxt-link
+            >Cole and Taunton, Water Temperature, 2017</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
             :to="{
-              name: 'datasets-historical-buoy-data-dashboard',
+              name: 'datasets-ma-buoy-data-dashboard',
               query: {
-                buoyIds: 'bid15,bid17',
+                buoyIds: 'bid101,bid102',
                 variables: 'depth',
-                start: '2008-05-01T04%3A00%3A00.000Z',
-                end: '2009-10-31T04%3A00%3A00.000Z',
+                start: '2018-05-01T04%3A00%3A00.000Z',
+                end: '2018-11-30T04%3A00%3A00.000Z',
               },
             }"
-            >Greenwich Bay and GSO Dock, Depth, 2008-2009</nuxt-link
+            >Cole and Taunton, Depth, 20018</nuxt-link
           >
         </div>
       </template>
@@ -118,12 +117,20 @@
     <ChartContainer width="half" :height="1">
       <template #title>Learn More</template>
       <template #subtitle
-        >The historical data available on this site has been compiled from the
-        <a
-          href="http://www.dem.ri.gov/programs/emergencyresponse/bart/stations.php"
-          >Narragansett Bay Fixed-Site Monitoring Network</a
-        >. See <a href="nbfsmn_disclaimer.pdf">the disclaimer</a> for more
-        information on the data as well as how to cite it.</template
+        ><p>
+          The historical data available on this site has been compiled from the
+          <a
+            href="https://www.mass.gov/info-details/mount-hope-bay-marine-buoy-continuous-probe-data#data-files-for-mount-hope-bay-marine-buoys"
+            >Massachusetts Department of Environmental Protection</a
+          >. The seasonal monitoring program is part of the Narragansett Bay
+          Fixed-Site Monitoring Network.
+        </p>
+        <br />
+        <p>
+          Each data column in this dataset has a matching
+          <em>Qualifiers</em> column with notes on the data collection and
+          adjustments made.
+        </p></template
       >
     </ChartContainer>
   </div>
@@ -155,7 +162,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', [
+    ...mapState('mabuoy', [
       'variables',
       'coordinates',
       'summary',

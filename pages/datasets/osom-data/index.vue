@@ -174,7 +174,7 @@ export default {
   justify-self: center;
   align-self: center;
   font-size: 20rem !important;
-  color: $link;
+  color: rgb(89, 81, 139);
 }
 
 .mx-datepicker-range {

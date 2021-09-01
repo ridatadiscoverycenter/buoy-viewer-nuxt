@@ -15,5 +15,11 @@ module.exports = {
   ],
   plugins: ['prettier'],
   // add your custom rules here
-  rules: {},
+  rules: {
+    quotes: ['warn', 'single'],
+    semi: ['warn', 'always'],
+    'no-multi-spaces': ['warn'],
+    'vue/comment-directive': 'off',
+    'prettier/prettier': 'warn',
+  },
 };
