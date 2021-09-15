@@ -55,6 +55,7 @@ export default {
             'faChartArea',
             'faCompass',
             'faDatabase',
+            'faExclamationCircle',
             'faHome',
             'faInfoCircle',
             'faLifeRing',

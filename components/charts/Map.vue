@@ -123,7 +123,7 @@ export default {
                 fill: { scale: 'color', field: 'station_name' },
                 tooltip: {
                   signal:
-                    '{"Buoy ID": datum.buoyId, "Station Name": datum.station_name, "Latitude": datum.latitude, "Longitude": datum.longitude}',
+                    '{"Buoy ID": datum.buoyId, "Station Name": datum.station_name, "Latitude": format(datum.latitude, ".4f"), "Longitude": format(datum.longitude, ".4f")}',
                 },
               },
               update: {

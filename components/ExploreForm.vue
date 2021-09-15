@@ -164,6 +164,13 @@ export default {
       return `datasets-${this.dataset}-dashboard`;
     },
   },
+  watch: {
+    initBuoys(cur, old) {
+      // for some reason (probably to do with computation graphs) initBuoys isn't always set
+      // on initial render, so we need to watch it and set if it comes in a little later
+      this.selectedBuoys = [...cur];
+    },
+  },
   methods: {
     disabledDate(date) {
       const utcDate = new Date(

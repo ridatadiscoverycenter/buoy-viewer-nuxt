@@ -21,6 +21,17 @@
       </div>
 
       <div
+        v-if="nonPlottableVariables.length > 0 && !loading"
+        class="notification is-warning is-light mx-4 px-4 py-2"
+      >
+        <fa :icon="['fas', 'exclamation-circle']" class="mr-1" />
+        <span class="is-size-6 mr-4">
+          The following variables are not plottable, download the data below if
+          needed: {{ nonPlottableVariables.join(', ') }}
+        </span>
+      </div>
+
+      <div
         v-if="dataset.length === 0 && !loading"
         class="notification is-danger is-light mx-4 px-4 py-2 has-text-centered"
       >
@@ -30,13 +41,13 @@
       <LineChart
         v-else
         id="line-chart"
-        :dataset="dataset"
+        :dataset="plottableDataset"
         :dataset-name="datasetName"
         :dataset-line-width="datasetLineWidth"
         :compare-dataset="compare ? compareDataset : []"
         :compare-name="compareName"
         :compare-line-width="compareLineWidth"
-        :variables="variables"
+        :variables="plottableVariables"
         :color-domain="colorDomain"
         :color-range="colorRange"
         x="time"
@@ -128,6 +139,21 @@ export default {
     },
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);
+    },
+    plottableVariables() {
+      return this.variables.filter(
+        (variable) => !variable.includes('Qualifiers')
+      );
+    },
+    nonPlottableVariables() {
+      return this.variables.filter((variable) =>
+        variable.includes('Qualifiers')
+      );
+    },
+    plottableDataset() {
+      return this.dataset.filter((row) =>
+        this.plottableVariables.includes(row.variable)
+      );
     },
   },
   methods: {

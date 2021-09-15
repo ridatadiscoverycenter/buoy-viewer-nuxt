@@ -1,6 +1,6 @@
 <template>
   <LineChartDashboard
-    dataset="historical-ma-buoy-data"
+    dataset="ma-buoy-data"
     dataset-title="Historical"
     :dataset-data="mabuoyData"
     compare-dataset-title="OSOM"

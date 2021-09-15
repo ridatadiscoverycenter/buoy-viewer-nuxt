@@ -5,7 +5,7 @@
     :dataset-data="modelData"
     :dataset-line-width="0.8"
     compare-dataset-title="Historical"
-    :compare-dataset-data="buoyData"
+    :compare-dataset-data="allBuoyData"
     :compare-line-width="1.8"
     :coordinates="coordinates"
     :dataset-id="datasetId"
@@ -52,6 +52,7 @@ export default {
       };
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
       await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
+      await this.$store.dispatch('mabuoy/fetchDataGeoJson', payload);
       this.loading = false;
     } catch (e) {
       this.loading = false;
@@ -72,6 +73,10 @@ export default {
       'summary',
     ]),
     ...mapState('buoy', ['buoyData']),
+    ...mapState('mabuoy', ['mabuoyData']),
+    allBuoyData() {
+      return [...this.buoyData, ...this.mabuoyData];
+    },
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line

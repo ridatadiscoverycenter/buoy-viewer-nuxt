@@ -3,15 +3,26 @@
     <ChartContainer width="two-thirds">
       <template #title>Available Data</template>
       <template #subtitle>
-        This dataset spans from {{ minDate.getUTCFullYear() }} to
-        {{ maxDate.getUTCFullYear() }}. The heatmap below summarizes the number
-        of observations collected for each month for different variables. Use
-        this heatmap to help you decide what data you want to visualize or
-        download. When you have an idea, go ahead and select the buoys,
-        variables and dates to explore. Or download the data in the most
-        appropriate format for your analyses! To begin, select a variable to see
-        what data is available.</template
-      >
+        <p>
+          This dataset spans from {{ minDate.getUTCFullYear() }} to
+          {{ maxDate.getUTCFullYear() }}. The heatmap below summarizes the
+          number of observations collected for each month for different
+          variables. Use this heatmap to help you decide what data you want to
+          visualize or download. When you have an idea, go ahead and select the
+          buoys, variables and dates to explore. Or download the data in the
+          most appropriate format for your analyses! To begin, select a variable
+          to see what data is available.
+        </p>
+        <br />
+        <p>
+          <small
+            ><i>Note:</i> The variables with "Qualifier" in the name provide
+            annotations for the corresponding variable without "Qualifier". The
+            qualifers are not plottable, but can be downloaded for analysis
+            offline.</small
+          >
+        </p>
+      </template>
       <template #chart>
         <div class="is-flex-column">
           <div class="control-item control-item-first">
@@ -74,12 +85,12 @@
               name: 'datasets-ma-buoy-data-dashboard',
               query: {
                 buoyIds: 'bid101,bid102',
-                variables: 'WaterTempSurface,WaterTempBottom',
+                variables: 'depth',
                 start: '2017-05-01T04%3A00%3A00.000Z',
                 end: '2017-11-30T04%3A00%3A00.000Z',
               },
             }"
-            >Cole and Taunton, Water Temperature, 2017</nuxt-link
+            >Cole and Taunton, Depth, 2017</nuxt-link
           >
           <nuxt-link
             class="button is-link mb-2"
@@ -87,12 +98,12 @@
               name: 'datasets-ma-buoy-data-dashboard',
               query: {
                 buoyIds: 'bid101,bid102',
-                variables: 'depth',
+                variables: 'WaterTempSurface,WaterTempBottom',
                 start: '2018-05-01T04%3A00%3A00.000Z',
                 end: '2018-11-30T04%3A00%3A00.000Z',
               },
             }"
-            >Cole and Taunton, Depth, 20018</nuxt-link
+            >Cole and Taunton, Water Temperature, 2018</nuxt-link
           >
         </div>
       </template>
@@ -129,7 +140,12 @@
         <p>
           Each data column in this dataset has a matching
           <em>Qualifiers</em> column with notes on the data collection and
-          adjustments made.
+          adjustments made. See
+          <a
+            href="https://pricaimcit.services.brown.edu/erddap/tabledap/ma_buoy_data_a6c9_12eb_1ec5.html"
+            >ERDDAP</a
+          >
+          for the full dataset with qualifiers.
         </p></template
       >
     </ChartContainer>

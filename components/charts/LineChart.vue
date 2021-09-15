@@ -282,7 +282,7 @@ export default {
                 stroke: { value: 'transparent' },
                 fill: { value: 'transparent' },
                 tooltip: {
-                  signal: `{ 'Variable': datum.datum.variable, 'Value': datum.datum.value, 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y}, 'Dataset': datum.datum.dataset }`,
+                  signal: `{ 'Variable': datum.datum.variable, 'Value': format(datum.datum.value, '.3f'), 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y}, 'Dataset': datum.datum.dataset }`,
                 },
               },
             },
