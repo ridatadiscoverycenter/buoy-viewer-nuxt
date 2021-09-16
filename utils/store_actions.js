@@ -34,7 +34,7 @@ export function baseActions(route) {
         commit('mutate', { property: 'coordinates', with: coords });
         dispatch(
           'updateColorMap',
-          response.map((v) => v.station_name),
+          { ids: response.map((v) => v.station_name), unique: true },
           { root: true }
         );
       });

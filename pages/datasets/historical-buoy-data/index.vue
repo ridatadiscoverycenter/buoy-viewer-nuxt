@@ -27,7 +27,7 @@
             v-if="!(summary.length === 0)"
             id="heatmap"
             :dataset="summary"
-            :min-width="400"
+            :min-width="600"
             :height="250"
             x="date"
             y="station_name"
@@ -211,7 +211,10 @@ export default {
 .plot {
   margin-top: 3rem;
 }
-
+.button {
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+}
 .compass-loading {
   @extend .mt-6;
   justify-self: center;
