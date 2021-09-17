@@ -149,7 +149,8 @@ export default {
                     stroke: { value: 'transparent' },
                     fill: { value: 'transparent' },
                     tooltip: {
-                      signal: `{ 'Abundance': format(datum.datum.abun, ',.3f'), 'Year': datum.datum.year, 'Station': datum.datum.station }`,
+                      signal:
+                        "{ 'Abundance': format(datum.datum.abun, ',.3f'), 'Year': datum.datum.year, 'Station': datum.datum.station }",
                     },
                   },
                 },

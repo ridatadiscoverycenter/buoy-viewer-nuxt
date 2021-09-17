@@ -52,7 +52,7 @@ export default {
     Map,
   },
   computed: {
-    ...mapState('buoy', ['coordinates']),
+    ...mapState('model', ['coordinates']),
     ...mapState(['colorMap']),
     colorDomain() {
       return this.coordinates.map((v) => v.station_name);
@@ -63,7 +63,7 @@ export default {
   },
   created() {
     if (this.coordinates.length === 0) {
-      this.$store.dispatch('buoy/fetchBuoyCoordinates');
+      this.$store.dispatch('model/fetchBuoyCoordinates');
     }
   },
 };
