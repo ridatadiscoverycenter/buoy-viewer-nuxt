@@ -6,6 +6,7 @@
     :dataset-line-width="0.8"
     compare-dataset-title="Historical"
     :compare-dataset-data="allBuoyData"
+    compare-dataset-path="/datasets/historical-buoy-data"
     :compare-line-width="1.8"
     :coordinates="coordinates"
     :dataset-id="datasetId"

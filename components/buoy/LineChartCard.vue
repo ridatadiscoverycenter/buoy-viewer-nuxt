@@ -13,7 +13,8 @@
       >
         <fa :icon="['fas', 'info-circle']" class="mr-1" />
         <span class="is-size-6 mr-4">
-          {{ compareName }} data is available which matches your query
+          <a :href="comparePath" target="_blank">{{ compareName }}</a> data is
+          available which matches your query
         </span>
         <button class="button is-info is-small" @click="toggleCompare">
           {{ compareText }}
@@ -102,6 +103,10 @@ export default {
       type: String,
       required: false,
       default: 'Other',
+    },
+    comparePath: {
+      type: String,
+      required: true,
     },
     compareLineWidth: {
       type: Number,

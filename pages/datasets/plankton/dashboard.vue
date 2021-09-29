@@ -5,6 +5,7 @@
     :dataset-data="planktonData"
     compare-dataset-title="OSOM"
     :compare-dataset-data="modelData"
+    compare-dataset-path="/datasets/osom-data"
     :coordinates="coordinates"
     :dataset-id="datasetId"
     :variables="variables"

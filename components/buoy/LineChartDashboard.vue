@@ -8,6 +8,7 @@
       :end-dt-str="endDate.slice(0, 10)"
       :compare-dataset="compareDatasetData"
       :compare-name="compareDatasetTitle"
+      :compare-path="compareDatasetPath"
       :compare-line-width="compareLineWidth"
       :dataset-name="datasetTitle"
       :loading="loading"
@@ -95,6 +96,10 @@ export default {
     },
     compareDatasetData: {
       type: Array,
+      required: true,
+    },
+    compareDatasetPath: {
+      type: String,
       required: true,
     },
     coordinates: {
