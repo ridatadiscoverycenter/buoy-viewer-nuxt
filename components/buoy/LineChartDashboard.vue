@@ -15,9 +15,9 @@
       :weather-data="weatherData"
     />
 
-    <BuoyLocations :coordinates="filterCoordinates" :height="4" />
+    <BuoyLocations :coordinates="filterCoordinates" :height="3" />
 
-    <ChartContainer width="one-third" :height="4">
+    <ChartContainer width="one-third" :height="3">
       <template #title>Keep Exploring</template>
       <template #subtitle>
         Try different variables, buoys, or changing the date range!

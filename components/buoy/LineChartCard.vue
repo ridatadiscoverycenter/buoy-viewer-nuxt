@@ -1,5 +1,5 @@
 <template>
-  <ChartContainer width="two-thirds" :height="5">
+  <ChartContainer width="two-thirds" :height="6">
     <template #title>Visualize Data</template>
     <template #subtitle
       >This plot shows {{ variables.join(', ') }} over the period between
