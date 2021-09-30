@@ -4,7 +4,11 @@
     <template #subtitle
       >This plot shows {{ variables.join(', ') }} over the period between
       {{ startDtStr }} and {{ endDtStr }}. You can hover over the lines to see
-      more specific data.</template
+      more specific data. Weather data from
+      <a href="https://www.rcc-acis.org/" target="_blank" rel="noreferrer"
+        >NOAA</a
+      >
+      is included below.</template
     >
     <template #chart>
       <div
@@ -54,6 +58,7 @@
         x="time"
         y="station_name"
         :enable-darkmode="false"
+        :weather-dataset="weatherData"
       />
     </template>
   </ChartContainer>
@@ -120,6 +125,10 @@ export default {
       type: Boolean,
       rquired: false,
       default: false,
+    },
+    weatherData: {
+      type: Array,
+      required: true,
     },
   },
   data() {

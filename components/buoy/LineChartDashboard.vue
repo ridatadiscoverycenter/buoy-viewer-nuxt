@@ -12,6 +12,7 @@
       :compare-line-width="compareLineWidth"
       :dataset-name="datasetTitle"
       :loading="loading"
+      :weather-data="weatherData"
     />
 
     <BuoyLocations :coordinates="filterCoordinates" :height="4" />
@@ -135,6 +136,10 @@ export default {
       type: Number,
       required: false,
       default: 1.8,
+    },
+    weatherData: {
+      type: Array,
+      required: true,
     },
   },
   computed: {

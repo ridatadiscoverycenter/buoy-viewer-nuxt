@@ -14,6 +14,7 @@
     :min-date="minDate"
     :max-date="maxDate"
     :loading="loading"
+    :weather-data="weather"
   >
     <template #summary-heatmap>
       <VariableHeatmap
@@ -54,6 +55,10 @@ export default {
       await this.$store.dispatch('model/fetchDataGeoJson', payload);
       await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
       await this.$store.dispatch('mabuoy/fetchDataGeoJson', payload);
+      await this.$store.dispatch('weather/fetchWeather', {
+        startDate: payload.start.slice(0, 10),
+        endDate: payload.end.slice(0, 10),
+      });
       this.loading = false;
     } catch (e) {
       this.loading = false;
@@ -75,6 +80,7 @@ export default {
     ]),
     ...mapState('buoy', ['buoyData']),
     ...mapState('mabuoy', ['mabuoyData']),
+    ...mapState('weather', ['weather']),
     allBuoyData() {
       return [...this.buoyData, ...this.mabuoyData];
     },
