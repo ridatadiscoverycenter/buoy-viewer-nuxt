@@ -12,6 +12,7 @@
     :min-date="minDate"
     :max-date="maxDate"
     :loading="loading"
+    :weather-data="weather"
   >
     <template #summary-heatmap>
       <VariableHeatmap :summary="summary" :variables="variables" />
@@ -44,8 +45,14 @@ export default {
         end: this.$route.query.end,
         ids: this.$route.query.buoyIds,
       };
-      await this.$store.dispatch('plankton/fetchDataGeoJson', payload);
-      await this.$store.dispatch('model/fetchDataGeoJson', payload);
+      await Promise.all([
+        this.$store.dispatch('plankton/fetchDataGeoJson', payload),
+        this.$store.dispatch('model/fetchDataGeoJson', payload),
+        this.$store.dispatch('weather/fetchWeather', {
+          startDate: payload.start.slice(0, 10),
+          endDate: payload.end.slice(0, 10),
+        }),
+      ]);
       this.loading = false;
     } catch (e) {
       this.loading = false;
@@ -66,6 +73,7 @@ export default {
       'summary',
     ]),
     ...mapState('model', ['modelData']),
+    ...mapState('weather', ['weather']),
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line

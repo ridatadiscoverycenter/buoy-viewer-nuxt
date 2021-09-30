@@ -52,13 +52,15 @@ export default {
         end: this.$route.query.end,
         ids: this.$route.query.buoyIds,
       };
-      await this.$store.dispatch('model/fetchDataGeoJson', payload);
-      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
-      await this.$store.dispatch('mabuoy/fetchDataGeoJson', payload);
-      await this.$store.dispatch('weather/fetchWeather', {
-        startDate: payload.start.slice(0, 10),
-        endDate: payload.end.slice(0, 10),
-      });
+      await Promise.all([
+        this.$store.dispatch('model/fetchDataGeoJson', payload),
+        this.$store.dispatch('buoy/fetchDataGeoJson', payload),
+        this.$store.dispatch('mabuoy/fetchDataGeoJson', payload),
+        this.$store.dispatch('weather/fetchWeather', {
+          startDate: payload.start.slice(0, 10),
+          endDate: payload.end.slice(0, 10),
+        }),
+      ]);
       this.loading = false;
     } catch (e) {
       this.loading = false;

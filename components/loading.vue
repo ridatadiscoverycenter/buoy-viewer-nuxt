@@ -41,7 +41,7 @@ export default {
 .compass-loading {
   @extend .mt-6;
   align-self: center;
-  font-size: 20rem !important;
+  font-size: 12vw !important;
   color: rgb(89, 81, 139);
 }
 </style>

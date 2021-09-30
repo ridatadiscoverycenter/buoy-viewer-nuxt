@@ -78,44 +78,6 @@ export default {
           title: 'Buoys',
           fill: 'color',
           orient: 'bottom-right',
-          encode: {
-            symbols: {
-              name: 'legendSymbol',
-              interactive: true,
-              update: {
-                strokeWidth: { value: 2 },
-                opacity: [
-                  {
-                    test: '!selected || selected === datum.value',
-                    value: 1,
-                  },
-                  { value: 0.15 },
-                ],
-                size: { value: 64 },
-              },
-              hover: {
-                cursor: { value: 'pointer' },
-              },
-            },
-            labels: {
-              name: 'legendLabel',
-              interactive: true,
-              update: {
-                opacity: [
-                  {
-                    test: '!selected || selected === datum.value',
-                    value: 1,
-                  },
-                  { value: 0.25 },
-                ],
-                fontWeight: { value: 'normal' },
-              },
-              hover: {
-                fontWeight: { value: 'bold' },
-                cursor: { value: 'pointer' },
-              },
-            },
-          },
         },
       ];
       if (this.compareDataset.length > 0) {
@@ -183,8 +145,13 @@ export default {
             name: 'xscale',
             type: 'time',
             domain: {
-              data: 'weather',
-              field: 'date',
+              fields: [
+                {
+                  data: 'weather',
+                  field: 'date',
+                },
+                { data: 'union', field: 'time' },
+              ],
             },
             range: 'width',
             padding: 0.05,
@@ -249,7 +216,7 @@ export default {
           {
             name: 'rainScale',
             type: 'ordinal',
-            domain: ['precipitation'],
+            domain: ['total'],
             range: ['grey'],
           },
         ],
@@ -267,22 +234,6 @@ export default {
             },
 
             signals: [
-              {
-                name: 'selected',
-                value: null,
-                on: [
-                  {
-                    events: '@legendSymbol:click, @legendLabel:click',
-                    update: 'selected === datum.value ? null : datum.value',
-                    force: true,
-                  },
-                  {
-                    events: 'mouseup[!event.item]',
-                    update: 'null',
-                    force: true,
-                  },
-                ],
-              },
               {
                 name: 'hovered',
                 value: null,
@@ -377,15 +328,7 @@ export default {
                         strokeWidth: { scale: 'lineWidth', field: 'dataset' },
                         strokeDash: { scale: 'lineDash', field: 'variable' },
                         interactive: false,
-                      },
-                      update: {
-                        strokeOpacity: [
-                          {
-                            test: '!selected || selected === datum.station_name',
-                            value: 0.85,
-                          },
-                          { value: 0.15 },
-                        ],
+                        strokeOpacity: { value: 0.9 },
                       },
                     },
                   },
@@ -395,7 +338,7 @@ export default {
           },
           {
             type: 'group',
-            title: { text: 'Providence Area Weather', anchor: 'start' },
+            title: { text: 'Providence Area Weather', anchor: 'start', dy: -5 },
 
             encode: {
               enter: {
@@ -416,7 +359,7 @@ export default {
               {
                 orient: 'right',
                 scale: 'precipScale',
-                title: 'Precipitation (in)',
+                title: 'Precipitation (in/day)',
                 grid: false,
               },
             ],
@@ -424,13 +367,21 @@ export default {
             legends: [
               {
                 stroke: 'colorScale',
-                orient: 'top-left',
+                orient: 'bottom',
                 direction: 'horizontal',
                 title: 'Temperature',
+                symbolType: 'stroke',
+              },
+              {
+                stroke: 'rainScale',
+                orient: 'bottom',
+                direction: 'horizontal',
+                title: 'Precipitation',
                 encode: {
                   symbols: {
                     enter: {
                       shape: { value: 'stroke' },
+                      angle: { value: 90 },
                     },
                   },
                 },
@@ -447,6 +398,7 @@ export default {
                     y: { scale: 'tempScale', field: 'minTemp' },
                     stroke: { scale: 'colorScale', value: 'min' },
                     strokeWidth: { value: 1 },
+                    strokeOpacity: { value: 0.9 },
                     zindex: { value: 1 },
                   },
                 },
@@ -460,6 +412,7 @@ export default {
                     y: { scale: 'tempScale', field: 'maxTemp' },
                     stroke: { scale: 'colorScale', value: 'max' },
                     strokeWidth: { value: 1 },
+                    strokeOpacity: { value: 0.9 },
                     zindex: { value: 1 },
                   },
                 },
@@ -473,6 +426,7 @@ export default {
                     y: { scale: 'tempScale', field: 'avgTemp' },
                     stroke: { scale: 'colorScale', value: 'avg' },
                     strokeWidth: { value: 1 },
+                    strokeOpacity: { value: 0.9 },
                     zindex: { value: 1 },
                   },
                 },
@@ -486,7 +440,7 @@ export default {
                     width: { value: 1 },
                     y: { scale: 'precipScale', value: 0 },
                     y2: { scale: 'precipScale', field: 'precipitation' },
-                    fill: { scale: 'rainScale', value: 'precipitation' },
+                    fill: { scale: 'rainScale', value: 'total' },
                     opacity: { value: 0.7 },
                   },
                 },

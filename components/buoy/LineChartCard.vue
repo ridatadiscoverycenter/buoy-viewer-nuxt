@@ -44,7 +44,7 @@
       </div>
 
       <LineChart
-        v-else
+        v-else-if="!loading"
         id="line-chart"
         :dataset="plottableDataset"
         :dataset-name="datasetName"
