@@ -27,7 +27,7 @@ export const actions = {
       ],
     };
     return this.$axios
-      .$post('http://data.rcc-acis.org/StnData', data, {
+      .$post('https://data.rcc-acis.org/StnData', data, {
         headers,
       })
       .then((response) => {
