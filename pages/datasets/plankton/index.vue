@@ -209,14 +209,6 @@ export default {
   margin-top: 3rem;
 }
 
-.compass-loading {
-  @extend .mt-6;
-  justify-self: center;
-  align-self: center;
-  font-size: 20rem !important;
-  color: rgb(89, 81, 139);
-}
-
 .mx-datepicker-range {
   width: 100% !important;
 }

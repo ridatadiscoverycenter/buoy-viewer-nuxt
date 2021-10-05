@@ -1,6 +1,8 @@
 <script>
 import vegaBaseMixin from '@/mixins/vega-base-mixin.js';
 
+import { formatVariable } from '@/utils/utils.js';
+
 export default {
   mixins: [vegaBaseMixin],
   props: {
@@ -70,7 +72,9 @@ export default {
       return this.dashes.slice(0, this.variables.length);
     },
     yTitle() {
-      return this.variables.length === 1 ? this.variables[0] : 'Variables';
+      return this.variables.length === 1
+        ? formatVariable(this.variables[0])
+        : 'Variables';
     },
     legends() {
       const leg = [
@@ -132,6 +136,11 @@ export default {
                 expr: 'toDate(datum.time)',
                 as: 'time',
               },
+              {
+                type: 'formula',
+                expr: 'datum.variable + (datum.units ? " (" + datum.units + ")" : "")',
+                as: 'unittedVariable',
+              },
             ],
           },
           {
@@ -183,7 +192,7 @@ export default {
             name: 'lineDash',
             type: 'ordinal',
             range: this.lineDashes,
-            domain: this.variables,
+            domain: this.variables.map(formatVariable),
           },
           {
             name: 'tempScale',
@@ -292,7 +301,7 @@ export default {
                     stroke: { value: 'transparent' },
                     fill: { value: 'transparent' },
                     tooltip: {
-                      signal: `{ 'Variable': datum.datum.variable, 'Value': format(datum.datum.value, '.3f'), 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y}, 'Dataset': datum.datum.dataset }`,
+                      signal: `{ 'Variable': datum.datum.unittedVariable, 'Value': format(datum.datum.value, '.3f'), 'Date': utcFormat(datum.datum.${this.x}, '%Y-%m-%dT%H:%M:%S.%LZ'), 'Buoy': datum.datum.${this.y}, 'Dataset': datum.datum.dataset }`,
                     },
                   },
                 },
@@ -312,7 +321,7 @@ export default {
                   facet: {
                     name: 'series',
                     data: 'union',
-                    groupby: ['station_name', 'variable', 'dataset'],
+                    groupby: ['station_name', 'unittedVariable', 'dataset'],
                   },
                 },
                 marks: [
@@ -326,7 +335,10 @@ export default {
                         y: { scale: 'yscale', field: 'value' },
                         stroke: { scale: 'color', field: this.y },
                         strokeWidth: { scale: 'lineWidth', field: 'dataset' },
-                        strokeDash: { scale: 'lineDash', field: 'variable' },
+                        strokeDash: {
+                          scale: 'lineDash',
+                          field: 'unittedVariable',
+                        },
                         interactive: false,
                         strokeOpacity: { value: 0.9 },
                       },

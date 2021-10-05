@@ -15,49 +15,27 @@
     :weather-data="weather"
   >
     <template #summary-heatmap>
-      <div class="is-flex-column">
-        <div class="control-item control-item-first">
-          <label for="variable" class="label">Variable</label>
-          <multiselect
-            id="variable"
-            v-model="variable"
-            class="multiselect"
-            :options="variables"
-          ></multiselect>
-        </div>
-        <Heatmap
-          v-if="!(summary.length === 0)"
-          id="heatmap"
-          :dataset="summary"
-          :min-width="400"
-          :height="250"
-          x="date"
-          y="station_name"
-          :variable="variable"
-          :enable-darkmode="false"
-        />
-        <fa v-else icon="compass" spin class="compass-loading" />
-      </div>
+      <StationHeatmap :summary="summary" :variables="variables" />
     </template>
   </LineChartDashboard>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Multiselect from 'vue-multiselect';
 
 import LineChartDashboard from '@/components/buoy/LineChartDashboard.vue';
-import Heatmap from '@/components/charts/Heatmap.vue';
+import StationHeatmap from '@/components/buoy/StationHeatmap.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
     LineChartDashboard,
-    Heatmap,
-    Multiselect,
+    StationHeatmap,
   },
   data() {
     return {
-      variable: 'WaterTempSurface',
+      variable: { name: 'WaterTempSurface', units: '°C' },
       loading: false,
     };
   },
@@ -104,6 +82,9 @@ export default {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line
       this.$fetch();
     },
+  },
+  methods: {
+    formatVariable,
   },
 };
 </script>

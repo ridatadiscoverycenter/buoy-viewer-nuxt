@@ -21,6 +21,7 @@
           v-model="selectedVariables"
           class="multiselect"
           :options="variables"
+          :custom-label="formatVariable"
           :multiple="true"
         ></multiselect>
       </div>
@@ -60,6 +61,8 @@ import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
 
 import BaseForm from '@/components/base/BaseForm.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -152,7 +155,7 @@ export default {
       }
     },
     selectedVariablesString() {
-      return this.selectedVariables.join(',');
+      return this.selectedVariables.map((v) => v.name).join(',');
     },
     selectedBuoysString() {
       const bids = this.coordinates
@@ -170,6 +173,11 @@ export default {
       // on initial render, so we need to watch it and set if it comes in a little later
       this.selectedBuoys = [...cur];
     },
+    initVariables(cur, old) {
+      // for some reason (probably to do with computation graphs) initBuoys isn't always set
+      // on initial render, so we need to watch it and set if it comes in a little later
+      this.selectedVariables = [...cur];
+    },
   },
   methods: {
     disabledDate(date) {
@@ -178,6 +186,7 @@ export default {
       );
       return utcDate < this.minDate || utcDate > this.maxDate;
     },
+    formatVariable,
   },
 };
 </script>

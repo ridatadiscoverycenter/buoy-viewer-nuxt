@@ -47,7 +47,10 @@ export default {
     heatmapSummary() {
       return aq
         .from(this.summary)
-        .fold(this.variables, { as: ['variable', 'count'] })
+        .fold(
+          this.variables.map((v) => v.name),
+          { as: ['variable', 'count'] }
+        )
         .objects();
     },
   },

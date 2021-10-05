@@ -25,7 +25,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 @import 'bulma';
 .loading-container {
   display: flex;

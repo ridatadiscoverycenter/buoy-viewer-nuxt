@@ -29,6 +29,7 @@
           v-model="downloadVariables"
           class="multiselect"
           :options="variables"
+          :custom-label="formatVariable"
           :multiple="true"
         ></multiselect>
       </div>
@@ -50,6 +51,8 @@ import { mapState } from 'vuex';
 import Multiselect from 'vue-multiselect';
 
 import BaseForm from '@/components/base/BaseForm.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -90,12 +93,17 @@ export default {
 
       return `${this.baseUrl}/tabledap/${this.datasetId}.${
         this.fileFormat
-      }?${this.downloadVariables.join(
-        ','
-      )},time,latitude,longitude,station_name&station_name=~"(${bids.join(
+      }?${this.downloadVariables
+        .map((v) => v.name)
+        .join(
+          ','
+        )},time,latitude,longitude,station_name&station_name=~"(${bids.join(
         '|'
       )})"`;
     },
+  },
+  methods: {
+    formatVariable,
   },
 };
 </script>

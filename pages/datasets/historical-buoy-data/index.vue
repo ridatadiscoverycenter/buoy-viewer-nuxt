@@ -13,29 +13,7 @@
         what data is available.</template
       >
       <template #chart>
-        <div class="is-flex-column">
-          <div class="control-item control-item-first">
-            <label for="variable" class="label">Variable</label>
-            <multiselect
-              id="variable"
-              v-model="variable"
-              class="multiselect"
-              :options="variables"
-            ></multiselect>
-          </div>
-          <Heatmap
-            v-if="!(summary.length === 0)"
-            id="heatmap"
-            :dataset="summary"
-            :min-width="600"
-            :height="250"
-            x="date"
-            y="station_name"
-            :variable="variable"
-            :enable-darkmode="false"
-          />
-          <fa v-else icon="compass" spin class="compass-loading" />
-        </div>
+        <StationHeatmap :summary="summary" :variables="variables" />
       </template>
     </ChartContainer>
 
@@ -131,9 +109,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import Multiselect from 'vue-multiselect';
 
-import Heatmap from '@/components/charts/Heatmap.vue';
+import StationHeatmap from '@/components/buoy/StationHeatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
@@ -141,8 +118,7 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 
 export default {
   components: {
-    Heatmap,
-    Multiselect,
+    StationHeatmap,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -214,13 +190,6 @@ export default {
 .button {
   white-space: normal !important;
   overflow-wrap: break-word !important;
-}
-.compass-loading {
-  @extend .mt-6;
-  justify-self: center;
-  align-self: center;
-  font-size: 20rem !important;
-  color: rgb(89, 81, 139);
 }
 
 .mx-datepicker-range {

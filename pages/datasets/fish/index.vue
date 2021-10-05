@@ -110,15 +110,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-@import 'bulma';
-
-.compass-loading {
-  @extend .mt-6;
-  justify-self: center;
-  align-self: center;
-  font-size: 20rem !important;
-  color: $link;
-}
-</style>

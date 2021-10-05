@@ -147,7 +147,8 @@ export default {
       return this.coordinates.map((val) => val.fullName);
     },
     queryVariables() {
-      return this.$route.query.variables.split(',');
+      const queryVarNames = this.$route.query.variables.split(',');
+      return this.variables.filter((v) => queryVarNames.includes(v.name));
     },
     startDate() {
       return this.$route.query.start;

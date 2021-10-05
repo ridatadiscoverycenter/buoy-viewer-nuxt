@@ -2,9 +2,9 @@
   <ChartContainer width="two-thirds" :height="6">
     <template #title>Visualize Data</template>
     <template #subtitle
-      >This plot shows {{ variables.join(', ') }} over the period between
-      {{ startDtStr }} and {{ endDtStr }}. You can hover over the lines to see
-      more specific data. Weather data from
+      >This plot shows {{ variables.map(formatVariable).join(', ') }} over the
+      period between {{ startDtStr }} and {{ endDtStr }}. You can hover over the
+      lines to see more specific data. Weather data from
       <a href="https://www.rcc-acis.org/" target="_blank" rel="noreferrer"
         >NOAA</a
       >
@@ -32,7 +32,7 @@
         <fa :icon="['fas', 'exclamation-circle']" class="mr-1" />
         <span class="is-size-6 mr-4">
           The following variables are not plottable, download the data below if
-          needed: {{ nonPlottableVariables.join(', ') }}
+          needed: {{ nonPlottableVariables.map(formatVariable).join(', ') }}
         </span>
       </div>
 
@@ -70,6 +70,8 @@ import * as aq from 'arquero';
 
 import LineChart from '@/components/charts/LineChart.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -156,17 +158,17 @@ export default {
     },
     plottableVariables() {
       return this.variables.filter(
-        (variable) => !variable.includes('Qualifiers')
+        (variable) => !variable.name.includes('Qualifiers')
       );
     },
     nonPlottableVariables() {
       return this.variables.filter((variable) =>
-        variable.includes('Qualifiers')
+        variable.name.includes('Qualifiers')
       );
     },
     plottableDataset() {
       return this.dataset.filter((row) =>
-        this.plottableVariables.includes(row.variable)
+        this.plottableVariables.map((v) => v.name).includes(row.variable)
       );
     },
   },
@@ -179,6 +181,7 @@ export default {
         this.compareText = 'Add To Plot';
       }
     },
+    formatVariable,
   },
 };
 </script>
