@@ -8,6 +8,8 @@
           v-model="fileFormat"
           class="multiselect"
           :options="fileFormats"
+          :preselect-first="true"
+          :allow-empty="false"
         ></multiselect>
       </div>
 
@@ -30,6 +32,7 @@
           class="multiselect"
           :options="variables"
           :custom-label="formatVariable"
+          track-by="name"
           :multiple="true"
         ></multiselect>
       </div>
@@ -40,6 +43,11 @@
         role="button"
         class="button is-link control-item-button"
         :href="downloadUrl"
+        :disabled="
+          downloadBuoys.length === 0 ||
+          downloadVariables.length === 0 ||
+          !fileFormat
+        "
         >Download Data</a
       >
     </template>

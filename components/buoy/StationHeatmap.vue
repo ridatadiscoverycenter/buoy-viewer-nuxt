@@ -8,6 +8,7 @@
         class="multiselect"
         :options="variables"
         :custom-label="formatVariable"
+        track-by="name"
       ></multiselect>
     </div>
     <Heatmap

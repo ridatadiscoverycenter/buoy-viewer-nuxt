@@ -22,6 +22,7 @@
           class="multiselect"
           :options="variables"
           :custom-label="formatVariable"
+          track-by="name"
           :multiple="true"
         ></multiselect>
       </div>
@@ -32,6 +33,7 @@
           id="date-select"
           v-model="dateRange"
           :disabled-date="disabledDate"
+          :default-value="[minDate, maxDate]"
           range
         ></date-picker>
       </div>
@@ -139,7 +141,12 @@ export default {
   },
   computed: {
     disable() {
-      return this.selectedVariables.length > 4;
+      return (
+        this.selectedVariables.length > 4 ||
+        this.selectedVariables.length === 0 ||
+        this.dateRange.length !== 2 ||
+        this.selectedBuoys.length === 0
+      );
     },
     selectedDates() {
       try {
