@@ -341,6 +341,7 @@ export default {
                         },
                         interactive: false,
                         strokeOpacity: { value: 0.9 },
+                        defined: { signal: 'datum.value !== null' },
                       },
                     },
                   },

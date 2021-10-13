@@ -13,6 +13,7 @@
     :max-date="maxDate"
     :loading="loading"
     :weather-data="weather"
+    :downsampled="downsampled"
   >
     <template #summary-heatmap>
       <StationHeatmap :summary="summary" :variables="variables" />
@@ -74,6 +75,7 @@ export default {
       'minDate',
       'maxDate',
       'summary',
+      'downsampled',
     ]),
     ...mapState('model', ['modelData']),
     ...mapState('weather', ['weather']),

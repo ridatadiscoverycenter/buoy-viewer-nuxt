@@ -13,6 +13,7 @@
       :dataset-name="datasetTitle"
       :loading="loading"
       :weather-data="weatherData"
+      :downsampled="downsampled"
     />
 
     <BuoyLocations :coordinates="filterCoordinates" :height="3" />
@@ -139,6 +140,10 @@ export default {
     },
     weatherData: {
       type: Array,
+      required: true,
+    },
+    downsampled: {
+      type: Boolean,
       required: true,
     },
   },

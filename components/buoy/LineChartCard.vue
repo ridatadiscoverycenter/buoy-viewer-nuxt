@@ -60,6 +60,13 @@
         :enable-darkmode="false"
         :weather-dataset="weatherData"
       />
+
+      <p v-if="downsampled">
+        <small
+          ><i>Note:</i> Data has been downsampled, select a smaller date range
+          to visualize raw data.</small
+        >
+      </p>
     </template>
   </ChartContainer>
 </template>
@@ -130,6 +137,10 @@ export default {
     },
     weatherData: {
       type: Array,
+      required: true,
+    },
+    downsampled: {
+      type: Boolean,
       required: true,
     },
   },

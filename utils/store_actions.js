@@ -12,6 +12,7 @@ export const initState = (route, datasetId) => {
     datasetId,
     minDate: new Date(0),
     maxDate: new Date(),
+    downsampled: false,
   };
   baseState[`${route}Data`] = [];
   return baseState;
@@ -80,9 +81,10 @@ export const buoyData =
     const endDate = end || state.maxDate;
     return axios
       .$get(
-        `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}&units=true`
+        `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}&units=true&downsampled=true`
       )
-      .then((data) => {
+      .then(({ data, downsampled }) => {
+        commit('mutate', { property: 'downsampled', with: downsampled });
         commit('mutate', { property: `${route}Data`, with: data });
       });
   };

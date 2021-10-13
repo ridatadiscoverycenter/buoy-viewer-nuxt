@@ -15,6 +15,7 @@
     :max-date="maxDate"
     :loading="loading"
     :weather-data="weather"
+    :downsampled="downsampled"
   >
     <template #summary-heatmap>
       <VariableHeatmap
@@ -79,6 +80,7 @@ export default {
       'minDate',
       'maxDate',
       'summary',
+      'downsampled',
     ]),
     ...mapState('buoy', ['buoyData']),
     ...mapState('mabuoy', ['mabuoyData']),
