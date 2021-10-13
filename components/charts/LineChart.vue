@@ -144,6 +144,16 @@ export default {
             ],
           },
           {
+            name: 'unionNonNull',
+            source: 'union',
+            transform: [
+              {
+                type: 'filter',
+                expr: 'datum.value !== null',
+              },
+            ],
+          },
+          {
             name: 'weather',
             values: this.weatherDataset,
           },
@@ -282,7 +292,7 @@ export default {
               {
                 type: 'symbol',
                 name: 'secret_symbols',
-                from: { data: 'union' },
+                from: { data: 'unionNonNull' },
                 encode: {
                   enter: {
                     fill: { value: 'transparent' },
