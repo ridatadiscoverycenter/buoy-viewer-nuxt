@@ -63,8 +63,9 @@
 
       <p v-if="downsampled">
         <small
-          ><i>Note:</i> Data has been downsampled, select a smaller date range
-          to visualize raw data.</small
+          ><fa :icon="['fas', 'info-circle']" class="mr-1" /><i>Note:</i> Data
+          has been downsampled, select a smaller date range to visualize raw
+          data.</small
         >
       </p>
     </template>
