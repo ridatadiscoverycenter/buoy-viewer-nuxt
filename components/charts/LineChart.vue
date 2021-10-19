@@ -81,14 +81,14 @@ export default {
         {
           title: 'Buoys',
           fill: 'color',
-          orient: 'bottom-right',
+          orient: 'top',
         },
       ];
       if (this.compareDataset.length > 0) {
         leg.push({
           title: 'Datasets',
           strokeWidth: 'lineWidth',
-          orient: 'bottom-right',
+          orient: 'top',
           symbolType: 'stroke',
         });
       }
@@ -96,7 +96,7 @@ export default {
         leg.push({
           title: 'Variables',
           strokeDash: 'lineDash',
-          orient: 'bottom-right',
+          orient: 'top',
           symbolType: 'stroke',
         });
       }
@@ -108,7 +108,7 @@ export default {
         $schema: 'https://vega.github.io/schema/vega/v5.json',
         description:
           'A basic line chart example, with value labels shown upon mouse hover.',
-        height: 800,
+        height: 850,
         padding: 5,
         autosize: { type: 'fit-x', resize: true },
 
@@ -365,7 +365,7 @@ export default {
 
             encode: {
               enter: {
-                y: { value: 560 },
+                y: { value: 570 },
                 width: { signal: 'width' },
                 height: { value: 200 },
               },
