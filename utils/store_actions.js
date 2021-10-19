@@ -44,6 +44,9 @@ export function baseActions(route) {
       return this.$axios
         .$get(`/${route}/variables?units=true`)
         .then((response) => {
+          response.sort((a, b) =>
+            a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+          );
           commit('mutate', { property: 'variables', with: response });
         });
     },
