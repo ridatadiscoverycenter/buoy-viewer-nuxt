@@ -34,7 +34,7 @@ export default {
         legends: [
           {
             title: 'Buoys',
-            orient: 'bottom-right',
+            orient: 'bottom-left',
             type: 'symbol',
             symbolType: 'circle',
             fill: 'color',

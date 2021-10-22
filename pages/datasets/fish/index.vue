@@ -41,7 +41,6 @@
             :station="station"
             :enable-darkmode="false"
           />
-          <fa v-else icon="compass" spin class="compass-loading" />
         </div>
       </template>
     </ChartContainer>
@@ -80,6 +79,8 @@
         </p>
       </template>
     </ChartContainer>
+
+    <CompassLoading :manual-load="samples.length === 0" />
   </div>
 </template>
 
@@ -91,6 +92,7 @@ import ChartContainer from '@/components/base/ChartContainer.vue';
 import BuoyLocations from '@/components/buoy/Locations.vue';
 import FishHeatMap from '@/components/fish/FishHeatMap.vue';
 import FishExploreForm from '@/components/fish/FishExploreForm.vue';
+import CompassLoading from '@/components/loading.vue';
 
 export default {
   components: {
@@ -99,6 +101,7 @@ export default {
     FishHeatMap,
     FishExploreForm,
     Multiselect,
+    CompassLoading,
   },
   data() {
     return {

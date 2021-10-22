@@ -178,8 +178,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import 'bulma';
+<style lang="scss" scoped>
 .is-active {
   background-color: rgb(89, 81, 139) !important;
 }

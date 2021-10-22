@@ -174,12 +174,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import 'bulma';
-.is-flex-column {
-  @extend .is-flex;
-  flex-direction: column;
-}
+<style lang="scss" scoped>
 .container-center {
   display: grid;
   grid-template-columns: 4fr 10fr 4fr;
@@ -189,12 +184,6 @@ export default {
     '. main-second .'
     '. main-third .'
     '. main-fourth .';
-}
-.control-item {
-  @extend .py-2;
-  @extend .px-2;
-  flex-grow: 1;
-  min-width: 250px;
 }
 .container-main-first {
   @extend .my-6;
@@ -215,10 +204,4 @@ export default {
 .plot {
   margin-top: 3rem;
 }
-
-.mx-datepicker-range {
-  width: 100% !important;
-}
 </style>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style src="vue2-datepicker/index.css"></style>

@@ -31,7 +31,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .error-content,
 .error-container {
   display: flex;

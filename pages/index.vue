@@ -69,23 +69,15 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import 'bulma';
+<style lang="scss" scoped>
 $gradient1: #598daf;
 $gradient2: #fdbc89;
 $gradient3: #f8eade;
-.is-link {
-  background-color: rgb(89, 81, 139) !important;
-}
+
 .cfa-button {
   @extend .has-text-light;
 }
-.brand-title {
-  @extend .mb-0;
-  @extend .mr-2;
-  font-weight: bold;
-  font-size: 1.2rem;
-}
+
 .home-title {
   @extend .title;
   font-size: $size-1 * 1.4;
@@ -97,14 +89,7 @@ $gradient3: #f8eade;
 .action-button {
   font-size: $size-3;
 }
-.disabled {
-  background-color: #efefef !important;
-  color: $grey !important;
-  cursor: not-allowed;
-  svg {
-    margin-left: 1rem;
-  }
-}
+
 .grid-container {
   background-image: linear-gradient($gradient1, $gradient2, $gradient3);
   display: grid !important;

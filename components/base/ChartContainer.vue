@@ -26,7 +26,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import 'bulma';
 .chart-container {
   margin-bottom: 0 !important;
   @extend .box;

@@ -295,9 +295,14 @@ export default {
                 from: { data: 'unionNonNull' },
                 encode: {
                   enter: {
-                    fill: { value: 'transparent' },
+                    fill: { scale: 'color', field: 'station_name' },
                     x: { scale: 'xscale', field: this.x },
                     y: { scale: 'yscale', field: 'value' },
+                  },
+                  update: {
+                    size: {
+                      signal: 'pow(scale("lineWidth", datum.dataset), 2)',
+                    },
                   },
                 },
               },

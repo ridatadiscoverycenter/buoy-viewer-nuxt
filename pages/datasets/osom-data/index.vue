@@ -161,17 +161,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-@import 'bulma';
-.is-flex-column {
-  @extend .is-flex;
-  flex-direction: column;
-}
-
-.mx-datepicker-range {
-  width: 100% !important;
-}
-</style>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style src="vue2-datepicker/index.css"></style>

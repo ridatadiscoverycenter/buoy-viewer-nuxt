@@ -30,7 +30,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import 'bulma';
 .logo-container {
   @extend .is-flex;
   @extend .px-2;
