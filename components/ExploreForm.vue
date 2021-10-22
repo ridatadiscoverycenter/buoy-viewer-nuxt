@@ -21,6 +21,8 @@
           v-model="selectedVariables"
           class="multiselect"
           :options="variables"
+          :custom-label="formatVariable"
+          track-by="name"
           :multiple="true"
         ></multiselect>
       </div>
@@ -31,6 +33,7 @@
           id="date-select"
           v-model="dateRange"
           :disabled-date="disabledDate"
+          :default-value="[minDate, maxDate]"
           range
         ></date-picker>
       </div>
@@ -60,6 +63,8 @@ import Multiselect from 'vue-multiselect';
 import DatePicker from 'vue2-datepicker';
 
 import BaseForm from '@/components/base/BaseForm.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -136,7 +141,12 @@ export default {
   },
   computed: {
     disable() {
-      return this.selectedVariables.length > 4;
+      return (
+        this.selectedVariables.length > 4 ||
+        this.selectedVariables.length === 0 ||
+        this.dateRange.length !== 2 ||
+        this.selectedBuoys.length === 0
+      );
     },
     selectedDates() {
       try {
@@ -152,7 +162,7 @@ export default {
       }
     },
     selectedVariablesString() {
-      return this.selectedVariables.join(',');
+      return this.selectedVariables.map((v) => v.name).join(',');
     },
     selectedBuoysString() {
       const bids = this.coordinates
@@ -164,6 +174,18 @@ export default {
       return `datasets-${this.dataset}-dashboard`;
     },
   },
+  watch: {
+    initBuoys(cur, old) {
+      // for some reason (probably to do with computation graphs) initBuoys isn't always set
+      // on initial render, so we need to watch it and set if it comes in a little later
+      this.selectedBuoys = [...cur];
+    },
+    initVariables(cur, old) {
+      // for some reason (probably to do with computation graphs) initBuoys isn't always set
+      // on initial render, so we need to watch it and set if it comes in a little later
+      this.selectedVariables = [...cur];
+    },
+  },
   methods: {
     disabledDate(date) {
       const utcDate = new Date(
@@ -171,6 +193,7 @@ export default {
       );
       return utcDate < this.minDate || utcDate > this.maxDate;
     },
+    formatVariable,
   },
 };
 </script>

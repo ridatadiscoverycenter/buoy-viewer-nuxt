@@ -13,29 +13,7 @@
         what data is available.</template
       >
       <template #chart>
-        <div class="is-flex-column">
-          <div class="control-item control-item-first">
-            <label for="variable" class="label">Variable</label>
-            <multiselect
-              id="variable"
-              v-model="variable"
-              class="multiselect"
-              :options="variables"
-            ></multiselect>
-          </div>
-          <Heatmap
-            v-if="!(summary.length === 0)"
-            id="heatmap"
-            :dataset="summary"
-            :min-width="600"
-            :height="250"
-            x="date"
-            y="station_name"
-            :variable="variable"
-            :enable-darkmode="false"
-          />
-          <fa v-else icon="compass" spin class="compass-loading" />
-        </div>
+        <StationHeatmap :summary="summary" :variables="variables" />
       </template>
     </ChartContainer>
 
@@ -131,9 +109,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import Multiselect from 'vue-multiselect';
 
-import Heatmap from '@/components/charts/Heatmap.vue';
+import StationHeatmap from '@/components/buoy/StationHeatmap.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import ExploreForm from '@/components/ExploreForm.vue';
 import DownloadForm from '@/components/DownloadForm.vue';
@@ -141,8 +118,7 @@ import BuoyLocations from '@/components/buoy/Locations.vue';
 
 export default {
   components: {
-    Heatmap,
-    Multiselect,
+    StationHeatmap,
     ChartContainer,
     ExploreForm,
     DownloadForm,
@@ -170,12 +146,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import 'bulma';
-.is-flex-column {
-  @extend .is-flex;
-  flex-direction: column;
-}
+<style lang="scss" scoped>
 .container-center {
   display: grid;
   grid-template-columns: 4fr 10fr 4fr;
@@ -185,12 +156,6 @@ export default {
     '. main-second .'
     '. main-third .'
     '. main-fourth .';
-}
-.control-item {
-  @extend .py-2;
-  @extend .px-2;
-  flex-grow: 1;
-  min-width: 250px;
 }
 .container-main-first {
   @extend .my-6;
@@ -215,17 +180,4 @@ export default {
   white-space: normal !important;
   overflow-wrap: break-word !important;
 }
-.compass-loading {
-  @extend .mt-6;
-  justify-self: center;
-  align-self: center;
-  font-size: 20rem !important;
-  color: $link;
-}
-
-.mx-datepicker-range {
-  width: 100% !important;
-}
 </style>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style src="vue2-datepicker/index.css"></style>

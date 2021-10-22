@@ -35,7 +35,7 @@
 import { mapState, mapGetters } from 'vuex';
 import moment from 'moment';
 
-import BuoyMarker from '@/assets/illustrations/buoy-marker.svg';
+import BuoyMarker from '@/assets/illustrations/buoy-marker.svg?inline';
 
 export default {
   components: {
@@ -67,19 +67,11 @@ export default {
 };
 </script>
 
-<style src="mapbox-gl/dist/mapbox-gl.css"></style>
-<style src="vue-mapbox/dist/vue-mapbox.css"></style>
-
 <style lang="sass" scoped>
 .mapboxgl-map-container
   height: 70vh
   width: 100%
   position: relative
-
-.mapboxgl-marker
-  height: 1.2rem
-  path
-    fill: rgba(255,255,255,0.8)
 
 .date
   font-size: 2.5rem
@@ -100,4 +92,11 @@ export default {
   width: 100%
   z-index: 10
   box-sizing: border-box
+</style>
+
+<style lang="sass">
+.mapboxgl-marker
+  height: 1.2rem
+  path
+    fill: hsla(0deg, 0%, 20%, 80%)
 </style>

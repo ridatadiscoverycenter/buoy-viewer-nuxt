@@ -13,7 +13,6 @@
 </template>
 
 <style lang="scss">
-@import 'bulma';
 .main-header {
   grid-area: main-header;
   border-bottom: 1px solid #a4b1bf;

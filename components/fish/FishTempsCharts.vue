@@ -116,7 +116,7 @@ export default {
           {
             orient: 'left',
             scale: 'ytemps',
-            title: `Surface Δ °C from Mean`,
+            title: 'Surface Δ °C from Mean',
             grid: false,
           },
         ],
@@ -162,7 +162,8 @@ export default {
                 stroke: { value: 'transparent' },
                 fill: { value: 'transparent' },
                 tooltip: {
-                  signal: `{ 'Water Temp. Δ from Seasonally Adjusted Mean': format(datum.datum.delta, ',.3f') + ' °C', 'Level': datum.datum.level, 'Month/Year': monthFormat(utcmonth(datum.datum.utc_time)) + ' ' + utcyear(datum.datum.utc_time), 'Station': datum.datum.Station }`,
+                  signal:
+                    "{ 'Water Temp. Δ from Seasonally Adjusted Mean': format(datum.datum.delta, ',.3f') + ' °C', 'Level': datum.datum.level, 'Month/Year': monthFormat(utcmonth(datum.datum.utc_time)) + ' ' + utcyear(datum.datum.utc_time), 'Station': datum.datum.Station }",
                 },
               },
             },
@@ -208,7 +209,7 @@ export default {
     tempDiffSpec() {
       return {
         type: 'group',
-        desctiption: `Difference Water Temperature Bottom/Surface`,
+        desctiption: 'Difference Water Temperature Bottom/Surface',
         name: 'tempdiff',
 
         encode: {
@@ -271,7 +272,7 @@ export default {
           {
             orient: 'left',
             scale: 'ydiffs',
-            title: `Δ °C Suface - Bottom`,
+            title: 'Δ °C Suface - Bottom',
             grid: false,
           },
         ],
@@ -317,7 +318,8 @@ export default {
                 stroke: { value: 'transparent' },
                 fill: { value: 'transparent' },
                 tooltip: {
-                  signal: `{ 'Water Temp. Δ Surface - Bottom': format(datum.datum.diff, ',.3f') + ' °C', 'Month/Year': monthFormat(utcmonth(datum.datum.utc_time)) + ' ' + utcyear(datum.datum.utc_time), 'Station': datum.datum.Station }`,
+                  signal:
+                    "{ 'Water Temp. Δ Surface - Bottom': format(datum.datum.diff, ',.3f') + ' °C', 'Month/Year': monthFormat(utcmonth(datum.datum.utc_time)) + ' ' + utcyear(datum.datum.utc_time), 'Station': datum.datum.Station }",
                 },
               },
             },

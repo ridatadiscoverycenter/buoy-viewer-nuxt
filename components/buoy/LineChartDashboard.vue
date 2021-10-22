@@ -8,14 +8,17 @@
       :end-dt-str="endDate.slice(0, 10)"
       :compare-dataset="compareDatasetData"
       :compare-name="compareDatasetTitle"
+      :compare-path="compareDatasetPath"
       :compare-line-width="compareLineWidth"
       :dataset-name="datasetTitle"
       :loading="loading"
+      :weather-data="weatherData"
+      :downsampled="downsampled"
     />
 
-    <BuoyLocations :coordinates="filterCoordinates" :height="4" />
+    <BuoyLocations :coordinates="filterCoordinates" :height="3" />
 
-    <ChartContainer width="one-third" :height="4">
+    <ChartContainer width="one-third" :height="3">
       <template #title>Keep Exploring</template>
       <template #subtitle>
         Try different variables, buoys, or changing the date range!
@@ -97,6 +100,10 @@ export default {
       type: Array,
       required: true,
     },
+    compareDatasetPath: {
+      type: String,
+      required: true,
+    },
     coordinates: {
       type: Array,
       required: true,
@@ -131,13 +138,22 @@ export default {
       required: false,
       default: 1.8,
     },
+    weatherData: {
+      type: Array,
+      required: true,
+    },
+    downsampled: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     buoys() {
       return this.coordinates.map((val) => val.fullName);
     },
     queryVariables() {
-      return this.$route.query.variables.split(',');
+      const queryVarNames = this.$route.query.variables.split(',');
+      return this.variables.filter((v) => queryVarNames.includes(v.name));
     },
     startDate() {
       return this.$route.query.start;

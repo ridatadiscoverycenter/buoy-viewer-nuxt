@@ -5,7 +5,7 @@
     </template>
     <template #main-header
       ><span class="title"
-        ><fa icon="chart-area" class="mr-2" />Historical RI Buoy Data -
+        ><fa icon="chart-area" class="mr-2" />Historical MA Buoy Data -
         {{ pageName }}</span
       >
     </template>
@@ -23,7 +23,7 @@ import Breadcrumb from '@/components/base/Breadcrumb.vue';
 const getPageName = (path) => {
   const pathParts = path.split('/').filter((part) => part.length > 0);
   const lastPart = pathParts.pop();
-  if (lastPart === 'historical-buoy-data') {
+  if (lastPart === 'ma-buoy-data') {
     return 'Summary';
   } else {
     return lastPart.substring(0, 1).toUpperCase() + lastPart.substring(1);
@@ -42,7 +42,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('buoy', ['variables', 'coordinates', 'summary']),
+    ...mapState('mabuoy', ['variables', 'coordinates', 'summary']),
   },
   watch: {
     $route(val) {
@@ -51,13 +51,13 @@ export default {
   },
   created() {
     if (this.coordinates.length === 0) {
-      this.$store.dispatch('buoy/fetchBuoyCoordinates');
+      this.$store.dispatch('mabuoy/fetchBuoyCoordinates');
     }
     if (this.summary.length === 0) {
-      this.$store.dispatch('buoy/fetchSummaryData');
+      this.$store.dispatch('mabuoy/fetchSummaryData');
     }
     if (this.variables.length === 0) {
-      this.$store.dispatch('buoy/fetchBuoyVariables');
+      this.$store.dispatch('mabuoy/fetchBuoyVariables');
     }
   },
 };

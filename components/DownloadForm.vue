@@ -8,6 +8,8 @@
           v-model="fileFormat"
           class="multiselect"
           :options="fileFormats"
+          :preselect-first="true"
+          :allow-empty="false"
         ></multiselect>
       </div>
 
@@ -29,6 +31,8 @@
           v-model="downloadVariables"
           class="multiselect"
           :options="variables"
+          :custom-label="formatVariable"
+          track-by="name"
           :multiple="true"
         ></multiselect>
       </div>
@@ -39,6 +43,11 @@
         role="button"
         class="button is-link control-item-button"
         :href="downloadUrl"
+        :disabled="
+          downloadBuoys.length === 0 ||
+          downloadVariables.length === 0 ||
+          !fileFormat
+        "
         >Download Data</a
       >
     </template>
@@ -50,6 +59,8 @@ import { mapState } from 'vuex';
 import Multiselect from 'vue-multiselect';
 
 import BaseForm from '@/components/base/BaseForm.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -90,12 +101,17 @@ export default {
 
       return `${this.baseUrl}/tabledap/${this.datasetId}.${
         this.fileFormat
-      }?${this.downloadVariables.join(
-        ','
-      )},time,latitude,longitude,station_name&station_name=~"(${bids.join(
+      }?${this.downloadVariables
+        .map((v) => v.name)
+        .join(
+          ','
+        )},time,latitude,longitude,station_name&station_name=~"(${bids.join(
         '|'
       )})"`;
     },
+  },
+  methods: {
+    formatVariable,
   },
 };
 </script>

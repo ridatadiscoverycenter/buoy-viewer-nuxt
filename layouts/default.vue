@@ -16,3 +16,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.logo-container {
+  @extend .is-flex;
+  @extend .px-2;
+  @extend .py-2;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid #a4b1bf;
+}
+</style>

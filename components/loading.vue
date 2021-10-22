@@ -26,7 +26,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import 'bulma';
 .loading-container {
   display: flex;
   position: fixed;
@@ -37,11 +36,5 @@ export default {
   background-color: rgba(82, 69, 99, 0.4);
   z-index: 1000;
   justify-content: center;
-}
-.compass-loading {
-  @extend .mt-6;
-  align-self: center;
-  font-size: 20rem !important;
-  color: rgb(89, 81, 139);
 }
 </style>

@@ -29,7 +29,17 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['./node_modules/bulma-slider/dist/css/bulma-slider.min', 'bulma'],
+  css: [
+    './node_modules/bulma-slider/dist/css/bulma-slider.min',
+    '~/assets/styles/main.scss',
+    './node_modules/vue-multiselect/dist/vue-multiselect.min.css',
+    './node_modules/vue2-datepicker/index.css',
+    './node_modules/mapbox-gl/dist/mapbox-gl.css',
+    './node_modules/vue-mapbox/dist/vue-mapbox.css',
+  ],
+  styleResources: {
+    scss: '~assets/styles/main.scss',
+  },
   /*
    ** Plugins to load before mounting the App
    */
@@ -44,6 +54,10 @@ export default {
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
+    // SVG Loader
+    '@nuxtjs/svg',
+    // https://www.npmjs.com/package/@nuxtjs/style-resources
+    '@nuxtjs/style-resources',
     [
       '@nuxtjs/fontawesome',
       {
@@ -55,6 +69,7 @@ export default {
             'faChartArea',
             'faCompass',
             'faDatabase',
+            'faExclamationCircle',
             'faHome',
             'faInfoCircle',
             'faLifeRing',
@@ -74,8 +89,6 @@ export default {
     '@nuxtjs/axios',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
-    // SVG Loader
-    'nuxt-svg-loader',
   ],
   /*
    ** Axios module configuration

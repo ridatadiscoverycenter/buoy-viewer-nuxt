@@ -132,8 +132,13 @@ export default {
       collapsed: false,
       datasets: [
         {
-          name: 'Historical Buoy Data',
+          name: 'RI Buoy Data',
           route: 'datasets-historical-buoy-data',
+          available: true,
+        },
+        {
+          name: 'MA Buoy Data',
+          route: 'datasets-ma-buoy-data',
           available: true,
         },
         {
@@ -173,8 +178,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import 'bulma';
+<style lang="scss" scoped>
 .is-active {
   background-color: rgb(89, 81, 139) !important;
 }

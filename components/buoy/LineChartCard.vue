@@ -1,10 +1,14 @@
 <template>
-  <ChartContainer width="two-thirds" :height="5">
+  <ChartContainer width="two-thirds" :height="6">
     <template #title>Visualize Data</template>
     <template #subtitle
-      >This plot shows {{ variables.join(', ') }} over the period between
-      {{ startDtStr }} and {{ endDtStr }}. You can hover over the lines to see
-      more specific data.</template
+      >This plot shows {{ variables.map(formatVariable).join(', ') }} over the
+      period between {{ startDtStr }} and {{ endDtStr }}. You can hover over the
+      lines to see more specific data. Weather data from
+      <a href="https://www.rcc-acis.org/" target="_blank" rel="noreferrer"
+        >NOAA</a
+      >
+      is included below.</template
     >
     <template #chart>
       <div
@@ -13,11 +17,23 @@
       >
         <fa :icon="['fas', 'info-circle']" class="mr-1" />
         <span class="is-size-6 mr-4">
-          {{ compareName }} data is available which matches your query
+          <a :href="comparePath" target="_blank">{{ compareName }}</a> data is
+          available which matches your query
         </span>
         <button class="button is-info is-small" @click="toggleCompare">
           {{ compareText }}
         </button>
+      </div>
+
+      <div
+        v-if="nonPlottableVariables.length > 0 && !loading"
+        class="notification is-warning is-light mx-4 px-4 py-2"
+      >
+        <fa :icon="['fas', 'exclamation-circle']" class="mr-1" />
+        <span class="is-size-6 mr-4">
+          The following variables are not plottable, download the data below if
+          needed: {{ nonPlottableVariables.map(formatVariable).join(', ') }}
+        </span>
       </div>
 
       <div
@@ -28,21 +44,30 @@
       </div>
 
       <LineChart
-        v-else
+        v-else-if="!loading"
         id="line-chart"
-        :dataset="dataset"
+        :dataset="plottableDataset"
         :dataset-name="datasetName"
         :dataset-line-width="datasetLineWidth"
         :compare-dataset="compare ? compareDataset : []"
         :compare-name="compareName"
         :compare-line-width="compareLineWidth"
-        :variables="variables"
+        :variables="plottableVariables"
         :color-domain="colorDomain"
         :color-range="colorRange"
         x="time"
         y="station_name"
         :enable-darkmode="false"
+        :weather-dataset="weatherData"
       />
+
+      <p v-if="downsampled">
+        <small
+          ><fa :icon="['fas', 'info-circle']" class="mr-1" /><i>Note:</i> Data
+          has been downsampled, select a smaller date range to visualize raw
+          data.</small
+        >
+      </p>
     </template>
   </ChartContainer>
 </template>
@@ -53,6 +78,8 @@ import * as aq from 'arquero';
 
 import LineChart from '@/components/charts/LineChart.vue';
 import ChartContainer from '@/components/base/ChartContainer.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -92,6 +119,10 @@ export default {
       required: false,
       default: 'Other',
     },
+    comparePath: {
+      type: String,
+      required: true,
+    },
     compareLineWidth: {
       type: Number,
       required: true,
@@ -104,6 +135,14 @@ export default {
       type: Boolean,
       rquired: false,
       default: false,
+    },
+    weatherData: {
+      type: Array,
+      required: true,
+    },
+    downsampled: {
+      type: Boolean,
+      required: true,
     },
   },
   data() {
@@ -129,6 +168,21 @@ export default {
     colorRange() {
       return this.colorDomain.map((v) => this.colorMap[v]);
     },
+    plottableVariables() {
+      return this.variables.filter(
+        (variable) => !variable.name.includes('Qualifiers')
+      );
+    },
+    nonPlottableVariables() {
+      return this.variables.filter((variable) =>
+        variable.name.includes('Qualifiers')
+      );
+    },
+    plottableDataset() {
+      return this.dataset.filter((row) =>
+        this.plottableVariables.map((v) => v.name).includes(row.variable)
+      );
+    },
   },
   methods: {
     toggleCompare() {
@@ -139,6 +193,7 @@ export default {
         this.compareText = 'Add To Plot';
       }
     },
+    formatVariable,
   },
 };
 </script>

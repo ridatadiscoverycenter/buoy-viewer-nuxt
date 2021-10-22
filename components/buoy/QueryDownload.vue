@@ -1,8 +1,9 @@
 <template>
-  <ChartContainer width="one-third" :height="3">
+  <ChartContainer width="one-third" :height="2">
     <template #title>Download Selected Data</template>
     <template #subtitle
-      >Selected data includes {{ variables.join(', ') }} from
+      >Selected data includes
+      {{ variables.map(formatVariable).join(', ') }} from
       {{ startDtStr.slice(0, 10) }} to {{ endDtStr.slice(0, 10) }}</template
     >
     <template #chart>
@@ -38,6 +39,8 @@ import Multiselect from 'vue-multiselect';
 
 import ChartContainer from '@/components/base/ChartContainer.vue';
 import BaseForm from '@/components/base/BaseForm.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -85,6 +88,7 @@ export default {
         this.endDtStr
       }&station_name=~"(${this.buoyIds.join('|')})"`;
     },
+    formatVariable,
   },
 };
 </script>

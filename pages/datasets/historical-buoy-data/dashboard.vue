@@ -5,53 +5,32 @@
     :dataset-data="buoyData"
     compare-dataset-title="OSOM"
     :compare-dataset-data="modelData"
+    compare-dataset-path="/datasets/osom-data"
     :coordinates="coordinates"
     :dataset-id="datasetId"
     :variables="variables"
     :min-date="minDate"
     :max-date="maxDate"
     :loading="loading"
+    :weather-data="weather"
+    :downsampled="downsampled"
   >
     <template #summary-heatmap>
-      <div class="is-flex-column">
-        <div class="control-item control-item-first">
-          <label for="variable" class="label">Variable</label>
-          <multiselect
-            id="variable"
-            v-model="variable"
-            class="multiselect"
-            :options="variables"
-          ></multiselect>
-        </div>
-        <Heatmap
-          v-if="!(summary.length === 0)"
-          id="heatmap"
-          :dataset="summary"
-          :min-width="400"
-          :height="250"
-          x="date"
-          y="station_name"
-          :variable="variable"
-          :enable-darkmode="false"
-        />
-        <fa v-else icon="compass" spin class="compass-loading" />
-      </div>
+      <StationHeatmap :summary="summary" :variables="variables" />
     </template>
   </LineChartDashboard>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import Multiselect from 'vue-multiselect';
 
 import LineChartDashboard from '@/components/buoy/LineChartDashboard.vue';
-import Heatmap from '@/components/charts/Heatmap.vue';
+import StationHeatmap from '@/components/buoy/StationHeatmap.vue';
 
 export default {
   components: {
     LineChartDashboard,
-    Heatmap,
-    Multiselect,
+    StationHeatmap,
   },
   data() {
     return {
@@ -68,8 +47,14 @@ export default {
         end: this.$route.query.end,
         ids: this.$route.query.buoyIds,
       };
-      await this.$store.dispatch('buoy/fetchDataGeoJson', payload);
-      await this.$store.dispatch('model/fetchDataGeoJson', payload);
+      await Promise.all([
+        this.$store.dispatch('buoy/fetchDataGeoJson', payload),
+        this.$store.dispatch('model/fetchDataGeoJson', payload),
+        this.$store.dispatch('weather/fetchWeather', {
+          startDate: payload.start.slice(0, 10),
+          endDate: payload.end.slice(0, 10),
+        }),
+      ]);
       this.loading = false;
     } catch (e) {
       this.loading = false;
@@ -88,8 +73,10 @@ export default {
       'minDate',
       'maxDate',
       'summary',
+      'downsampled',
     ]),
     ...mapState('model', ['modelData']),
+    ...mapState('weather', ['weather']),
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line

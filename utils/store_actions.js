@@ -12,6 +12,7 @@ export const initState = (route, datasetId) => {
     datasetId,
     minDate: new Date(0),
     maxDate: new Date(),
+    downsampled: false,
   };
   baseState[`${route}Data`] = [];
   return baseState;
@@ -40,9 +41,14 @@ export function baseActions(route) {
       });
     },
     fetchBuoyVariables({ commit }) {
-      return this.$axios.$get(`/${route}/variables`).then((response) => {
-        commit('mutate', { property: 'variables', with: response });
-      });
+      return this.$axios
+        .$get(`/${route}/variables?units=true`)
+        .then((response) => {
+          response.sort((a, b) =>
+            a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+          );
+          commit('mutate', { property: 'variables', with: response });
+        });
     },
   };
 }
@@ -78,9 +84,10 @@ export const buoyData =
     const endDate = end || state.maxDate;
     return axios
       .$get(
-        `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}`
+        `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}&units=true&downsampled=true`
       )
-      .then((data) => {
+      .then(({ data, downsampled }) => {
+        commit('mutate', { property: 'downsampled', with: downsampled });
         commit('mutate', { property: `${route}Data`, with: data });
       });
   };

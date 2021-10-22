@@ -1,13 +1,11 @@
 <template>
   <LineChartDashboard
-    dataset="osom-data"
-    dataset-title="OSOM"
-    :dataset-data="modelData"
-    :dataset-line-width="0.8"
-    compare-dataset-title="Historical"
-    :compare-dataset-data="allBuoyData"
-    compare-dataset-path="/datasets/historical-buoy-data"
-    :compare-line-width="1.8"
+    dataset="ma-buoy-data"
+    dataset-title="Historical"
+    :dataset-data="mabuoyData"
+    compare-dataset-title="OSOM"
+    :compare-dataset-data="modelData"
+    compare-dataset-path="/datasets/osom-data"
     :coordinates="coordinates"
     :dataset-id="datasetId"
     :variables="variables"
@@ -18,12 +16,7 @@
     :downsampled="downsampled"
   >
     <template #summary-heatmap>
-      <VariableHeatmap
-        :summary="summary"
-        :variables="variables"
-        x-title="Year"
-        x-unit="year"
-      />
+      <StationHeatmap :summary="summary" :variables="variables" />
     </template>
   </LineChartDashboard>
 </template>
@@ -32,15 +25,18 @@
 import { mapState } from 'vuex';
 
 import LineChartDashboard from '@/components/buoy/LineChartDashboard.vue';
-import VariableHeatmap from '@/components/buoy/VariableHeatmap.vue';
+import StationHeatmap from '@/components/buoy/StationHeatmap.vue';
+
+import { formatVariable } from '@/utils/utils.js';
 
 export default {
   components: {
     LineChartDashboard,
-    VariableHeatmap,
+    StationHeatmap,
   },
   data() {
     return {
+      variable: { name: 'WaterTempSurface', units: '°C' },
       loading: false,
     };
   },
@@ -54,9 +50,8 @@ export default {
         ids: this.$route.query.buoyIds,
       };
       await Promise.all([
-        this.$store.dispatch('model/fetchDataGeoJson', payload),
-        this.$store.dispatch('buoy/fetchDataGeoJson', payload),
         this.$store.dispatch('mabuoy/fetchDataGeoJson', payload),
+        this.$store.dispatch('model/fetchDataGeoJson', payload),
         this.$store.dispatch('weather/fetchWeather', {
           startDate: payload.start.slice(0, 10),
           endDate: payload.end.slice(0, 10),
@@ -72,9 +67,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('model', [
+    ...mapState('mabuoy', [
       'coordinates',
-      'modelData',
+      'mabuoyData',
       'datasetId',
       'variables',
       'minDate',
@@ -82,17 +77,16 @@ export default {
       'summary',
       'downsampled',
     ]),
-    ...mapState('buoy', ['buoyData']),
-    ...mapState('mabuoy', ['mabuoyData']),
+    ...mapState('model', ['modelData']),
     ...mapState('weather', ['weather']),
-    allBuoyData() {
-      return [...this.buoyData, ...this.mabuoyData];
-    },
   },
   watch: {
     '$route.query': function(newQuery, oldQuery) { // eslint-disable-line
       this.$fetch();
     },
+  },
+  methods: {
+    formatVariable,
   },
 };
 </script>
