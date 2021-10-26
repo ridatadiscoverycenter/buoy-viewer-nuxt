@@ -41,14 +41,12 @@ export function baseActions(route) {
       });
     },
     fetchBuoyVariables({ commit }) {
-      return this.$axios
-        .$get(`/${route}/variables?units=true`)
-        .then((response) => {
-          response.sort((a, b) =>
-            a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-          );
-          commit('mutate', { property: 'variables', with: response });
-        });
+      return this.$axios.$get(`/${route}/variables`).then((response) => {
+        response.sort((a, b) =>
+          a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
+        );
+        commit('mutate', { property: 'variables', with: response });
+      });
     },
   };
 }
@@ -84,7 +82,7 @@ export const buoyData =
     const endDate = end || state.maxDate;
     return axios
       .$get(
-        `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}&units=true&downsampled=true`
+        `/${route}/query?ids=${ids}&variables=${variables}&start=${startDate}&end=${endDate}`
       )
       .then(({ data, downsampled }) => {
         commit('mutate', { property: 'downsampled', with: downsampled });
